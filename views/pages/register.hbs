@@ -1,0 +1,134 @@
+<section ng-app="registerUcsApp" ng-controller="registerUcsCtrl" id='main'>
+	<div class="main">
+		<h1 class='b-header b-header--red b-header--section'>UCS REGISTER FORM</h1>
+		<div class="container-fluid">
+			<div class="row">
+				<form id="ucs-register-form" class="b-form col-lg-6 col-md-8 ml-auto mr-auto">
+					<div id="form-loader" class="overlay_container">
+						<i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
+					</div>
+					<h4>Basic Information</h4>
+					<input type="hidden" name="_csrf" value="{{ csrfToken }}">
+					<div class="form-group row">
+						<label for="requester" class="col-lg-12 col-form-label">Your Name / Nickname
+							<span class="required">*</span>
+						</label>
+						<div class="col-lg-12">
+							<input ng-model="requester" type="text" class="form-control" name="requester" placeholder="Enter your name / nickname">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="contentName" class="col-lg-12 col-form-label">Content Name</label>
+						<div class="col-lg-12">
+							<input ng-model="contentName" type="text" class="form-control" name="contentName" placeholder="Enter your content name">
+						</div>
+					</div>
+					<hr>
+					<h4>Song Information</h4>
+					<div class="form-group row">
+						<label for="song" class="col-lg-12 col-form-label">Song
+							<span class="required">*</span>
+						</label>
+						<div class="col-lg-12">
+							<select id="song" class="b-select2" name="song">
+								<option value="">Choose song</option>
+								<optgroup ng-repeat="(group, song) in songs | groupBy: 'group'" label="<span class='b-option-group'>{[{ group }]}</span>">
+									<option ng-repeat="item in song" value='{[{ item.value }]}'>{[{ item.title }]}</option>
+								</optgroup>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<h4>Stepchart Difficulty</h4>
+					<div class="form-group row">
+						<div class="col-lg-6 col-sm-12">
+							<label for="stepchartType" class="col-form-label">Stepchart Type
+								<span class="required">*</span>
+							</label>
+							<select ng-model="stepchartType" class="form-control" name="stepchartType">
+								<option value="">Choose Stepchart Type</option>
+								<option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
+							</select>
+						</div>
+						<div class="col-lg-6 col-sm-12">
+							<label for="stepchartLevel" class="col-form-label">Stepchart Level
+								<span class="required">*</span>
+							</label>
+							<select ng-model="stepchartLevel" class="form-control" name="stepchartLevel">
+								<option value="">Choose Stepchart Level</option>
+								<option ng-repeat="stepchartLevelItem in stepchartLevels" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<h4>Stepchart Info</h4>
+					<div class="form-group row">
+						<label for="stepmaker" class="col-lg-12 col-form-label">Stepmaker
+							<span class="required">*</span>
+						</label>
+						<div class="col-lg-12">
+							<input ng-model="stepmaker" type="text" class="form-control" name="stepmaker" placeholder="Enter STEPMAKER Name">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="ucsLink" class="col-lg-12 col-form-label">UCS Download Link
+							<span class="required">*</span>
+						</label>
+						<div class="col-lg-12">
+							<input ng-model="ucsLink" type="text" class="form-control" name="ucsLink" placeholder="Enter UCS Chart Download Link">
+						</div>
+					</div>
+					<hr>
+					<h4>Verification Email</h4>
+					<div class="form-group row">
+						<label for="email" class="col-lg-12 col-form-label">Email
+							<span class="required">*</span>
+						</label>
+						<div class="col-lg-12">
+							<input ng-model="email" type="text" class="form-control" name="email" placeholder="Enter your email">
+						</div>
+					</div>
+					<hr>
+					<h4>Note</h4>
+					<div class="form-group row">
+						<label for="requester_note" class="col-lg-12 col-form-label">Leave your note if you would like to remind us</label>
+						<div class="col-lg-12">
+							<textarea class="b-text-area" id="requester_note" name="requester_note"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" name="terms" id="terms">
+							<label class="form-check-label" for="terms">
+								I have read and accept
+								<a href='/faq-rules' target="_blank">UCS Rules</a>
+								<span class="required">*</span>
+							</label>
+						</div>
+					</div>
+					<button class="btn btn-primary submit">Submit</button>
+					<button type="button" id="reset" class="btn btn-danger">Reset</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	{{> register-preview}}
+</section>
+{{#section 'header_components'}}
+<link rel="stylesheet" href="css/register.css">
+<link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> {{/section}} {{#section 'footer_components'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.2/core.js"></script>
+<script src="/lib/lodash.js"></script>
+<script src="/lib/angular.min.js"></script>
+<script src="/lib/angular-filter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/classic/ckeditor.js"></script>
+<script src="/lib/axios.min.js"></script>
+<script src="/lib/sweet-alert-2/sweetalert2.all.min.js"></script>
+<script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/lib/sanitize-html.min.js"></script>
+<script type="text/javascript" src="/lib/decode-html.js"></script>
+<script src="/js/const.js"></script>
+<script type="application/javascript" src="/js/register.js"></script>
+<script src="/js/register-validation.js"></script> {{/section}}

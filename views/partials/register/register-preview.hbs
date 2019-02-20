@@ -1,0 +1,44 @@
+<div class="modal fade" id="preview-modal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="previewModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-auto">
+                    <img class="img-fluid preview-thumbnail" ng-src="{[{ preview.song.thumbnailUrl || '//:0' }]}" >
+                </div>
+                <p>
+                    <strong>Song name: </strong>{[{ preview.song.songName }]}
+                    <br>
+                    <br>
+                    <strong>Requester: </strong>{[{ preview.requester }]}
+                    <br>
+                    <br>
+                    <strong>Content name: </strong>{[{ preview.contentName }]}
+                    <br>
+                    <br>
+                    <strong>Level: </strong>
+                    <span>
+                        <img class='stepball' ng-src='/images/stepball_levels/{[{ preview.stepchartType }]}/{[{ preview.stepchartLevel }]}.png' />
+                    </span>
+                    <br>
+                    <br>
+                    <strong>Stepmaker:</strong> {[{ preview.stepmaker }]}
+                    <br>
+                    <br>
+                    <strong>UCS Download Link: </strong><span class="ucs-link">{[{ preview.ucsLink }]}</span>
+                    <br>
+                    <br>
+                    <strong>Verification Email: </strong>{[{ preview.email }]}</p>
+            </div>
+            <div class="modal-footer">
+                <button id='confirm-submit' type="button" class="btn btn-primary">Yes, submit this</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+@import 'shared/media-query-mixins.scss';
+
+$require-invalid-color: #dc3545;
+
+.required {
+    color: $require-invalid-color;
+}
+
+.label-invalid {
+    color: $require-invalid-color;
+}
+
+#search-form {
+    @include respond-breakpoint(xs) {
+        padding: 0;
+    }
+}
+
+select {
+    cursor: pointer;
+}
+
+.alert__block {
+    padding-bottom: 0.5px;
+}
+
+.b-text-area {
+    width: 100%;
+    height: 300px;
+}
+
+.ck-editor__editable {
+    min-height: 300px !important;
+}

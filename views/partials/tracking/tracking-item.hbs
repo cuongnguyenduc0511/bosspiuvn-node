@@ -1,0 +1,38 @@
+<div class="request-item" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
+	<div class="row">
+		<div class="col-xl-auto col-lg-12">
+			<img class="request-item__thumbnail img-fluid" ng-src="{[{ requestItem.song.thumbnailUrl || '//:0' }]}">
+		</div>
+		<div class="col align-self-center">
+			<div class="request-item__info">
+				<h4 class="request-item__info__header">
+					{[{ requestItem.song.name }]} {[{ requestItem.stepchartInfo.stepchartType.value === 'co-op' ? requestItem.stepchartInfo.stepchartType.shortLabel
+					+ ' ' + requestItem.stepchartInfo.stepchartLevel : requestItem.stepchartInfo.stepchartType.shortLabel + requestItem.stepchartInfo.stepchartLevel
+					}]} | UCS by {[{ requestItem.stepmaker }]}
+				</h4>
+				<span>
+					<strong>Requester:</strong> {[{ requestItem.requester }]}</span>
+				<br>
+				<span>
+					<strong>Name Content:</strong> {[{ requestItem.contentName ? requestItem.contentName : 'N/A' }]}</span>
+				<br>
+				<span>
+					<strong>Step Difficulty:</strong>
+					<img class="request-item__info__stepball" ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}.png">
+				</span>
+				<br>
+				<span>
+					<strong>STEPMAKER:</strong> {[{ requestItem.stepmaker }]}</span>
+				<br>
+				<span>
+					<strong>Status:</strong>
+					<span class="request-item__info__status badge badge-pill {[{ requestItem.status.clientBadgeStyle }]}">{[{ requestItem.status.label }]}</span>
+				</span>
+				<div ng-if="!requestItem.isOldRequest" class="request-item__option d-flex justify-content-end">
+					<button type="button" class="btn btn-primary" ng-click="showUpdateModal(requestItem.requestId, 'Update')"><i class="fas fa-edit"></i></button>
+					<button type="button" class="btn btn-danger" ng-click="showUpdateModal(requestItem.requestId, 'Delete')"><i class="fas fa-trash-alt"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

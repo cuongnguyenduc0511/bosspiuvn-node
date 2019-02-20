@@ -1,0 +1,18 @@
+.main .b-section div[class*="col-"] {
+  margin-bottom: 50px; }
+
+.main #team-members {
+  margin-bottom: -50px; }
+  .main #team-members .row {
+    margin-top: 15px !important; }
+
+.main #our-duty .row {
+  margin-top: 10px; }
+
+.main #our-duty img {
+  margin-bottom: 10px; }
+
+#video-carousel {
+  padding-bottom: 20px; }
+  #video-carousel .item-video {
+    height: 500px; }

@@ -1,0 +1,15 @@
+@import 'shared/media-query-mixins.scss';
+
+.todo {
+    @include respond-breakpoint(xl) {
+        padding: 0px 30px;
+    }
+
+    @include respond-breakpoint(sm) {
+        padding: 0px 15px;
+    }
+
+    @include respond-breakpoint(xs) {
+        padding: 0px 10px;
+    }
+}

@@ -1,0 +1,163 @@
+// jshint ignore: start
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var fs = require('file-system');
+require('dotenv').config()
+
+//session + flash + cookie parser
+var session = require('express-session');
+var flash = require('connect-flash');
+
+//bodyParser + methodOveride
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+
+//Connect to MongoDB / Mongoose ODM
+var mongoose = require('mongoose');
+// const db_connection_string = 'mongodb://localhost:27017/new-bosspiuvn';
+// const dbConnectionString = 'mongodb://admin:admin@bosspiuvn-shard-00-00-twheh.mongodb.net:27017,bosspiuvn-shard-00-01-twheh.mongodb.net:27017,bosspiuvn-shard-00-02-twheh.mongodb.net:27017/bosspiuvn-server?ssl=true&replicaSet=BOSSPIUVN-shard-0&authSource=admin';
+mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true });
+
+//Handlebars sections setup
+var express_handlebars_sections = require('express-handlebars-sections');
+var hbs = require('hbs');
+var engines = require('engines');
+
+var indexRouter = require('./routes/index');
+const { appRoutes } = require('./routes/api-index');
+
+var routers = appRoutes.map(route => {
+    return { path: `/${route}`, routerInstance: require(`./routes/${route}`) }
+});
+
+var app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'hbs');
+
+hbs.registerHelper("section", express_handlebars_sections());
+app.engine('handlebars', engines.handlebars);
+
+const walkSync = (dir, filelist = []) => {
+    fs.readdirSync(dir).forEach(file => {
+
+        filelist = fs.statSync(path.join(dir, file)).isDirectory()
+            ? walkSync(path.join(dir, file), filelist)
+            : filelist.concat(path.join(dir, file));
+
+    });
+    return filelist;
+}
+
+var filelist = walkSync(path.join(__dirname, '../views/partials'));
+if (filelist.length > 0) {
+    filelist.forEach(function (filename) {
+        var matches = /^([^.]+).hbs$/.exec(path.basename(filename));
+        if (!matches) {
+            return;
+        }
+        var name = matches[1];
+        // console.log(name);
+        var template = fs.readFileSync(filename, 'utf8');
+        hbs.registerPartial(name, template);
+    });
+}
+
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept, X-XSRF-TOKEN, Authorization");
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
+//flash session
+app.use(cookieParser('secret'));
+var sess = {
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        path: '/',
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000
+    },
+    rolling: true
+};
+app.use(session(sess));
+app.use(flash());
+
+
+//SETUP Method override [PUT & DELETE] Form HTML5
+app.use(bodyParser.urlencoded())
+
+// Mount csrfProtection before initialize route
+// const csrf = require('csurf');
+// const csrfProtection = csrf();
+// app.use(csrfProtection);
+
+app.use('/', indexRouter);
+for (var i = 0; i < routers.length; i++) {
+    const { path, routerInstance } = routers[i];
+    app.use(path, routerInstance);
+}
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    next(createError(404));
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    // // render the error page
+    // res.status(err.status || 500);
+    // res.render('error');
+
+    // // render the error page
+    if (err.status === 404) {
+        res.status(err.status).render('pages/not-found', {
+            title: 'Page Not Found | 404',
+            layout: 'master_layout/layout2',
+            root: root,
+        });
+    } else if (err.status === 403 && err.code === 'EBADCSRFTOKEN') {
+        res.status(err.status).send({
+            message: 'CSRF Token required'
+        });
+    } else {
+        // render the error page
+        res.status(err.status || 500);
+        res.render('error');
+    }
+
+});
+
+module.exports = app;

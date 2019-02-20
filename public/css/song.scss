@@ -1,0 +1,48 @@
+.owl-item {
+    &.active {
+        border-radius: 50%;
+        &.center {
+            background-image: linear-gradient(to right, #e7e73b, #f1da49, #f6ce58, #f7c367, #f3ba75, #f2b878, #f1b67a, #efb47d, #f4b876, #f7bc6f, #fac067, #fbc55f);
+            opacity: 1;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in;
+            animation-duration: 0.2s;        
+        }
+    }
+}
+
+.navigation-carousel {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    .btn {
+        &:first-child {
+            margin-right: 10px;
+        }
+    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coming-soon {
+    padding-bottom: 20px;
+}
+
+.thumbnail-small {
+    display: block;
+    // margin-left: auto;
+    // margin-right: auto;  
+    max-width: 100%!important;
+    width: auto!important;
+    max-height: 150px!important;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

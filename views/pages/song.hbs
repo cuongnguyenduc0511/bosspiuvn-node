@@ -1,0 +1,55 @@
+<section ng-app="songApp" ng-controller="songCtrl" id='main'>
+    <div class="main">
+        <h1 class='b-header b-header--cyan b-header--section'>AVAILABLE UCS SONG LIST</h1>
+        <div ng-cloak class="owl-carousel owl-theme">
+            <div class="item" ng-repeat="seriesItem in series">
+                <div class="row">
+                    <div class="col-12">
+                        <img class="mx-auto d-block" ng-src="/images/series/{[{ seriesItem.imgFilename }]}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="isCarouselInit" class="navigation-carousel">
+            <button class="btn btn-primary" ng-click="triggerPrevCarousel()">Prev</button>
+            <button class="btn btn-primary" ng-click="triggerNextCarousel()">Next</button>
+        </div>
+        <div ng-cloak ng-if="songList.length > 0" class="table-responsive">
+            <table class="table song-list">
+                <thead>
+                    <tr class="d-flex">
+                        <th scope="col" class="col-3"></th>
+                        <th scope="col" class="col-5">Song Name</th>
+                        <th scope="col" class="col-4">Artist</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr class="d-flex" ng-repeat="songItem in songList">
+                        <td class="col-3">
+                            <img class="thumbnail-small" ng-src='{[{ songItem.thumbnailUrl }]}'>
+                        </td>
+                        <td class="col-5">{[{ songItem.songName }]}</td>
+                        <td class="col-4">{[{ songItem.artist }]}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="coming-soon" ng-if="songList.length <= 0">
+            <h1 class="text-center">Song List Coming Soon</h1>
+        </div>
+    </div>
+</section>
+
+{{#section 'header_components'}}
+<link rel="stylesheet" href="css/song.css">
+<link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
+<link rel="stylesheet" href="lib/owl-carousel/dist/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="lib/owl-carousel/dist/assets/owl.theme.default.min.css"> {{/section}} {{#section 'footer_components'}}
+<script src="lib/owl-carousel/dist/owl.carousel.min.js"></script>
+<script src="/lib/angular.min.js"></script>
+<script src="/lib/axios.min.js"></script>
+<script src="/lib/lodash.js"></script>
+<script src="/js/const.js"></script>
+<script src="/js/song.js"></script> {{/section}}

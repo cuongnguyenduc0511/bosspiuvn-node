@@ -1,0 +1,27 @@
+<div ng-cloak ng-if="trackingResult && trackingResult.items.length > 0" class="d-flex justify-content-center">
+	<ul class="b-pagination pagination">
+		<li ng-class="trackingResult.currentPage === 1 ? 'page-item disabled' : 'page-item'">
+			<span class="page-link" page="1" ng-click="changePage($event)">First</span>
+		</li>
+		<li ng-class="!trackingResult.prevPage ? 'page-item disabled' : 'page-item'">
+			<span class="page-link" page="{[{ trackingResult.prevPage }]}" ng-click="changePage($event)">Previous</span>
+		</li>
+		<li class="page-item" ng-repeat="leftPaginationItem in leftPaginationItems">
+			<span class="page-link" page="{[{ leftPaginationItem }]}" ng-click="changePage($event)">{[{ leftPaginationItem }]}</span>
+		</li>
+		<li class="page-item active">
+			<span class="page-link">
+				{[{ trackingResult.currentPage }]}
+			</span>
+		</li>
+		<li class="page-item" ng-repeat="rightPaginationItem in rightPaginationItems">
+			<span class="page-link" page="{[{ rightPaginationItem }]}" ng-click="changePage($event)">{[{ rightPaginationItem }]}</span>
+		</li>
+		<li ng-class="!trackingResult.nextPage ? 'page-item disabled' : 'page-item'">
+			<span class="page-link" page="{[{ trackingResult.nextPage }]}" ng-click="changePage($event)">Next</span>
+		</li>
+		<li ng-class="!trackingResult.nextPage ? 'page-item disabled' : 'page-item'">
+			<span class="page-link" page="{[{ trackingResult.totalPages }]}" ng-click="changePage($event)">Last</span>
+		</li>
+	</ul>
+</div>

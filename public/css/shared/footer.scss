@@ -1,0 +1,53 @@
+.footer {
+    padding: 0.9375rem 0;
+    text-align: center;
+    display: flex;
+    background: url(../../images/footerBg1.jpg) center top no-repeat;
+    margin: 0 auto;
+    overflow: hidden;
+    background-size: cover;
+    color: white;
+
+    p {
+        font-size: 12.8px;
+        margin: 0 0 10px;
+    }
+
+    &__brand {
+        &-container {
+            margin-top: 30px;
+        }
+        align-content: center;
+        align-self: center;
+        img {
+            max-width: 180px;
+            margin-bottom: 30px;
+        }
+    }
+
+    &__content {
+        margin-top: 30px;
+    }
+
+    &__social-network {
+        margin-bottom: 20px;
+
+        a {
+            color: white;
+            margin-right: 50px; 
+
+            &:hover {
+                color: red;
+                transition: all 0.2s ease;            
+            }
+
+            &:last-child {
+                margin-right: -8px;
+            }
+
+            &:focus {
+                transition: all 0.2s ease;            
+            }
+        }
+    }
+}
