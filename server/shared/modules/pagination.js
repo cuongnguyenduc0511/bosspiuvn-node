@@ -1,22 +1,25 @@
-const { RECORD_PER_PAGE, RESPONSE } = require('../constant');
+const { RECORD_PER_PAGE, RESPONSE, STATUS_CODE } = require('../constant');
 const _ = require('lodash');
 const queryString = require('querystring');
 
 module.exports.getData = (req, res, modelInstance, callback) => {
 	const pageParam = req.query.page;
-	const currentPage = (isNaN(parseInt(pageParam)) || pageParam <= 0 || !pageParam) ? 1 : parseInt(pageParam);
+	const currentPage = (isNaN(pageParam) || pageParam <= 0 || !pageParam) ? 1 : parseInt(pageParam);
 	const self = this;
 
 	getPaginationData(req, res, currentPage, modelInstance).then(data => {
 		if (!data) {
+			// recursion when current page is exceed with total pages
 			self.getData(req, res, modelInstance, callback);
 		} else {
-			console.log(data);
 			callback(null, data);
 		}
 	}).catch(err => {
-		console.log(err);
-		callback(err, null);
+		const error = {
+			status: STATUS_CODE.BAD_REQUEST,
+			err
+		}
+		callback(error, null);
 	});
 
 }
@@ -32,16 +35,14 @@ async function getPaginationData(req, res, currentPage, modelInstance) {
 	try {
 		let paginationResult = await modelInstance.getPaginationData(RECORD_PER_PAGE, skip, dbQuery);
 		paginationResult = paginationResult[0];
+		
 		if (!paginationResult) {
-			// res.send({
-			// 	message: RESPONSE.NO_RESULT
-			// });
 			let countItems = await modelInstance.countAllItems();
-			throw ({
+			return Promise.resolve({
 				status: 404,
 				isPristine: countItems === 0,
 				message: RESPONSE.NO_RESULT
-			})
+			});
 		}
 
 		const { totalItems } = paginationResult;
@@ -51,6 +52,7 @@ async function getPaginationData(req, res, currentPage, modelInstance) {
 
 		if (currentPage > totalPages) {
 			req.query.page = totalPages;
+			// recursion
 			return Promise.resolve(null);
 		}
 

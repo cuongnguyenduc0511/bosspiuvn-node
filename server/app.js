@@ -17,9 +17,7 @@ var methodOverride = require('method-override');
 
 //Connect to MongoDB / Mongoose ODM
 var mongoose = require('mongoose');
-// const db_connection_string = 'mongodb://localhost:27017/new-bosspiuvn';
-// const dbConnectionString = 'mongodb://admin:admin@bosspiuvn-shard-00-00-twheh.mongodb.net:27017,bosspiuvn-shard-00-01-twheh.mongodb.net:27017,bosspiuvn-shard-00-02-twheh.mongodb.net:27017/bosspiuvn-server?ssl=true&replicaSet=BOSSPIUVN-shard-0&authSource=admin';
-mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true });
+mongoose.connect(process.env.LOCAL_DB_CONNECTION_STRING, { useNewUrlParser: true });
 
 //Handlebars sections setup
 var express_handlebars_sections = require('express-handlebars-sections');

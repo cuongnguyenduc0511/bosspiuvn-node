@@ -26,9 +26,9 @@ const SALT_ROUNDS = 10;
 
 const RECORD_PER_PAGE = 15;
 
-const ID_LENGTH = 30;
+const ID_LENGTH = 50;
 
-const JWT_ID_LENGTH = 50;
+const JWT_ID_LENGTH = 100;
 
 const TITLE_FORMAT = '| BOSS_PIUVN Pump It Up Team';
 

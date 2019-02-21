@@ -9,6 +9,11 @@ const authMessages = {
     SIGN_OUT_FAILED: 'An error occurred while signing out, please try again later'
 }
 
+const requestMessages = {
+    REGISTER_ERROR: 'An error occurred while registering, please try again later',
+}
+
 module.exports = {
-    authMessages
+    authMessages,
+    requestMessages
 }

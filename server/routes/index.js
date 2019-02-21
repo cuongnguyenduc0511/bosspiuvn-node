@@ -72,9 +72,8 @@ router.get('/register', csrfProtection, (req, res, next) => {
     });
 });
 
-router.post('/register', csrfProtection, (req, res, next) => {
+router.post('/register', (req, res, next) => {
     requestController.registerNewRequest(req, res);
-    // res.status(500).send({error: 'Error'});
 })
 
 router.post('/request-token', csrfProtection, (req, res, next) => {

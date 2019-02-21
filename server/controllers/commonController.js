@@ -23,6 +23,7 @@ module.exports.getStepchartTypes = (req, res) => {
 };
 
 module.exports.getSongs = (req, res) => {
+    console.log('get songs');
     songModel.getAllData((err, data) => {
         if(err) {
             res.send(err);

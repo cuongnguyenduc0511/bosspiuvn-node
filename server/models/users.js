@@ -29,6 +29,11 @@ const UserSchema = new Schema({
     createdAt: {
         type: Date,
         required: true
+    },
+    isLocked: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }, { collection: 'users' });
 

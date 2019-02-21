@@ -6,7 +6,7 @@ const { authMessages } = require('../shared/response_messages');
 const { randomString } = require('../shared/modules/randomString');
 const { decodeAndSanitizeValue } = require('../shared/modules/sanitize')
 const accessTokenController = require('../controllers/accessTokenController');
-const { JWT_ID_LENGTH } = require('../shared/constant');
+const { JWT_ID_LENGTH, STATUS_CODE } = require('../shared/constant');
 const { validateForm } = require('../modules/validate');
 
 const authValidation = {
@@ -70,7 +70,7 @@ module.exports.authenticate = async (req, res) => {
         try {
             const userData = await userModel.findUser(authUser);
             if (_.isEmpty(userData)) {
-                return res.status(401).send({
+                return res.status(STATUS_CODE.UNAUTHORIZED).send({
                     message: USER_NOT_EXISTS
                 })
             }
@@ -78,12 +78,12 @@ module.exports.authenticate = async (req, res) => {
             const isPasswordMatch = await userModel.comparePassword(authUser.password, userData.password);
             if (isPasswordMatch) {
                 const accessToken = await createAccessToken(userData);
-                res.status(200).send({
+                res.status(STATUS_CODE.SUCCESS).send({
                     message: AUTH_SUCCESS,
                     accessToken
                 })
             } else {
-                return res.status(401).send({
+                return res.status(STATUS_CODE.UNAUTHORIZED).send({
                     message: INVALID_PASSWORD
                 })
             }
@@ -95,68 +95,11 @@ module.exports.authenticate = async (req, res) => {
             })
         }
     } else {
-        return res.status(400).send({
+        return res.status(STATUS_CODE.BAD_REQUEST).send({
             message: 'Validation Error',
             validation: validFormObj
         })
     }
-
-    // userModel.findUser(authUser, function (err, userData) {
-    //     if (err) {
-    //         return res.status(500).send({
-    //             message: authMessages.AUTH_ERROR,
-    //             error: err
-    //         })
-    //     }
-    //     if (!userData) {
-    //         res.status(401).send(USER_NOT_EXISTS);
-    //     }
-    //     else {
-    //         userModel.comparePassword(authUser.password, userData.password, function (comparePwdError, isMatch) {
-    //             if (comparePwdError) {
-    //                 return res.status(500).send({
-    //                     message: authMessages.AUTH_ERROR,
-    //                     error: comparePwdError
-    //                 })
-    //             }
-    //             if (isMatch) {
-    //                 // Match
-    //                 const jwtId = randomString(JWT_ID_LENGTH);
-    //                 const currentTime = moment();
-    //                 const tokenExpTime = moment().add(1, 'day');
-
-    //                 const accessToken = {
-    //                     userId: userData._id,
-    //                     tokenId: jwtId,
-    //                     accessDate: currentTime,
-    //                     expiryDate: tokenExpTime,
-    //                     isRevoked: false
-    //                 }
-
-    //                 accessTokenController.addToken(accessToken, function (addTokenErr, data) {
-    //                     if (addTokenErr) {
-    //                         return res.status(500).send({
-    //                             message: authMessages.AUTH_ERROR,
-    //                             error: addTokenErr
-    //                         })
-    //                     } else {
-    //                         let payload = {
-    //                             userId: userData._id
-    //                         }
-    //                         const issuer = req.protocol + '://' + req.get('host');
-    //                         let token = jwt.sign(payload, 'secretKey', { jwtid: jwtId, audience: 'bosspiuvn', issuer, expiresIn: tokenExpTime.unix() });
-    //                         res.status(200).json({
-    //                             message: AUTH_SUCCESS,
-    //                             token: token
-    //                         });
-    //                     }
-    //                 })
-    //             } else {
-    //                 res.status(401).send(INVALID_PASSWORD);
-    //             }
-    //         });
-    //     }
-    // });
 };
 
 async function createAccessToken(userData) {
