@@ -361,7 +361,12 @@ module.exports.removeToken = async (requestId, mode) => {
 }
 
 module.exports.deleteRequest = async requestId => {
-	await UCSRequest.deleteOne({ "requestId": requestId });
+	try {
+		const result = await UCSRequest.deleteOne({ "requestId": requestId });
+		return Promise.resolve(result);
+	} catch (err) {
+		return Promise.reject(err);
+	}
 }
 
 module.exports.searchQuery = req => {

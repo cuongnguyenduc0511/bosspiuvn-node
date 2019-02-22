@@ -1,5 +1,6 @@
 const sanitizeHtml = require('sanitize-html');
 var decode = require('decode-html');
+const _ = require('lodash');
 
 module.exports.decodeAndSanitizeValue = (value) => {
     if(value) {
@@ -10,10 +11,17 @@ module.exports.decodeAndSanitizeValue = (value) => {
     return null;
 }
 
-module.exports.decodeAndSanitizeObject = (obj) => {
-    Object.keys(obj).forEach((key, index) => {
-        obj[key] = module.exports.decodeAndSanitizeValue(obj[key])
-    });
+module.exports.decodeAndSanitizeObject = (object) => {
+    if (!_.isEmpty(object)) {
+        Object.keys(object).forEach((key) => {
+            if (object[key] && typeof object[key] === 'object') {
+                module.exports.decodeAndSanitizeObject(object[key]);
+                return;
+            }
+            object[key] = module.exports.decodeAndSanitizeValue(object[key]);
+        })
+    }
+    return null;
 }
 
 function sanitizeParam(dirty) {

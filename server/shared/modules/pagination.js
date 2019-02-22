@@ -2,26 +2,26 @@ const { RECORD_PER_PAGE, RESPONSE, STATUS_CODE } = require('../constant');
 const _ = require('lodash');
 const queryString = require('querystring');
 
-module.exports.getData = (req, res, modelInstance, callback) => {
+module.exports.getData = async (req, res, modelInstance) => {
 	const pageParam = req.query.page;
 	const currentPage = (isNaN(pageParam) || pageParam <= 0 || !pageParam) ? 1 : parseInt(pageParam);
 	const self = this;
 
-	getPaginationData(req, res, currentPage, modelInstance).then(data => {
-		if (!data) {
+	try {
+		const paginationData = await getPaginationData(req, res, currentPage, modelInstance);
+		if (_.isEmpty(paginationData)) {
 			// recursion when current page is exceed with total pages
-			self.getData(req, res, modelInstance, callback);
+			self.getData(req, res, modelInstance);
 		} else {
-			callback(null, data);
+			return Promise.resolve(paginationData);
 		}
-	}).catch(err => {
+	} catch (err) {
 		const error = {
 			status: STATUS_CODE.BAD_REQUEST,
 			err
 		}
-		callback(error, null);
-	});
-
+		return Promise.reject(error);
+	}
 }
 
 async function getPaginationData(req, res, currentPage, modelInstance) {
@@ -35,7 +35,7 @@ async function getPaginationData(req, res, currentPage, modelInstance) {
 	try {
 		let paginationResult = await modelInstance.getPaginationData(RECORD_PER_PAGE, skip, dbQuery);
 		paginationResult = paginationResult[0];
-		
+
 		if (!paginationResult) {
 			let countItems = await modelInstance.countAllItems();
 			return Promise.resolve({

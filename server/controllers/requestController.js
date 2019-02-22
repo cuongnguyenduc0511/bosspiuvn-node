@@ -54,22 +54,16 @@ module.exports.getItemById = (req, res) => {
   }
 };
 
-module.exports.getRequests = (req, res) => {
+module.exports.getRequests = async (req, res) => {
   try {
-    pagination.getData(req, res, requestModel, (err, data) => {
-      if (err) {
-        const errorStatus = err.status || 500;
-        res.status(errorStatus).send({
-          message: 'An error occurred while fetching data, please try again later'
-        });
-      } else {
-        let statusCode = !_.isEmpty(data.items) && data.items.length > 0 ? 200 : 404;
-        res.status(statusCode).send(data);
-      }
-    })
+    const paginationResult = await pagination.getData(req, res, requestModel);
+    let statusCode = !_.isEmpty(paginationResult.items) && paginationResult.items.length > 0 ? 200 : 404;
+    res.status(statusCode).send(paginationResult);
   } catch (err) {
-    res.status(500).send({
-      message: 'An error occurred while fetching data, please try again later'
+    const errorStatus = err.status || STATUS_CODE.SERVER_ERROR;
+    res.status(errorStatus).send({
+      message: 'An error occurred while fetching data, please try again later',
+      err
     });
   }
 };
@@ -93,7 +87,13 @@ module.exports.requestToken = async (req, res) => {
       }
 
       if (email === requestItem.email) {
-        sendTokenEmail(requestItem, mode, tokenPayload, res);
+        const updateResult = await sendTokenEmail(requestItem, mode, tokenPayload);
+        if (!_.isEmpty(updateResult)) {
+          const { updateMode, registeredEmail } = updateResult;
+          res.status(STATUS_CODE.SUCCESS).send({
+            message: `Your ${updateMode} token has been sent to your email: ${registeredEmail}, please check your email`
+          })
+        }
       } else {
         return res.status(STATUS_CODE.BAD_REQUEST).send({
           message: `Wrong email, please type your valid email`
@@ -158,7 +158,6 @@ module.exports.registerNewRequest = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log('catch you!!');
     const { status, error } = err;
     const statusCode = status || STATUS_CODE.SERVER_ERROR;
     return res.status(statusCode).send({
@@ -188,19 +187,17 @@ module.exports.updateRequestByToken = async (req, res) => {
       updateToken
     } = formData;
     if (!requestId) {
-      res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.status(STATUS_CODE.BAD_REQUEST).send({
         message: 'Request ID Required'
       });
-      return;
     }
     const requestItemResult = await getItemByIdAsync(requestId);
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];
       if (_.isEmpty(requestItem.updateToken)) {
-        res.status(STATUS_CODE.BAD_REQUEST).send({
+        return res.status(STATUS_CODE.BAD_REQUEST).send({
           message: 'Please request update token'
         });
-        return;
       }
 
       if (updateToken === requestItem.updateToken.token) {
@@ -223,15 +220,9 @@ module.exports.updateRequestByToken = async (req, res) => {
           }
 
           await removeToken(requestId, UPDATE_MODE.UPDATE);
-
-          updateRequestByID(requestId, updateData, (err) => {
-            if (err) {
-              res.status(STATUS_CODE.SERVER_ERROR).send(err);
-            } else {
-              res.status(STATUS_CODE.SUCCESS).send({
-                message: 'Congratulations, your request has been successfully updated'
-              });
-            }
+          await updateRequestByID(requestId, updateData);
+          res.status(STATUS_CODE.SUCCESS).send({
+            message: 'Congratulations, your request has been successfully updated'
           });
         } else {
           // Remove Update Token
@@ -252,7 +243,7 @@ module.exports.updateRequestByToken = async (req, res) => {
     }
   } catch (err) {
     res.status(STATUS_CODE.SERVER_ERROR).send({
-      message: 'An error occurred when updating request, Please try again later'
+      message: 'An error occurred while updating request, Please try again later'
     })
   }
 }
@@ -264,20 +255,18 @@ module.exports.deleteRequestByToken = async (req, res) => {
   const { getItemByIdAsync, removeToken, deleteRequest } = requestModel;
   try {
     if (_.isEmpty(requestId)) {
-      res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.status(STATUS_CODE.BAD_REQUEST).send({
         message: 'Request ID Required'
-      })
-      return;
+      });
     }
 
     const requestItemResult = await getItemByIdAsync(requestId)
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];
       if (_.isEmpty(requestItem.deleteToken)) {
-        res.status(STATUS_CODE.BAD_REQUEST).send({
+        return res.status(STATUS_CODE.BAD_REQUEST).send({
           message: 'Please request delete token'
         });
-        return;
       }
 
       if (email === requestItem.email && deleteToken === requestItem.deleteToken.token) {
@@ -296,17 +285,18 @@ module.exports.deleteRequestByToken = async (req, res) => {
           });
         }
       } else {
-        res.status(STATUS_CODE.BAD_REQUEST).send({
+        return res.status(STATUS_CODE.BAD_REQUEST).send({
           message: 'Wrong email / token, please type your valid email / token'
         });
       }
     } else {
-      res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.status(STATUS_CODE.BAD_REQUEST).send({
         message: 'Request ID Not found'
       })
     }
   } catch (err) {
-    res.status(STATUS_CODE.SERVER_ERROR).send({
+    console.log(err);
+    return res.status(STATUS_CODE.SERVER_ERROR).send({
       message: 'An error occured while deleting request, please try again later',
       err
     })
@@ -342,7 +332,7 @@ async function sendRegisterEmail(addedRequest) {
   }
 }
 
-async function sendTokenEmail(requestItem, updateMode, tokenPayload, res) {
+async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
   let updateData = {};
   const { song, stepchartInfo, email, requestId } = requestItem;
   const { stepchartType, stepchartLevel } = stepchartInfo;
@@ -375,24 +365,14 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload, res) {
 
   try {
     await requestModel.updateRequestByID(requestId, updateData);
-    res.status(STATUS_CODE.SUCCESS).send({
-      message: `Your ${mode.toLowerCase()} token has been sent to your email: ${email}, please check your email`
-    })
+    await nodemailerTransport.sendMail(mailOptions);
+    return Promise.resolve({
+      updateMode: mode.toLowerCase(),
+      registeredEmail: email
+    });
   } catch (err) {
-    res.send(STATUS_CODE.SERVER_ERROR).send({
-      message: 'An error occurred while requesting token, please try again later'
-    })
+    return Promise.reject(err);
   }
-  // requestModel.updateRequestByID(requestId, updateData, async (err, doc) => {
-  //   if (err) {
-  //     res.status(STATUS_CODE.SERVER_ERROR).send(err);
-  //   } else {
-  //     await nodemailerTransport.sendMail(mailOptions);
-  //     res.status(STATUS_CODE.SUCCESS).send({
-  //       message: `Your ${mode.toLowerCase()} token has been sent to your email: ${email}, please check your email`
-  //     })
-  //   }
-  // });
 }
 
 async function generateRequestId() {

@@ -72,7 +72,7 @@ router.get('/register', csrfProtection, (req, res, next) => {
     });
 });
 
-router.post('/register', (req, res, next) => {
+router.post('/register', csrfProtection, (req, res, next) => {
     requestController.registerNewRequest(req, res);
 })
 

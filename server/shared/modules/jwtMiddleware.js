@@ -23,9 +23,6 @@ module.exports.verifyToken = function (req, res, next) {
                 message: authMessages.TOKEN_EXPIRED
             });
         } else {
-            // console.log(decoded);
-            // req.userId = decoded.subject;
-            // next();
             jwtMiddleware(req, res, function(err) {
                 if(err) {
                     return res.status(401).send({
@@ -56,25 +53,3 @@ const jwtMiddleware = expressJwt({
         });
     }
 });
-
-// module.exports.verifyToken = function (req, res, next) {
-//     if (!req.headers.authorization) {
-//         return res.status(401).send('Unauthorized Request');
-//     }
-
-//     let token = req.headers.authorization.split(' ')[1];
-//     if (token === 'null') {
-//         return res.status(401).send('Unauthorized Request');
-//     }
-
-//     jwt.verify(token, 'secretKey', function (err, decoded) {
-//         if (err) {
-//             return res.status(401).send('Token Expired');
-//         } else {
-//             console.log(decoded);
-//             req.userId = decoded.subject;
-//             next();
-//         }
-//     });
-// }
-
