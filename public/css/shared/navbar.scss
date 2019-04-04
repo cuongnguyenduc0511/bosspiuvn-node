@@ -12,11 +12,12 @@
 
         button.navbar-toggler {
             border: none;
+            background-color: white !important;
         }
     }
 
     i.fa-bars {
-        color: black;
+        color: white;
         font-size: 1.5em
     }
     -webkit-transition: all 0.1s linear;
@@ -78,7 +79,7 @@
             .navbar-transparent & {
                 color: white !important;
             }
-            color: black !important;
+            color: white !important;
         }
 
 
@@ -110,7 +111,9 @@
     }
 
     .nav-link:hover {
-        color: red !important;
+        // color: white !important;
+        // background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
+        color: yellow !important;
         transition: all 0.2s ease;
         transform: scale(1.2);
     }

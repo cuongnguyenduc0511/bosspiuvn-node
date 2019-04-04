@@ -38,8 +38,6 @@ a:focus {
     z-index: 9999;
     background: url(../images/xx_bg2.jpg) center top no-repeat;
     background-size: cover;
-    /* background: #7386D5; */
-    /* background-image: linear-gradient(to right top, #6f819b, #0ca2c5, #00c3c1, #00dd87, #a8eb12); */
     color: #fff;
     transition: all 0.3s;
     overflow-y: scroll;
@@ -63,11 +61,10 @@ a:focus {
     height: 35px;
     line-height: 35px;
     text-align: center;
-    /* background: #7386D5; */
     background: transparent;
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: -3px;
     cursor: pointer;
     -webkit-transition: all 0.3s;
     -o-transition: all 0.3s;
@@ -75,8 +72,8 @@ a:focus {
 }
 
 #dismiss:hover {
-    background: #fff;
-    color: #7386D5;
+    background: yellow;
+    color: black;
 }
 
 .overlay {
@@ -104,7 +101,7 @@ a:focus {
     padding: 20px 0;
     border: 10px solid transparent;
     border-image: url('../images/dark_metal_border_page.png')  10 / auto repeat;
-    background: url(../images/iron_texture47.jpg) center top no-repeat;
+    /* background: url(../images/iron_texture47.jpg) center top no-repeat; */
     background-size: cover;
     /* border-bottom: 1px solid #47748b; */
 }
@@ -114,19 +111,20 @@ a:focus {
 }
 
 #sidebar ul p {
-    color: #fff;
+    color: #ffffff;
     padding: 10px;
 }
 
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
+    font-weight: 400;
     display: block;
 }
 
 #sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
+    color: #000000;
+    background: yellow;
 }
 
 #sidebar ul li.active>a,

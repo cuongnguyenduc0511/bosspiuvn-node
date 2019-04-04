@@ -3,6 +3,11 @@ var requestRouter = express.Router();
 const { verifyToken }  = require('../shared/modules/jwtMiddleware');
 const requestController = require('../controllers/requestController');
 
+// *** Update Status Route
+requestRouter.put('/:id/status', (req, res, next) => {
+    requestController.updateRequestStatus(req, res);
+});
+
 // *** Fetching Items
 requestRouter.get('/:id', verifyToken, (req, res, next) => {
     requestController.getItemById(req, res);

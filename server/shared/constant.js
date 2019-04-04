@@ -1,7 +1,7 @@
 const DB = {
-    REQUEST: 'request',
-    STEPCHART_TYPE: 'stepchart_type',
-    SONG: 'song',
+    REQUEST: 'requests',
+    STEPCHART_TYPE: 'stepchart_types',
+    SONG: 'songs',
     STATUS: 'status'
 }
 
@@ -19,6 +19,13 @@ const REQUEST_STATUS = {
     CRASHED: 'crashed',
     UPLOAD_PENDING: 'upload-pending'
 }
+
+const ERROR_STATUS_TYPES = [
+    REQUEST_STATUS.OFFSYNC,
+    REQUEST_STATUS.UNPLAYABLE,
+    REQUEST_STATUS.INVALID,
+    REQUEST_STATUS.CRASHED
+]
 
 const TOKEN_DURATION_DAY = 3;
 
@@ -61,6 +68,7 @@ module.exports = {
     TOKEN_DURATION_DAY,
     REQUEST_STATUS,
     ID_LENGTH,
+    ERROR_STATUS_TYPES,
     JWT_ID_LENGTH
 };
 

@@ -48,7 +48,13 @@ $h4-font-family: 'Russo One', sans-serif;
 }
 
 .b-navbar-logo {
-    width: 120px;
+    width: 204px;
+    transform: scale(0.9);
+    margin-left: -15px;
+}
+
+.bss-nav-bar {
+    background-color: #000000
 }
 
 .ucs-link {

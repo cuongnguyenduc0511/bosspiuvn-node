@@ -78,9 +78,9 @@ const RequestSchema = new Schema({
 	},
 	isSpecial: { type: Boolean, default: false },
 	isOldRequest: { type: Boolean, default: false }
-}, { collection: 'request' });
+}, { collection: 'requests' });
 
-var UCSRequest = mongoose.model('request', RequestSchema);
+var UCSRequest = mongoose.model('requests', RequestSchema);
 
 module.exports.addData = async newData => {
 	try {
@@ -233,6 +233,7 @@ module.exports.getItemByIdAsync = async id => {
 					requesterNote: '$note.requesterNote',
 					customNote: '$note.customNote',
 					playedBy: 1,
+					requester: 1,
 					deleteToken: '$deleteRequestToken',
 					updateToken: '$updateRequestToken',
 					email: 1, // Sensitive Data

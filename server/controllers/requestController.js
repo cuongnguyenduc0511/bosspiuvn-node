@@ -1,6 +1,7 @@
 const requestModel = require('../models/request');
 const pagination = require('../shared/modules/pagination');
-const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS, ID_LENGTH, TOKEN_DURATION_DAY } = require('../shared/constant');
+const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS, 
+  ID_LENGTH, TOKEN_DURATION_DAY, ERROR_STATUS_TYPES } = require('../shared/constant');
 const { requestMessages } = require('../shared/response_messages');
 const tokenModule = require('../modules/tokenModules');
 const { randomString } = require('../shared/modules/randomString');
@@ -8,6 +9,7 @@ const { decodeAndSanitizeObject } = require('../shared/modules/sanitize')
 const nodemailer = require('nodemailer');
 const hbsNodemailer = require('nodemailer-express-handlebars');
 const _ = require('lodash');
+const moment = require('moment');
 
 const nodemailerTransport = nodemailer.createTransport({
   host: process.env.MAIL_SERVICE_HOST,
@@ -154,7 +156,7 @@ module.exports.registerNewRequest = async (req, res) => {
     const emailSent = await sendRegisterEmail(addedItemInfo);
     if (!_.isEmpty(emailSent)) {
       res.status(STATUS_CODE.SUCCESS).send({
-        message: `Your request has been sent, please check your email: ${addedItemInfo.email} to confirm your request`
+        message: `Your request has been sent, please check your email: ${addedItemInfo.email} to view your request`
       });
     }
   } catch (err) {
@@ -303,28 +305,55 @@ module.exports.deleteRequestByToken = async (req, res) => {
   }
 }
 
-async function sendRegisterEmail(addedRequest) {
-  const {
-    requestId,
-    stepchartInfo,
-    song,
-    email
-  } = addedRequest;
-  const { stepchartLevel, stepchartType } = stepchartInfo;
-
-  const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
-
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: title,
-    template: 'register_body',
-    context: {
-      target: addedRequest
+module.exports.updateRequestStatus = async (req, res) => {
+  const { status } = req.body;
+  const requestId = req.params.id;
+  const requestStatusTypes = _.values(REQUEST_STATUS);
+  if (_.indexOf(requestStatusTypes, status) !== -1) {
+    await requestModel.updateRequestByID(requestId, { status });
+    const updatedResult = await requestModel.getItemByIdAsync(requestId);
+    const updatedRequest = updatedResult[0];
+    console.log(updatedRequest);
+    if (_.indexOf(ERROR_STATUS_TYPES, updatedRequest.status.value) !== -1) {
+      const expiredDate = moment().add(3, 'days');
+      // await requestModel.updateRequestByID(requestId, { expiredDate });
+      await sendErrorRequestEmail(updatedRequest, expiredDate);
+    } else if (updatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
+      await sendCompletedRequestEmail(updatedRequest);
+    } else {
     }
+    res.send({
+      message: 'Request status has been updated, mail has been sent successfully'
+    }); 
+  } else {
+    res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Status type is not valid'
+    });
   }
+}
 
+async function sendRegisterEmail(addedRequest) {
   try {
+    const {
+      requestId,
+      stepchartInfo,
+      song,
+      email
+    } = addedRequest;
+    const { stepchartLevel, stepchartType } = stepchartInfo;
+  
+    const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
+  
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: title,
+      template: 'register_body',
+      context: {
+        target: addedRequest
+      }
+    }
+  
     const result = await nodemailerTransport.sendMail(mailOptions);
     return Promise.resolve(result);
   } catch (err) {
@@ -333,43 +362,101 @@ async function sendRegisterEmail(addedRequest) {
 }
 
 async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
-  let updateData = {};
-  const { song, stepchartInfo, email, requestId } = requestItem;
-  const { stepchartType, stepchartLevel } = stepchartInfo;
-  let mode;
-  switch (updateMode) {
-    case UPDATE_MODE.UPDATE:
-      mode = UPDATE_MODE.UPDATE;
-      updateData.updateRequestToken = tokenPayload;
-      break;
-    case UPDATE_MODE.DELETE:
-      mode = UPDATE_MODE.DELETE;
-      updateData.deleteRequestToken = tokenPayload;
-      break;
-  }
-
-  const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
-
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: title,
-    template: 'token_body',
-    context: {
-      target: requestItem,
-      tokenPayload,
-      mode,
-      modeLowercase: mode.toLowerCase()
-    }
-  }
-
   try {
+    let updateData = {};
+    const { song, stepchartInfo, email, requestId } = requestItem;
+    const { stepchartType, stepchartLevel } = stepchartInfo;
+    let mode;
+    switch (updateMode) {
+      case UPDATE_MODE.UPDATE:
+        mode = UPDATE_MODE.UPDATE;
+        updateData.updateRequestToken = tokenPayload;
+        break;
+      case UPDATE_MODE.DELETE:
+        mode = UPDATE_MODE.DELETE;
+        updateData.deleteRequestToken = tokenPayload;
+        break;
+    }
+  
+    const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
+  
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: title,
+      template: 'token_body',
+      context: {
+        target: requestItem,
+        tokenPayload,
+        mode,
+        modeLowercase: mode.toLowerCase()
+      }
+    }
+  
     await requestModel.updateRequestByID(requestId, updateData);
     await nodemailerTransport.sendMail(mailOptions);
     return Promise.resolve({
       updateMode: mode.toLowerCase(),
       registeredEmail: email
     });
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
+
+async function sendErrorRequestEmail(requestItem, expiredDate) {
+  try {
+    const {
+      requestId,
+      stepchartInfo,
+      song,
+      email
+    } = requestItem;
+    const { stepchartLevel, stepchartType } = stepchartInfo;
+  
+    const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
+  
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: title,
+      template: 'error_request_body',
+      context: {
+        target: requestItem,
+        expiredDate: moment(expiredDate).format('dddd, MMMM Do YYYY, h:mm:ss A Z')
+      }
+    }  
+    const result = await nodemailerTransport.sendMail(mailOptions);
+    return Promise.resolve(result);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
+
+async function sendCompletedRequestEmail(requestItem) {
+  const {
+    requestId,
+    stepchartInfo,
+    song,
+    email
+  } = requestItem;
+  const { stepchartLevel, stepchartType } = stepchartInfo;
+
+  const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Request Completed`;
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: title,
+    template: 'request_completed_body',
+    context: {
+      target: requestItem
+    }
+  }
+
+  try {
+    const result = await nodemailerTransport.sendMail(mailOptions);
+    return Promise.resolve(result);
   } catch (err) {
     return Promise.reject(err);
   }

@@ -6,9 +6,9 @@ var SongSchema = Schema({
     artist:  { type: String },
     seriesGroupCategory: { type: String },
     thumbnailUrl: { type: String }
-}, { collection: 'song' });
+}, { collection: 'songs' });
 
-var Song = module.exports = mongoose.model('song', SongSchema);
+var Song = module.exports = mongoose.model('songs', SongSchema);
 
 module.exports.getPaginationData = async (recordPerPage, skip, query) => {
     const result = await Song.aggregate([

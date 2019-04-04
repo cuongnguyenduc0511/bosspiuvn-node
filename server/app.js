@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('file-system');
+var UAParser = require('ua-parser-js');
 require('dotenv').config()
 
 //session + flash + cookie parser
@@ -17,7 +18,7 @@ var methodOverride = require('method-override');
 
 //Connect to MongoDB / Mongoose ODM
 var mongoose = require('mongoose');
-mongoose.connect(process.env.LOCAL_DB_CONNECTION_STRING, { useNewUrlParser: true });
+mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true });
 
 //Handlebars sections setup
 var express_handlebars_sections = require('express-handlebars-sections');
@@ -72,9 +73,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Client Browser detection (IE)
+app.use(function (req, res, next) {
+    var parser = new UAParser();
+    var ua = req.headers['user-agent'];
+    var browserName = parser.setUA(ua).getBrowser().name;
+
+    if(browserName === 'IE') {
+        return res.send('Browser not supported, please install Firefox / Chrome to access');
+    }
+
+    next();
+})
+
 // Add headers
 app.use(function (req, res, next) {
-
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
 

@@ -25,5 +25,8 @@ router.get('/version-categories', (req, res, next) => {
     commonController.getVersionCategory(req, res);
 });
 
+router.get('/song-artists', (req, res, next) => {
+    commonController.getArtists(req, res);
+});
 
 module.exports = router;
