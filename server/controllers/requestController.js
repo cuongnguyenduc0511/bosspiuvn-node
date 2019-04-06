@@ -1,7 +1,7 @@
 const requestModel = require('../models/request');
 const pagination = require('../shared/modules/pagination');
-const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS, 
-  ID_LENGTH, TOKEN_DURATION_DAY, ERROR_STATUS_TYPES } = require('../shared/constant');
+const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS,
+  ID_LENGTH, ERROR_STATUS_TYPES } = require('../shared/constant');
 const { requestMessages } = require('../shared/response_messages');
 const tokenModule = require('../modules/tokenModules');
 const { randomString } = require('../shared/modules/randomString');
@@ -26,6 +26,7 @@ const nodemailerOptions = {
     extname: '.hbs',
     layoutsDir: 'views/email/',
     defaultLayout: 'email_default',
+    partialsDir: 'views/email/'
     // partialsDir : 'views/partials/'
   },
   viewPath: 'views/email/',
@@ -82,12 +83,7 @@ module.exports.requestToken = async (req, res) => {
     const requestItemResult = await getItemByIdAsync(requestId);
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];
-      const { generateToken, addTokenExpirationTime } = tokenModule;
-      const tokenPayload = {
-        token: generateToken(),
-        exp: addTokenExpirationTime(Date.now(), TOKEN_DURATION_DAY)
-      }
-
+      const tokenPayload = tokenModule.generateToken();
       if (email === requestItem.email) {
         const updateResult = await sendTokenEmail(requestItem, mode, tokenPayload);
         if (!_.isEmpty(updateResult)) {
@@ -132,6 +128,12 @@ module.exports.registerNewRequest = async (req, res) => {
       ucsLink,
       email
     } = data;
+
+    if (email === process.env.EMAIL) {
+      return res.status(STATUS_CODE.BAD_REQUEST).send({
+        message: `This email can not be used, please try another email`
+      });  
+    }
 
     const submitData = {
       requestId,
@@ -223,6 +225,7 @@ module.exports.updateRequestByToken = async (req, res) => {
 
           await removeToken(requestId, UPDATE_MODE.UPDATE);
           await updateRequestByID(requestId, updateData);
+          await requestModel.removeFields(requestId, { expiredDate: 1 });
           res.status(STATUS_CODE.SUCCESS).send({
             message: 'Congratulations, your request has been successfully updated'
           });
@@ -254,6 +257,7 @@ module.exports.deleteRequestByToken = async (req, res) => {
   const form = req.body;
   decodeAndSanitizeObject(form);
   const { requestId, email, deleteToken } = form;
+
   const { getItemByIdAsync, removeToken, deleteRequest } = requestModel;
   try {
     if (_.isEmpty(requestId)) {
@@ -309,25 +313,32 @@ module.exports.updateRequestStatus = async (req, res) => {
   const { status } = req.body;
   const requestId = req.params.id;
   const requestStatusTypes = _.values(REQUEST_STATUS);
-  if (_.indexOf(requestStatusTypes, status) !== -1) {
+  const result = await requestModel.getItemByIdAsync(requestId);
+  const updateItem = result[0];
+  if (_.indexOf(requestStatusTypes, status) === -1) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Status type is not valid'
+    });
+  } else if (updateItem.status.value === REQUEST_STATUS.COMPLETED) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: `You can't update status with completed request`
+    });
+  } else {
     await requestModel.updateRequestByID(requestId, { status });
     const updatedResult = await requestModel.getItemByIdAsync(requestId);
     const updatedRequest = updatedResult[0];
-    console.log(updatedRequest);
     if (_.indexOf(ERROR_STATUS_TYPES, updatedRequest.status.value) !== -1) {
       const expiredDate = moment().add(3, 'days');
-      // await requestModel.updateRequestByID(requestId, { expiredDate });
+      await requestModel.updateRequestByID(requestId, { expiredDate });
       await sendErrorRequestEmail(updatedRequest, expiredDate);
     } else if (updatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
+      await requestModel.removeFields(requestId, { expiredDate: 1 });
       await sendCompletedRequestEmail(updatedRequest);
     } else {
+      await requestModel.removeFields(requestId, { expiredDate: 1 });
     }
-    res.send({
+    res.status(STATUS_CODE.SUCCESS).send({
       message: 'Request status has been updated, mail has been sent successfully'
-    }); 
-  } else {
-    res.status(STATUS_CODE.BAD_REQUEST).send({
-      message: 'Status type is not valid'
     });
   }
 }
@@ -341,9 +352,9 @@ async function sendRegisterEmail(addedRequest) {
       email
     } = addedRequest;
     const { stepchartLevel, stepchartType } = stepchartInfo;
-  
+
     const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
-  
+
     const mailOptions = {
       from: process.env.EMAIL,
       to: email,
@@ -353,7 +364,7 @@ async function sendRegisterEmail(addedRequest) {
         target: addedRequest
       }
     }
-  
+
     const result = await nodemailerTransport.sendMail(mailOptions);
     return Promise.resolve(result);
   } catch (err) {
@@ -377,9 +388,9 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
         updateData.deleteRequestToken = tokenPayload;
         break;
     }
-  
+
     const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
-  
+
     const mailOptions = {
       from: process.env.EMAIL,
       to: email,
@@ -392,7 +403,7 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
         modeLowercase: mode.toLowerCase()
       }
     }
-  
+
     await requestModel.updateRequestByID(requestId, updateData);
     await nodemailerTransport.sendMail(mailOptions);
     return Promise.resolve({
@@ -413,9 +424,9 @@ async function sendErrorRequestEmail(requestItem, expiredDate) {
       email
     } = requestItem;
     const { stepchartLevel, stepchartType } = stepchartInfo;
-  
+
     const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
-  
+
     const mailOptions = {
       from: process.env.EMAIL,
       to: email,
@@ -425,7 +436,7 @@ async function sendErrorRequestEmail(requestItem, expiredDate) {
         target: requestItem,
         expiredDate: moment(expiredDate).format('dddd, MMMM Do YYYY, h:mm:ss A Z')
       }
-    }  
+    }
     const result = await nodemailerTransport.sendMail(mailOptions);
     return Promise.resolve(result);
   } catch (err) {

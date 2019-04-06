@@ -351,6 +351,15 @@ module.exports.updateRequestByID = async (requestId, updateData) => {
 	}
 };
 
+module.exports.removeFields = async (requestId, removeFields) => {
+	try {
+		const result = UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $unset: removeFields });
+		return Promise.resolve(result);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
 module.exports.removeToken = async (requestId, mode) => {
 	let removeToken;
 	switch (mode) {
@@ -404,4 +413,3 @@ module.exports.searchQuery = req => {
 
 	return query;
 }
-
