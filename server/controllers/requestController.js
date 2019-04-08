@@ -330,12 +330,14 @@ module.exports.updateRequestStatus = async (req, res) => {
     if (_.indexOf(ERROR_STATUS_TYPES, updatedRequest.status.value) !== -1) {
       const expiredDate = moment().add(3, 'days');
       await requestModel.updateRequestByID(requestId, { expiredDate });
+      console.log('yo');
       await sendErrorRequestEmail(updatedRequest, expiredDate);
     } else if (updatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
       await requestModel.removeFields(requestId, { expiredDate: 1 });
       await sendCompletedRequestEmail(updatedRequest);
     } else {
       await requestModel.removeFields(requestId, { expiredDate: 1 });
+      await sendStandardRequestEmail(updatedRequest);
     }
     res.status(STATUS_CODE.SUCCESS).send({
       message: 'Request status has been updated, mail has been sent successfully'
@@ -353,7 +355,7 @@ async function sendRegisterEmail(addedRequest) {
     } = addedRequest;
     const { stepchartLevel, stepchartType } = stepchartInfo;
 
-    const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
+    const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
 
     const mailOptions = {
       from: process.env.EMAIL,
@@ -389,7 +391,7 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
         break;
     }
 
-    const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
+    const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
 
     const mailOptions = {
       from: process.env.EMAIL,
@@ -418,14 +420,13 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
 async function sendErrorRequestEmail(requestItem, expiredDate) {
   try {
     const {
-      requestId,
       stepchartInfo,
       song,
       email
     } = requestItem;
     const { stepchartLevel, stepchartType } = stepchartInfo;
 
-    const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
+    const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
 
     const mailOptions = {
       from: process.env.EMAIL,
@@ -446,20 +447,47 @@ async function sendErrorRequestEmail(requestItem, expiredDate) {
 
 async function sendCompletedRequestEmail(requestItem) {
   const {
-    requestId,
     stepchartInfo,
     song,
     email
   } = requestItem;
   const { stepchartLevel, stepchartType } = stepchartInfo;
 
-  const title = `[BOSS_PIUVN - UCS Request] - Request ID ${requestId}: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Request Completed`;
+  const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Request Completed`;
 
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,
     subject: title,
     template: 'request_completed_body',
+    context: {
+      target: requestItem
+    }
+  }
+
+  try {
+    const result = await nodemailerTransport.sendMail(mailOptions);
+    return Promise.resolve(result);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
+
+async function sendStandardRequestEmail(requestItem) {
+  const {
+    stepchartInfo,
+    song,
+    email
+  } = requestItem;
+  const { stepchartLevel, stepchartType } = stepchartInfo;
+
+  const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Status Changed`;
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: title,
+    template: 'standard_status_request_body',
     context: {
       target: requestItem
     }

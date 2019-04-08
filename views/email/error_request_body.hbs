@@ -595,11 +595,11 @@
                         
                             <h3>Hi, {{ target.requester }}</h3>
 
-<p style="line-height: 200%;"><strong>Whoops !</strong>&nbsp;Your request has been changed status&nbsp;to:<span style="color:#FF0000"> <strong>{{ target.status.label }}</strong></span><br>
+<p style="line-height: 200%;"><strong>Whoops !</strong>&nbsp;Your request&nbsp;status has been changed to:<span style="color:#FF0000"> <strong>{{ target.status.label }}.</strong></span><br>
 <br>
-We detected that your request has problem. Please update your request to our <a href="https://www.bosspiuvn.com/ucs-tracking" target="_blank"><strong>UCS Tracking System</strong></a> as soon as possible. If you don't update before the <span style="color:#0000CD"><strong><em>expiration time</em></strong></span>, your request will be <span style="color:#FF0000"><strong>terminated.</strong></span><br>
+We detected that your request has problem. Please update your request to our <a href="https://www.bosspiuvn.com/ucs-tracking" target="_blank"><strong>UCS Tracking System</strong></a> as soon as possible. If you don't update before <span style="color:#0000CD"><strong><em>expiration time</em></strong></span>, your request will be <span style="color:#FF0000"><strong>terminated.</strong></span><br>
 <br>
-<strong>Expiration Time</strong>:&nbsp;{{ expiredDate }}<br>
+<strong>Expiration Time</strong>:&nbsp; {{ expiredDate }}<br>
 <br>
 For more assistance, please don't hesitate to contact us at Facebook / Twitter Page.<br>
 <br>
@@ -640,6 +640,95 @@ Thank you and have a nice day<br>
                 <td class="mcnDividerBlockInner" style="padding: 18px;">
                 <hr class="mcnDividerContent" style="border-bottom-color:none; border-left-color:none; border-right-color:none; border-bottom-width:0; border-left-width:0; border-right-width:0; margin-top:0; margin-right:0; margin-bottom:0; margin-left:0;" />
 -->
+            </td>
+        </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+              	<!--[if mso]>
+				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+				<tr>
+				<![endif]-->
+			    
+				<!--[if mso]>
+				<td valign="top" width="600" style="width:600px;">
+				<![endif]-->
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-style: normal; font-weight: normal;">
+                        
+                            <h1 class="null"><span style="font-size:40px"><font color="#000000" face="roboto, helvetica neue, helvetica, arial, sans-serif">Request Info</font></span></h1>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+                
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
+    <tbody class="mcnImageBlockOuter">
+            <tr>
+                <td valign="top" style="padding:9px" class="mcnImageBlockInner">
+                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
+                        <tbody><tr>
+                            <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
+                                
+                                    
+                                        <img align="center" alt="" src="{{ target.song.thumbnailUrl }}" width="370" style="max-width:370px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+                                    
+                                
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+              	<!--[if mso]>
+				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+				<tr>
+				<![endif]-->
+			    
+				<!--[if mso]>
+				<td valign="top" width="600" style="width:600px;">
+				<![endif]-->
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+                        
+                            <strong>Request ID: </strong>{{ target.requestId }}<br>
+<br>
+<strong>Song:</strong> {{ target.song.name }}<br>
+<br>
+<strong>Level: </strong>&nbsp;<img data-file-id="11957" height="80" src="https://www.bosspiuvn.com/images/stepball_levels/{{ target.stepchartInfo.value }}/{{ target.stepchartInfo.stepchartLevel }}.png" width="80"><br>
+<br>
+<strong>STEPMAKER:</strong> {{ target.stepmaker }}
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+                
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
             </td>
         </tr>
     </tbody>
