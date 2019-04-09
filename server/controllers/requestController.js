@@ -262,7 +262,7 @@ module.exports.deleteRequestByToken = async (req, res) => {
   try {
     if (_.isEmpty(requestId)) {
       return res.status(STATUS_CODE.BAD_REQUEST).send({
-        message: 'Request ID Required'
+        message: 'Request ID required'
       });
     }
 
@@ -297,7 +297,7 @@ module.exports.deleteRequestByToken = async (req, res) => {
       }
     } else {
       return res.status(STATUS_CODE.BAD_REQUEST).send({
-        message: 'Request ID Not found'
+        message: 'Request ID does not exist'
       })
     }
   } catch (err) {
@@ -313,8 +313,22 @@ module.exports.updateRequestStatus = async (req, res) => {
   const { status } = req.body;
   const requestId = req.params.id;
   const requestStatusTypes = _.values(REQUEST_STATUS);
+
+  if (!requestId) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Request ID required'
+    });
+  }
+
   const result = await requestModel.getItemByIdAsync(requestId);
   const updateItem = result[0];
+
+  if (_.isEmpty(updateItem)) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Request ID does not exist'
+    })
+  }
+
   if (_.indexOf(requestStatusTypes, status) === -1) {
     return res.status(STATUS_CODE.BAD_REQUEST).send({
       message: 'Status type is not valid'
@@ -329,6 +343,7 @@ module.exports.updateRequestStatus = async (req, res) => {
     const updatedRequest = updatedResult[0];
     if (_.indexOf(ERROR_STATUS_TYPES, updatedRequest.status.value) !== -1) {
       const expiredDate = moment().add(3, 'days');
+      console.log(expiredDate);
       await requestModel.updateRequestByID(requestId, { expiredDate });
       console.log('yo');
       await sendErrorRequestEmail(updatedRequest, expiredDate);
@@ -336,6 +351,7 @@ module.exports.updateRequestStatus = async (req, res) => {
       await requestModel.removeFields(requestId, { expiredDate: 1 });
       await sendCompletedRequestEmail(updatedRequest);
     } else {
+      console.log("////")
       await requestModel.removeFields(requestId, { expiredDate: 1 });
       await sendStandardRequestEmail(updatedRequest);
     }
@@ -348,7 +364,6 @@ module.exports.updateRequestStatus = async (req, res) => {
 async function sendRegisterEmail(addedRequest) {
   try {
     const {
-      requestId,
       stepchartInfo,
       song,
       email

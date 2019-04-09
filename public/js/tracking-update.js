@@ -11,18 +11,12 @@ appModule.controller('trackingUcsSubCtrl', ($scope, $http, $q, $timeout) => {
 	$scope.showUpdateModal = (targetRequestId, mode) => {
 		$scope.updateMode = mode;
 		$scope.targetRequest = targetRequestId;
-		// const updateForm = $(`#update-request-form`);
-		// const deleteForm = $(`#delete-request-form`);
 		switch (mode) {
 			case UPDATE_MODE:
 				$scope.submitButtonStyle = PRIMARY_CLASS;
-				// updateForm.show();
-				// deleteForm.hide();
 				break;
 			case DELETE_MODE:
 				$scope.submitButtonStyle = DANGER_CLASS;
-				// deleteForm.show();
-				// updateForm.hide();
 				break;
 		}
 		$('#update-request-modal').modal('show');
@@ -51,6 +45,7 @@ appModule.controller('trackingUcsSubCtrl', ($scope, $http, $q, $timeout) => {
 						type: 'success',
 						allowOutsideClick: false
 					}).then(() => {
+						toggleTextArea(false, updateForm);
 						resetForm({
 							formId: 'request-token-form'
 						});
@@ -59,6 +54,7 @@ appModule.controller('trackingUcsSubCtrl', ($scope, $http, $q, $timeout) => {
 			}).catch(error => {
 				const { response } = error;
 				$scope.isRequestingToken = false;
+				toggleTextArea(false, updateForm);
 				Swal({
 					title: 'Oof...',
 					text: response ? (response.data.message || response) : error,
@@ -117,39 +113,6 @@ appModule.controller('trackingUcsSubCtrl', ($scope, $http, $q, $timeout) => {
 					allowOutsideClick: false
 				})
 			});
-
-			// $q.when(axios.post(requestUrl, {
-			// 	...formData,
-			// 	requestId: $scope.targetRequest
-			// })).then(response => {
-			// 	$timeout(() => {
-			// 		$('#update-request-modal').modal('hide');
-			// 		toggleTextArea(false, form);
-			// 		Swal({
-			// 			title: 'Success',
-			// 			text: response.data.message,
-			// 			type: 'success',
-			// 			allowOutsideClick: false
-			// 		}).then(() => {
-			// 			$scope.$emit('reloadList');
-			// 		});
-			// 	}, 2000);
-			// }).catch(error => {
-			// 	$scope.isRequestingSubmit = false;
-			// 	const { response } = error;
-			// 	toggleTextArea(false, form);
-			// 	Swal({
-			// 		title: 'Oof...',
-			// 		text: response ? (response.data.message || response) : error,
-			// 		type: 'error',
-			// 		allowOutsideClick: false
-			// 	}).then(() => {
-			// 		resetForm({
-			// 			formId: form.attr('id'),
-			// 			currentMode
-			// 		})
-			// 	});
-			// });
 		}
 	}
 
