@@ -1,11 +1,11 @@
 const requestModel = require('../models/request');
 const pagination = require('../shared/modules/pagination');
 const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS,
-  ID_LENGTH, ERROR_STATUS_TYPES } = require('../shared/constant');
+  ID_LENGTH, ERROR_STATUS_TYPES, EXPIRATION_DURATION_DAYS } = require('../shared/constant');
 const { requestMessages } = require('../shared/response_messages');
 const tokenModule = require('../modules/tokenModules');
 const { randomString } = require('../shared/modules/randomString');
-const { decodeAndSanitizeObject } = require('../shared/modules/sanitize')
+const { decodeAndSanitizeObject, decodeAndSanitizeValue } = require('../shared/modules/sanitize')
 const nodemailer = require('nodemailer');
 const hbsNodemailer = require('nodemailer-express-handlebars');
 const _ = require('lodash');
@@ -73,6 +73,8 @@ module.exports.getRequests = async (req, res) => {
 
 module.exports.requestToken = async (req, res) => {
   const { email, mode, requestId } = req.body;
+  decodeAndSanitizeValue(email);
+  const submitEmail = String(email).toLowerCase();
   const { getItemByIdAsync } = requestModel;
   try {
     if (_.isEmpty(requestId)) {
@@ -84,7 +86,7 @@ module.exports.requestToken = async (req, res) => {
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];
       const tokenPayload = tokenModule.generateToken();
-      if (email === requestItem.email) {
+      if (submitEmail === requestItem.email) {
         const updateResult = await sendTokenEmail(requestItem, mode, tokenPayload);
         if (!_.isEmpty(updateResult)) {
           const { updateMode, registeredEmail } = updateResult;
@@ -126,13 +128,14 @@ module.exports.registerNewRequest = async (req, res) => {
       stepmaker,
       requester,
       ucsLink,
-      email
     } = data;
+
+    const email = String(data.email).toLowerCase();
 
     if (email === process.env.EMAIL) {
       return res.status(STATUS_CODE.BAD_REQUEST).send({
         message: `This email can not be used, please try another email`
-      });  
+      });
     }
 
     const submitData = {
@@ -329,34 +332,46 @@ module.exports.updateRequestStatus = async (req, res) => {
     })
   }
 
-  if (_.indexOf(requestStatusTypes, status) === -1) {
-    return res.status(STATUS_CODE.BAD_REQUEST).send({
-      message: 'Status type is not valid'
-    });
-  } else if (updateItem.status.value === REQUEST_STATUS.COMPLETED) {
+  if (updateItem.status.value === REQUEST_STATUS.COMPLETED) {
     return res.status(STATUS_CODE.BAD_REQUEST).send({
       message: `You can't update status with completed request`
     });
-  } else {
-    await requestModel.updateRequestByID(requestId, { status });
-    const updatedResult = await requestModel.getItemByIdAsync(requestId);
-    const updatedRequest = updatedResult[0];
-    if (_.indexOf(ERROR_STATUS_TYPES, updatedRequest.status.value) !== -1) {
-      const expiredDate = moment().add(3, 'days');
-      console.log(expiredDate);
-      await requestModel.updateRequestByID(requestId, { expiredDate });
-      console.log('yo');
-      await sendErrorRequestEmail(updatedRequest, expiredDate);
-    } else if (updatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
-      await requestModel.removeFields(requestId, { expiredDate: 1 });
-      await sendCompletedRequestEmail(updatedRequest);
-    } else {
-      console.log("////")
-      await requestModel.removeFields(requestId, { expiredDate: 1 });
-      await sendStandardRequestEmail(updatedRequest);
+  }
+
+  if (_.indexOf(requestStatusTypes, status) !== -1) {
+    console.log('yeah! go head');
+    try {
+      await requestModel.updateRequestByID(requestId, { status });
+      const newUpdatedResult = await requestModel.getItemByIdAsync(requestId);
+      const newUpdatedRequest = newUpdatedResult[0];
+
+      if (_.indexOf(ERROR_STATUS_TYPES, newUpdatedRequest.status.value) !== -1) {
+        console.log('error');
+        const expiredDate = moment().add(EXPIRATION_DURATION_DAYS, 'days');
+        await requestModel.updateRequestByID(requestId, { expiredDate });
+        await sendErrorRequestEmail(newUpdatedRequest, expiredDate);
+      } else if (newUpdatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
+        console.log('completed');
+        await requestModel.removeFields(requestId, { expiredDate: 1 });
+        await sendCompletedRequestEmail(newUpdatedRequest);
+      } else {
+        console.log('standard');
+        await requestModel.removeFields(requestId, { expiredDate: 1 });
+        await sendStandardRequestEmail(newUpdatedRequest);
+      }
+      res.status(STATUS_CODE.SUCCESS).send({
+        message: 'Request status has been updated, mail has been sent successfully'
+      });
+    } catch (e) {
+      console.log(e);
+      return res.status(STATUS_CODE.SERVER_ERROR).send({
+        message: 'An error occured while updating request, please try again later',
+        err
+      })
     }
-    res.status(STATUS_CODE.SUCCESS).send({
-      message: 'Request status has been updated, mail has been sent successfully'
+  } else {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Status type is not valid'
     });
   }
 }

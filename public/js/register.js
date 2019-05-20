@@ -112,18 +112,13 @@ appModule.controller('registerUcsCtrl', ($scope, $http, $q) => {
 			stepmaker,
 			ucsLink
 		}
-		// const { song, ...rest } = $scope.preview;
-		// const data = {
-		// 	song: song.value,
-		// 	...rest
-		// }
+
 		axios.post('/register', data)
 			.then(function (response) {
 				setTimeout(function () {
 					$(self).empty().append(defaultState);
 					$('#preview-modal').modal('hide');
 					$(':button').prop('disabled', false);
-					const { email } = $scope.preview;
 					Swal({
 						title: 'Congratulations!',
 						text: response.data.message,

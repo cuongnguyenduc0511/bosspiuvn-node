@@ -452,6 +452,12 @@ $h4-font-family: 'Russo One', sans-serif;
     box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
+.team-avatar {
+    width: 300px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
 @font-face {
     font-family: 'Amaz Obitaem Ostrov Italic';
     src:  url(../css/font/AmazObitaemOstrovItalic.ttf);
