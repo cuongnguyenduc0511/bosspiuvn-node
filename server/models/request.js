@@ -65,9 +65,13 @@ const RequestSchema = new Schema({
 	status: {
 		type: String,
 		required: true,
-		default: REQUEST_STATUS.PENDING
+		default: REQUEST_STATUS.ACTIVATION_PENDING
 	},
 	playedBy: Schema.Types.Mixed,
+	activationToken: {
+		token: { type: String },
+		exp: { type: Date }
+	},
 	updateRequestToken: {
 		token: { type: String },
 		exp: { type: Date }
@@ -76,6 +80,7 @@ const RequestSchema = new Schema({
 		token: { type: String },
 		exp: { type: Date }
 	},
+	isActivated: { type: Boolean, default: false },
 	isSpecial: { type: Boolean, default: false },
 	isOldRequest: { type: Boolean, default: false }
 }, { collection: 'requests' });
@@ -236,6 +241,8 @@ module.exports.getItemByIdAsync = async id => {
 					requester: 1,
 					deleteToken: '$deleteRequestToken',
 					updateToken: '$updateRequestToken',
+					activationToken: 1,
+					isActivated: 1,
 					email: 1, // Sensitive Data
 					status: {
 						value: '$status.statusValue',
@@ -368,6 +375,16 @@ module.exports.removeToken = async (requestId, mode) => {
 	}
 
 	await UCSRequest.findOneAndUpdate({ "requestId": requestId }, removeToken);
+}
+
+module.exports.activateRequest = async (requestId) => {
+	var opts = { runValidators: true, context: 'query' };
+	try {
+		const result = UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $set: { isActivated: true, status: REQUEST_STATUS.PENDING }, $unset: { activationToken: 1 } }, opts);
+		return Promise.resolve(result);
+	} catch (err) {
+		return Promise.reject(err);
+	}
 }
 
 module.exports.deleteRequest = async requestId => {

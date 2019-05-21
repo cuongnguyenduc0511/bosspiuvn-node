@@ -3,7 +3,7 @@ const pagination = require('../shared/modules/pagination');
 const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS,
   ID_LENGTH, ERROR_STATUS_TYPES, EXPIRATION_DURATION_DAYS } = require('../shared/constant');
 const { requestMessages } = require('../shared/response_messages');
-const tokenModule = require('../modules/tokenModules');
+const { generateToken, generateActivationToken } = require('../modules/tokenModules');
 const { randomString } = require('../shared/modules/randomString');
 const { decodeAndSanitizeObject, decodeAndSanitizeValue } = require('../shared/modules/sanitize')
 const nodemailer = require('nodemailer');
@@ -71,6 +71,48 @@ module.exports.getRequests = async (req, res) => {
   }
 };
 
+module.exports.activateRequest = async (req, res) => {
+  const { id: requestId, token } = req.query;
+  if (_.isEmpty(requestId) || _.isEmpty(token)) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Request ID / Token is not provided'
+    })
+  }
+
+  const { getItemByIdAsync } = requestModel;
+  const requestItemResult = await getItemByIdAsync(requestId);
+  try {
+    if (requestItemResult.length > 0) {
+      const requestItem = requestItemResult[0];
+      if (requestItem.isActivated) {
+        return res.status(STATUS_CODE.BAD_REQUEST).send({
+          message: `Request id: ${requestId} is already activated`
+        })
+      }
+      
+      if (token === requestItem.activationToken.token && !requestItem.isActivated) {
+        await requestModel.activateRequest(requestId);
+        res.status(STATUS_CODE.SUCCESS).send({
+          message: `Request id: ${requestId} has been successfully activated`
+        })
+      } else {
+        return res.status(STATUS_CODE.BAD_REQUEST).send({
+          message: `Activate token does not match`
+        })
+      }
+    } else {
+      return res.status(STATUS_CODE.NOT_FOUND).send({
+        message: 'Wrong Request ID / Request ID does not exist'
+      })
+    }
+  } catch (err) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send({
+      message: 'An error occurred while activating token, Please try again later',
+      err
+    })
+  }
+}
+
 module.exports.requestToken = async (req, res) => {
   const { email, mode, requestId } = req.body;
   decodeAndSanitizeValue(email);
@@ -85,7 +127,7 @@ module.exports.requestToken = async (req, res) => {
     const requestItemResult = await getItemByIdAsync(requestId);
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];
-      const tokenPayload = tokenModule.generateToken();
+      const tokenPayload = generateToken();
       if (submitEmail === requestItem.email) {
         const updateResult = await sendTokenEmail(requestItem, mode, tokenPayload);
         if (!_.isEmpty(updateResult)) {
@@ -152,16 +194,20 @@ module.exports.registerNewRequest = async (req, res) => {
       stepmaker,
       contentName,
       ucsLink,
+      activationToken: {
+        token: generateActivationToken(),
+        exp: moment().add(8, 'hours')
+      },
       email
     }
 
     const addedDoc = await addData(submitData);
     const addedItemResult = await getItemByIdAsync(addedDoc.requestId);
     const addedItemInfo = addedItemResult[0];
-    const emailSent = await sendRegisterEmail(addedItemInfo);
+    const emailSent = await sendRegisterEmail(addedItemInfo, req);
     if (!_.isEmpty(emailSent)) {
       res.status(STATUS_CODE.SUCCESS).send({
-        message: `Your request has been sent, please check your email: ${addedItemInfo.email} to view your request`
+        message: `Your request has been sent, please check your email: ${addedItemInfo.email} to activate your request`
       });
     }
   } catch (err) {
@@ -376,12 +422,14 @@ module.exports.updateRequestStatus = async (req, res) => {
   }
 }
 
-async function sendRegisterEmail(addedRequest) {
+async function sendRegisterEmail(addedRequest, req) {
   try {
     const {
       stepchartInfo,
       song,
-      email
+      email,
+      requestId,
+      activationToken: { token: activationToken, exp: expiredAt }
     } = addedRequest;
     const { stepchartLevel, stepchartType } = stepchartInfo;
 
@@ -393,7 +441,9 @@ async function sendRegisterEmail(addedRequest) {
       subject: title,
       template: 'register_body',
       context: {
-        target: addedRequest
+        target: addedRequest,
+        activationLink: `${req.protocol}://${req.headers.host}/request-activation?id=${requestId}&token=${activationToken}`,
+        expiredAt: moment(expiredAt).format('dddd, MMMM Do YYYY, h:mm:ss A Z'),
       }
     }
 

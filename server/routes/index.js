@@ -1,18 +1,3 @@
-// const appRoutes = [
-//     'app',
-//     'auth',
-//     'api'
-// ]
-
-// const apiRoutes = [
-//     'songs',
-//     'requests'
-// ]
-
-// module.exports = {
-//     appRoutes: appRoutes,
-//     apiRoutes: apiRoutes
-// };
 const requestController = require('../controllers/requestController');
 const { TITLE_FORMAT } = require('../shared/constant');
 const express = require('express');
@@ -72,6 +57,10 @@ router.get('/register', csrfProtection, (req, res, next) => {
     });
 });
 
+router.get('/request-activation', (req, res, next) => {
+    requestController.activateRequest(req, res);
+})
+
 router.post('/register', csrfProtection, (req, res, next) => {
     requestController.registerNewRequest(req, res);
 })
@@ -87,13 +76,5 @@ router.post('/update-request', csrfProtection, (req, res, next) => {
 router.post('/delete-request', csrfProtection, (req, res, next) => {
     requestController.deleteRequestByToken(req, res);
 });
-
-// router.get('*', function(req, res){
-//     res.render('pages/not-found', {
-//         title: 'Page Not Found | 404',
-//         layout: 'master_layout/layout2',
-//         root: root,
-//     });
-// });
 
 module.exports = router;

@@ -1,6 +1,7 @@
-module.exports.randomString = (length_) => {
+const POSSIBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+module.exports.randomString = (length_, possibleChars = POSSIBLE_CHARS) => {
+    var chars = possibleChars.split('');
     if (typeof length_ !== "number") {
         length_ = Math.floor(Math.random() * chars.length_);
     }

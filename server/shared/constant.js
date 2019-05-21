@@ -11,6 +11,7 @@ const UPDATE_MODE = {
 }
 
 const REQUEST_STATUS = {
+    ACTIVATION_PENDING: 'activation-pending',
     PENDING: 'pending',
     COMPLETED: 'completed',
     OFFSYNC: 'offsync',
