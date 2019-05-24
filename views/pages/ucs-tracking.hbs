@@ -65,7 +65,7 @@
 				<strong>{[{ trackingResult.totalItems }]}</strong>
 			</div>
 		</section>
-		<section ng-cloak ng-if="trackingResult.items.length > 0 && !isFetchingRequest && !isResultNotFoundShow && !isPristineList"
+		<section ng-cloak ng-if="trackingResult.items.length > 0 && !isFetchingRequest && !isResultNotFoundShow && !isPristineList && !isFetchingRequestTimeout"
 		 id="request-list" ng-controller="trackingUcsSubCtrl">
 			{{> tracking-item}} {{> tracking-item-pagination}} {{> tracking-update-modal}}
 		</section>

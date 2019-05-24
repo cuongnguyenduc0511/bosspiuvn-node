@@ -1,9 +1,31 @@
+const {union} = require('lodash');
+
 const DB = {
     REQUEST: 'requests',
     STEPCHART_TYPE: 'stepchart_types',
     SONG: 'songs',
     STATUS: 'status'
 }
+
+const STEPCHART_TYPES = {
+    SINGLE: 'single',
+    DOUBLE: 'double',
+    SINGLE_PERFORMANCE: 'single-performance',
+    DOUBLE_PERFORMANCE: 'double-performance',
+    COOP: 'co-op'
+}
+
+const STANDARD_STEPCHART_LEVELS = ['13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
+const COOP_STEPCHART_TYPES = ['X2','X3','X4','X5','X6','X7','X8','X9'];
+
+const STANDARD_STEPCHART_REQUIREMENT = [
+    STEPCHART_TYPES.SINGLE,
+    STEPCHART_TYPES.DOUBLE,
+    STEPCHART_TYPES.SINGLE_PERFORMANCE,
+    STEPCHART_TYPES.DOUBLE_PERFORMANCE
+]
+
+const STEPCHART_LEVELS = union(STANDARD_STEPCHART_LEVELS, COOP_STEPCHART_TYPES);
 
 const UPDATE_MODE = {
     UPDATE: 'Update',
@@ -36,7 +58,7 @@ const SALT_ROUNDS = 10;
 
 const RECORD_PER_PAGE = 15;
 
-const ID_LENGTH = 50;
+const ID_LENGTH = 20;
 
 const JWT_ID_LENGTH = 100;
 
@@ -73,6 +95,11 @@ module.exports = {
     REQUEST_STATUS,
     ID_LENGTH,
     ERROR_STATUS_TYPES,
-    JWT_ID_LENGTH
+    JWT_ID_LENGTH,
+    STEPCHART_TYPES,
+    STEPCHART_LEVELS,
+    STANDARD_STEPCHART_REQUIREMENT,
+    COOP_STEPCHART_TYPES,
+    STANDARD_STEPCHART_LEVELS
 };
 

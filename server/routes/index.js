@@ -1,6 +1,7 @@
 const requestController = require('../controllers/requestController');
 const { TITLE_FORMAT } = require('../shared/constant');
 const express = require('express');
+const { activateRequestMiddleware, registerRequestMiddleware } = require('../middleware/middleware');
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
@@ -57,11 +58,11 @@ router.get('/register', csrfProtection, (req, res, next) => {
     });
 });
 
-router.get('/request-activation', (req, res, next) => {
+router.get('/request-activation', activateRequestMiddleware, (req, res) => {
     requestController.activateRequest(req, res);
 })
 
-router.post('/register', csrfProtection, (req, res, next) => {
+router.post('/register', csrfProtection, registerRequestMiddleware, (req, res) => {
     requestController.registerNewRequest(req, res);
 })
 

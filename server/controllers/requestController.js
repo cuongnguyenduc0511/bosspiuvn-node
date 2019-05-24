@@ -72,38 +72,32 @@ module.exports.getRequests = async (req, res) => {
 };
 
 module.exports.activateRequest = async (req, res) => {
-  const { id: requestId, token } = req.query;
-  if (_.isEmpty(requestId) || _.isEmpty(token)) {
-    return res.status(STATUS_CODE.BAD_REQUEST).send({
-      message: 'Request ID / Token is not provided'
-    })
-  }
-
   const { getItemByIdAsync } = requestModel;
+  const { id: requestId, token } = req.query;
   const requestItemResult = await getItemByIdAsync(requestId);
   try {
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];
       if (requestItem.isActivated) {
-        return res.status(STATUS_CODE.BAD_REQUEST).send({
-          message: `Request id: ${requestId} is already activated`
-        })
+        return res.status(STATUS_CODE.SUCCESS).send(
+          `<h2 style="color: blue">Request ID: ${requestId} is already activated</h2>`
+        )
       }
       
       if (token === requestItem.activationToken.token && !requestItem.isActivated) {
         await requestModel.activateRequest(requestId);
-        res.status(STATUS_CODE.SUCCESS).send({
-          message: `Request id: ${requestId} has been successfully activated`
-        })
+        res.status(STATUS_CODE.SUCCESS).send(
+          `<h2 style="color: green">Request id: ${requestId} has been successfully activated</h2>`
+        )
       } else {
-        return res.status(STATUS_CODE.BAD_REQUEST).send({
-          message: `Activate token does not match`
-        })
+        return res.status(STATUS_CODE.BAD_REQUEST).send(
+          `<h2 style="color: red">Activate token does not match for Request id: ${requestId}</h2>`
+        )
       }
     } else {
-      return res.status(STATUS_CODE.NOT_FOUND).send({
-        message: 'Wrong Request ID / Request ID does not exist'
-      })
+      return res.status(STATUS_CODE.NOT_FOUND).send(
+        `<h2 style="color: red">Wrong Request ID / Request ID does not exist</h2>`
+      )
     }
   } catch (err) {
     return res.status(STATUS_CODE.SERVER_ERROR).send({
@@ -157,9 +151,6 @@ module.exports.requestToken = async (req, res) => {
 module.exports.registerNewRequest = async (req, res) => {
   try {
     const { addData, getItemByIdAsync } = requestModel;
-    const { requesterNote, ...rest } = req.body;
-    const data = { ...rest };
-    decodeAndSanitizeObject(data);
     const requestId = await generateRequestId();
 
     const {
@@ -170,15 +161,9 @@ module.exports.registerNewRequest = async (req, res) => {
       stepmaker,
       requester,
       ucsLink,
-    } = data;
-
-    const email = String(data.email).toLowerCase();
-
-    if (email === process.env.EMAIL) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
-        message: `This email can not be used, please try another email`
-      });
-    }
+      email,
+      requesterNote
+    } = req.submitData;
 
     const submitData = {
       requestId,
@@ -385,31 +370,26 @@ module.exports.updateRequestStatus = async (req, res) => {
   }
 
   if (_.indexOf(requestStatusTypes, status) !== -1) {
-    console.log('yeah! go head');
     try {
       await requestModel.updateRequestByID(requestId, { status });
       const newUpdatedResult = await requestModel.getItemByIdAsync(requestId);
       const newUpdatedRequest = newUpdatedResult[0];
 
       if (_.indexOf(ERROR_STATUS_TYPES, newUpdatedRequest.status.value) !== -1) {
-        console.log('error');
         const expiredDate = moment().add(EXPIRATION_DURATION_DAYS, 'days');
         await requestModel.updateRequestByID(requestId, { expiredDate });
         await sendErrorRequestEmail(newUpdatedRequest, expiredDate);
       } else if (newUpdatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
-        console.log('completed');
         await requestModel.removeFields(requestId, { expiredDate: 1 });
         await sendCompletedRequestEmail(newUpdatedRequest);
       } else {
-        console.log('standard');
         await requestModel.removeFields(requestId, { expiredDate: 1 });
         await sendStandardRequestEmail(newUpdatedRequest);
       }
       res.status(STATUS_CODE.SUCCESS).send({
         message: 'Request status has been updated, mail has been sent successfully'
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
       return res.status(STATUS_CODE.SERVER_ERROR).send({
         message: 'An error occured while updating request, please try again later',
         err

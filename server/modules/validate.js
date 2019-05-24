@@ -1,7 +1,9 @@
 const validate = require('validate.js');
+const {isEmpty, values, map} = require('lodash');
 
-module.exports.validateForm = (formValue, formConstraints) => {
-  let formValidation = validate(formValue, formConstraints, {fullMessages: false});
+exports.default = (formValue, formConstraints, customValidInstance = null) => {
+  const validateInstance = !isEmpty(customValidInstance) ? customValidInstance : validate;
+  let formValidation = validateInstance(formValue, formConstraints, {fullMessages: false});
 
   for(let k in formValidation) {
     formValidation[k] = formValidation[k] ? {
@@ -9,6 +11,10 @@ module.exports.validateForm = (formValue, formConstraints) => {
     } : null
   }
 
-//   return Promise.resolve(formValidation);
   return formValidation;
+}
+
+module.exports.showValidationErrors = (validations) => {
+  const messages = values(validations);
+  return map(messages, 'errorMessage');
 }
