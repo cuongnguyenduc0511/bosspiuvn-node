@@ -1,7 +1,7 @@
 const requestController = require('../controllers/requestController');
 const { TITLE_FORMAT } = require('../shared/constant');
 const express = require('express');
-const { activateRequestMiddleware, registerRequestMiddleware } = require('../middleware/middleware');
+const { activateRequestMiddleware, registerRequestMiddleware, updateRequestMiddleware } = require('../middleware/middleware');
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
@@ -70,7 +70,7 @@ router.post('/request-token', csrfProtection, (req, res, next) => {
     requestController.requestToken(req, res);
 });
 
-router.post('/update-request', csrfProtection, (req, res, next) => {
+router.post('/update-request', csrfProtection, updateRequestMiddleware, (req, res) => {
     requestController.updateRequestByToken(req, res);
 });
 

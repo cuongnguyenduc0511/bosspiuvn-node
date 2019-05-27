@@ -209,12 +209,6 @@ module.exports.updateRequestByToken = async (req, res) => {
   const { getItemByIdAsync, updateRequestByID, removeToken } = requestModel;
   try {
     const {
-      requesterNote,
-      ...rest
-    } = req.body;
-    decodeAndSanitizeObject(rest);
-    const formData = rest;
-    const {
       requestId,
       stepchartType,
       stepchartLevel,
@@ -222,13 +216,10 @@ module.exports.updateRequestByToken = async (req, res) => {
       stepmaker,
       ucsLink,
       contentName,
+      requesterNote,
       updateToken
-    } = formData;
-    if (!requestId) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
-        message: 'Request ID Required'
-      });
-    }
+    } = req.submitData;
+
     const requestItemResult = await getItemByIdAsync(requestId);
     if (requestItemResult.length > 0) {
       const requestItem = requestItemResult[0];

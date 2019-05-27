@@ -9,7 +9,7 @@
     "watch-css": "npm run build-css && node-sass-chokidar public/ -o public/ --watch --recursive --use-polling --polling-interval 1000"
   },
   "dependencies": {
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",

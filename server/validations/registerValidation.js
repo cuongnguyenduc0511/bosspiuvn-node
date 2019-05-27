@@ -1,5 +1,5 @@
 const registerValidateInstance = require('validate.js');
-const {values, includes} = require('lodash');
+const {values, includes, omit, merge} = require('lodash');
 const validateModule = require('../modules/validate').default;
 const { STEPCHART_LEVELS, STEPCHART_TYPES, COOP_STEPCHART_TYPES, 
 STANDARD_STEPCHART_REQUIREMENT, STANDARD_STEPCHART_LEVELS} = require('../shared/constant');
@@ -29,7 +29,7 @@ function isValidStepchartLevel(stepchartType, stepchartLevel) {
 const formContraints = {
   requester: {
     presence: {
-      message: 'Requester is required',
+      message: 'Requester name is required',
       allowEmpty: false
     },
   },
@@ -80,11 +80,33 @@ const formContraints = {
       allowEmpty: false
     },
     format: {
-      pattern: /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/,
+      pattern: /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
       flags: "i",
       message: "UCS Link is not valid"
     }
   }
 };
 
-exports.default = (formValue) => validateModule(formValue, formContraints, registerValidateInstance);
+module.exports.registerValidation = (formValue) => validateModule(formValue, formContraints, registerValidateInstance);
+
+module.exports.updateRequestValidation = (formValue) => {
+  const updateSchema = {
+    requestId: {
+      presence: {
+        message: 'Request Id is required',
+        allowEmpty: false
+      }
+    },
+    updateToken: {
+      presence: {
+        message: 'Update token is required',
+        allowEmpty: false
+      }
+    }
+  }
+
+  let updateContraints = omit(formContraints, ['song', 'email']);
+  updateContraints = merge(updateSchema, updateContraints);
+
+  return validateModule(formValue, updateContraints, registerValidateInstance);
+}
