@@ -4,7 +4,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<form id="ucs-register-form" class="b-form col-lg-6 col-md-8 ml-auto mr-auto">
-					<div id="form-loader" class="overlay_container">
+					<div ng-if="!isFullyLoaded" id="form-loader" class="overlay_container">
 						<i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
 					</div>
 					<h4>Basic Information</h4>

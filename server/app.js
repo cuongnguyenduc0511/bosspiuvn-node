@@ -126,7 +126,7 @@ app.use(flash());
 
 
 //SETUP Method override [PUT & DELETE] Form HTML5
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Mount csrfProtection before initialize route
 // const csrf = require('csurf');

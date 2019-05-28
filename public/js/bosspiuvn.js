@@ -1,9 +1,4 @@
-$(document).ready(() => {
-    // setTimeout(function() {
-    //     $("html, body").animate({ scrollTop: 0 }, 300);
-    //     toggleNavbar();
-    // })
-
+$(document).ready(function () {
     $("#sidebar").mCustomScrollbar({
         theme: "minimal"
     });
@@ -21,18 +16,3 @@ $(document).ready(() => {
     });
 
 });
-
-// $( window ).scroll(() => {
-//     toggleNavbar();
-// });
-
-// function toggleNavbar() {
-//     let navbarElem = $('.navbar').first();
-//     let pageHeaderElem = $('.page-header').first();
-//     let changeOffset = pageHeaderElem.hasClass('page-header__background') ? 70 : 150;
-//     if(window.pageYOffset > changeOffset) {
-//         navbarElem.removeClass( "navbar-transparent" );
-//     } else {
-//         navbarElem.addClass( "navbar-transparent" );
-//     }
-// }
