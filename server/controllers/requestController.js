@@ -1,4 +1,6 @@
 const requestModel = require('../models/request');
+const songModel = require('../models/song');
+const stepchartTypeModel = require('../models/stepchartTypes');
 const pagination = require('../shared/modules/pagination');
 const { UPDATE_MODE, STATUS_CODE, REQUEST_STATUS,
   ID_LENGTH, ERROR_STATUS_TYPES, EXPIRATION_DURATION_DAYS } = require('../shared/constant');
@@ -149,10 +151,12 @@ module.exports.requestToken = async (req, res) => {
 }
 
 module.exports.registerNewRequest = async (req, res) => {
+  let registerRequestSession = null;
   try {
-    const { addData, getItemByIdAsync } = requestModel;
     const requestId = await generateRequestId();
-
+    registerRequestSession = await requestModel.getSession();
+    registerRequestSession.startTransaction();
+  
     const {
       stepchartLevel,
       stepchartType,
@@ -186,16 +190,19 @@ module.exports.registerNewRequest = async (req, res) => {
       email
     }
 
-    const addedDoc = await addData(submitData);
-    const addedItemResult = await getItemByIdAsync(addedDoc.requestId);
-    const addedItemInfo = addedItemResult[0];
-    const emailSent = await sendRegisterEmail(addedItemInfo, req);
-    if (!_.isEmpty(emailSent)) {
-      res.status(STATUS_CODE.SUCCESS).send({
-        message: `Your request has been sent, please check your email: ${addedItemInfo.email} to activate your request`
-      });
-    }
+    const addedDoc = await requestModel.addData(submitData);
+    const aggregated = await getFullDetailsRequest(addedDoc);
+    console.log(aggregated);
+    await sendRegisterEmail(aggregated, req);
+    await registerRequestSession.commitTransaction();
+    registerRequestSession.endSession();
+    res.status(STATUS_CODE.SUCCESS).send({
+      message: `Your request has been sent, please check your email: ${aggregated.email} to activate your request`
+    });
   } catch (err) {
+    console.log(err);
+    await registerRequestSession.abortTransaction();
+    registerRequestSession.endSession();
     const { status, error } = err;
     const statusCode = status || STATUS_CODE.SERVER_ERROR;
     return res.status(statusCode).send({
@@ -421,13 +428,17 @@ async function sendRegisterEmail(addedRequest, req) {
     const result = await nodemailerTransport.sendMail(mailOptions);
     return Promise.resolve(result);
   } catch (err) {
+    console.log(err);
     return Promise.reject(err);
   }
 }
 
 async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
+  let createTokenSession = null;
   try {
     let updateData = {};
+    createTokenSession = await requestModel.getSession();
+    createTokenSession.startTransaction();
     const { song, stepchartInfo, email, requestId } = requestItem;
     const { stepchartType, stepchartLevel } = stepchartInfo;
     let mode;
@@ -459,11 +470,15 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
 
     await requestModel.updateRequestByID(requestId, updateData);
     await nodemailerTransport.sendMail(mailOptions);
+    await createTokenSession.commitTransaction();
+    createTokenSession.endSession();
     return Promise.resolve({
       updateMode: mode.toLowerCase(),
       registeredEmail: email
     });
   } catch (err) {
+    await createTokenSession.abortTransaction();
+    createTokenSession.endSession();
     return Promise.reject(err);
   }
 }
@@ -563,5 +578,42 @@ async function generateRequestId() {
     }
   } catch (err) {
     return Promise.reject(err);
+  }
+}
+
+const getFullDetailsRequest = async (addedDoc) => {
+  try {
+    const { 
+      song: targetSong, 
+      stepchartInfo: {stepchartType, stepchartLevel}, 
+      contentName, stepmaker, ucsLink, requester, activationToken, email,
+      requestId } = addedDoc;
+    const songDetails = await songModel.getSongById(targetSong);
+    _.omit(songDetails, ['value']);
+    const { songName, ...restSong } = songDetails;
+    const stepTypeDetails = await stepchartTypeModel.getTypeDetails(stepchartType);
+    const song = {
+      name: songName,
+      ...restSong
+    }
+    const stepchartInfo = {
+      stepchartType: {
+        ...stepTypeDetails
+      },
+      stepchartLevel
+    }
+    return Promise.resolve(Object.assign({}, {
+      song, 
+      stepchartInfo,
+      contentName,
+      stepmaker,
+      ucsLink,
+      requester,
+      activationToken,
+      email,
+      requestId
+    }));  
+  } catch (err) {
+    return Promise.reject(err);  
   }
 }

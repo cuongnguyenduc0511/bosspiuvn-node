@@ -184,7 +184,7 @@ const manipulateSongTitle = function(songs) {
     //   <span class='artist'><span class='artist__label'>Artist:</span> ${artist}</span>
     // </div>`,
       title:
-      '<div><strong class="song-name">' + item.songName + '</strong><br><span class="artist"><span class="artist__label">Artist:</span>' + item.artist + '</span></div>',
+      '<div><strong class="song-name">' + item.songName + '</strong><br><span class="artist"><span class="artist__label">Artist: </span>' + item.artist + '</span></div>',
       value: item.value,
       thumbnailUrl: item.thumbnailUrl
     }

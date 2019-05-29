@@ -87,11 +87,17 @@ const RequestSchema = new Schema({
 
 var UCSRequest = mongoose.model('requests', RequestSchema);
 
-module.exports.addData = async newData => {
+let session = null
+
+module.exports.getSession = async () => {
+	session = await UCSRequest.startSession();
+	return session;
+}
+
+module.exports.addData = async (newData) => {
 	try {
-		const newRequest = new UCSRequest(newData);
-		const result = await newRequest.save();
-		return Promise.resolve(result);
+    const result = await UCSRequest.create([newData], { session: session });
+		return Promise.resolve(result[0]);
 	} catch (err) {
 		const { name, _message, message } = err;
 		const errorObj = {
@@ -349,7 +355,7 @@ module.exports.countAllItems = async () => {
 }
 
 module.exports.updateRequestByID = async (requestId, updateData) => {
-	var opts = { runValidators: true, context: 'query' };
+	var opts = { runValidators: true, context: 'query', session: session };
 	try {
 		const result = UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $set: updateData }, opts);
 		return Promise.resolve(result);
