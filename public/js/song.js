@@ -48,8 +48,10 @@ appModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
             $timeout(() => {
                 initCarousel();
                 carousel.on('changed.owl.carousel', function (event) {
-                    $scope.songList = getSongList(event);
-                    $scope.$digest();
+                    abortLoadingImages().then(() => {
+                        $scope.songList = getSongList(event);
+                        $scope.$digest();
+                    })
                 });
             })
         }).catch(error => {
@@ -66,6 +68,13 @@ appModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
         let songList = _.filter(songs, function (item) { return item.group === currentSeries.title; });
         songList = _.sortBy(songList, ['songName']);
         return songList;
+    }
+
+    function abortLoadingImages() {
+        const loadingThumbs = $('.thumbnail-small');
+        return Promise.resolve(loadingThumbs.each(function() {
+            $( this ).attr("src", "");
+        }))
     }
 
     $scope.triggerNextCarousel = function() {
