@@ -14,13 +14,18 @@ const _ = require('lodash');
 const moment = require('moment');
 
 const nodemailerTransport = nodemailer.createTransport({
-  host: process.env.MAIL_SERVICE_HOST,
-  port: process.env.MAIL_SERVICE_HOST_PORT,
-  secure: true,
+  host: process.env.MAILGUN_SMTP_HOST,
+  port: process.env.MAILGUN_SMTP_PORT,
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASSWORD
+    user: process.env.MAILGUN_SMTP_USERNAME,
+    pass: process.env.MAILGUN_SMTP_PASSWORD
   }
+  // host: process.env.TEST_MAIL_SMTP_HOST,
+  // port: process.env.MAIL_SMTP_PORT,
+  // auth: {
+  //   user: process.env.TEST_EMAIL,
+  //   pass: process.env.TEST_EMAIL_PASSWORD
+  // }
 });
 
 const nodemailerOptions = {
@@ -36,28 +41,6 @@ const nodemailerOptions = {
 };
 
 nodemailerTransport.use('compile', hbsNodemailer(nodemailerOptions));
-
-module.exports.getItemById = (req, res) => {
-  const requestId = req.params.id;
-  try {
-    requestModel.getItemById(requestId, (err, result) => {
-      let requestItem = result[0];
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        const statusCode = _.isEmpty(requestItem) ? 404 : 200;
-        const notFound = {
-          message: 'Request item not found',
-          status: 404
-        }
-        requestItem = _.isEmpty(requestItem) ? notFound : requestItem
-        res.status(statusCode).send(requestItem);
-      }
-    });
-  } catch (err) {
-    res.status(500).send(err);
-  }
-};
 
 module.exports.getRequests = async (req, res) => {
   try {
@@ -129,7 +112,7 @@ module.exports.requestToken = async (req, res) => {
         if (!_.isEmpty(updateResult)) {
           const { updateMode, registeredEmail } = updateResult;
           res.status(STATUS_CODE.SUCCESS).send({
-            message: `Your ${updateMode} token has been sent to your email: ${registeredEmail}, please check your email`
+            message: `Your ${updateMode} token has been sent to your email: ${registeredEmail}`
           })
         }
       } else {
@@ -342,16 +325,8 @@ module.exports.deleteRequestByToken = async (req, res) => {
 }
 
 module.exports.updateRequestStatus = async (req, res) => {
-  const { status } = req.body;
+  const { status, publishedVideoUrl } = req.body;
   const requestId = req.params.id;
-  const requestStatusTypes = _.values(REQUEST_STATUS);
-
-  if (!requestId) {
-    return res.status(STATUS_CODE.BAD_REQUEST).send({
-      message: 'Request ID required'
-    });
-  }
-
   const result = await requestModel.getItemByIdAsync(requestId);
   const updateItem = result[0];
 
@@ -367,36 +342,34 @@ module.exports.updateRequestStatus = async (req, res) => {
     });
   }
 
-  if (_.indexOf(requestStatusTypes, status) !== -1) {
-    try {
-      await requestModel.updateRequestByID(requestId, { status });
-      const newUpdatedResult = await requestModel.getItemByIdAsync(requestId);
-      const newUpdatedRequest = newUpdatedResult[0];
+  let updateStatusSession = await requestModel.getSession();
 
-      if (_.indexOf(ERROR_STATUS_TYPES, newUpdatedRequest.status.value) !== -1) {
-        const expiredDate = moment().add(EXPIRATION_DURATION_DAYS, 'days');
-        await requestModel.updateRequestByID(requestId, { expiredDate });
-        await sendErrorRequestEmail(newUpdatedRequest, expiredDate);
-      } else if (newUpdatedRequest.status.value === REQUEST_STATUS.COMPLETED) {
-        await requestModel.removeFields(requestId, { expiredDate: 1 });
-        await sendCompletedRequestEmail(newUpdatedRequest);
-      } else {
-        await requestModel.removeFields(requestId, { expiredDate: 1 });
-        await sendStandardRequestEmail(newUpdatedRequest);
-      }
-      res.status(STATUS_CODE.SUCCESS).send({
-        message: 'Request status has been updated, mail has been sent successfully'
-      });
-    } catch (err) {
-      return res.status(STATUS_CODE.SERVER_ERROR).send({
-        message: 'An error occured while updating request, please try again later',
-        err
-      })
+  try {
+    updateStatusSession.startTransaction();
+    if(_.indexOf(ERROR_STATUS_TYPES, status) !== -1) {
+      const expiredDate = moment().add(EXPIRATION_DURATION_DAYS, 'days');
+      const newUpdatedRequest = await requestModel.updateRequestByIDPrototype(requestId, { expiredDate, status });
+      await sendErrorRequestEmail(newUpdatedRequest, expiredDate);
+    } else if (status === REQUEST_STATUS.COMPLETED) {
+      await requestModel.removeFields(requestId, { expiredDate: 1 });
+      const newUpdatedRequest = await requestModel.updateRequestByIDPrototype(requestId, { publishedVideoUrl, status });
+      await sendCompletedRequestEmail(newUpdatedRequest);
+    } else {
+      await requestModel.removeFields(requestId, { expiredDate: 1 });
+      await sendStandardRequestEmail(newUpdatedRequest);
     }
-  } else {
-    return res.status(STATUS_CODE.BAD_REQUEST).send({
-      message: 'Status type is not valid'
+    await updateStatusSession.commitTransaction();
+    updateStatusSession.endSession();
+    res.status(STATUS_CODE.SUCCESS).send({
+        message: 'Request status has been updated, mail has been sent successfully'
     });
+  } catch (err) {
+    await updateStatusSession.abortTransaction();
+    updateStatusSession.endSession();  
+    return res.status(STATUS_CODE.SERVER_ERROR).send({
+      message: 'An error occured while updating request, please try again later',
+      err
+    })
   }
 }
 
@@ -414,7 +387,7 @@ async function sendRegisterEmail(addedRequest, req) {
     const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
 
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
       to: email,
       subject: title,
       template: 'register_body',
@@ -456,7 +429,7 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
     const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
 
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
       to: email,
       subject: title,
       template: 'token_body',
@@ -493,9 +466,9 @@ async function sendErrorRequestEmail(requestItem, expiredDate) {
     const { stepchartLevel, stepchartType } = stepchartInfo;
 
     const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
-
+    
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
       to: email,
       subject: title,
       template: 'error_request_body',
@@ -520,7 +493,7 @@ async function sendCompletedRequestEmail(requestItem) {
   const { stepchartLevel, stepchartType } = stepchartInfo;
 
   const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Request Completed`;
-
+  
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,
@@ -550,7 +523,7 @@ async function sendStandardRequestEmail(requestItem) {
   const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Status Changed`;
 
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
     to: email,
     subject: title,
     template: 'standard_status_request_body',

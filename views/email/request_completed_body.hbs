@@ -595,17 +595,64 @@
                         
                             <h3 style="display: block;margin: 0;padding: 0;color: #444444;font-family: Helvetica;font-size: 22px;font-style: normal;font-weight: bold;line-height: 150%;letter-spacing: normal;text-align: left;">Hi, {{ target.requester }}</h3>
 
-<p style="line-height: 200%;margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #757575;font-family: Helvetica;font-size: 16px;text-align: left;"><strong>Congratulations !!</strong> Your request has been completed and your video will be uploaded to our youtube channel soon.&nbsp;<br>
-Thank you for requesting,&nbsp;we hope to see more new requests from yours.<br>
+<p style="line-height: 200%;margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #757575;font-family: Helvetica;font-size: 16px;text-align: left;"><strong>Congratulations !!</strong> Your request has been completed, please click open video button below to watch. We hope you enjoyed</p>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+                
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnButtonBlockOuter">
+        <tr>
+            <td style="padding-top: 0;padding-right: 18px;padding-bottom: 18px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" valign="top" align="center" class="mcnButtonBlockInner">
+                <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 4px;background-color: #2BAADF;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                    <tbody>
+                        <tr>
+                            <td align="center" valign="middle" class="mcnButtonContent" style="font-family: Arial;font-size: 16px;padding: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                <a class="mcnButton " title="Open Video" href="{{ target.publishedVideoUrl }}" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;">Open Video</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+				<tr>
+				<![endif]-->
+			    
+				<!--[if mso]>
+				<td valign="top" width="600" style="width:600px;">
+				<![endif]-->
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #757575;font-family: Helvetica;font-size: 16px;line-height: 150%;text-align: left;">
+                        
+                            Thank you for requesting,&nbsp;we hope to see more new requests.<br>
 <br>
 Support us by subscribing our Youtube Channel or Like / Following our Facebook / Twitter Page. We're really appreciated all of your support<br>
 <br>
 Thank you and have a nice day<br>
-<strong><em>Team Leader of BOSS_PIUVN</em><br>
+<strong><em>Team Captain of BOSS_PIUVN</em><br>
 <em>ZHAOYUN / Zhao X</em></strong><br>
 <br>
-P/S: This is no-reply email, do not send email here</p>
-
+P/S: This is no-reply email, do not send email here
                         </td>
                     </tr>
                 </tbody></table>
@@ -710,7 +757,7 @@ P/S: This is no-reply email, do not send email here</p>
 <br>
 <strong>Song:</strong> {{ target.song.name }}<br>
 <br>
-<strong>Level: </strong>&nbsp;<img data-file-id="11957" height="80" src="https://www.bosspiuvn.com/images/stepball_levels/{{ target.stepchartInfo.value }}/{{ target.stepchartInfo.stepchartLevel }}.png" width="80" style="border: 0;height: auto !important;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;"><br>
+<strong>Level: </strong>&nbsp;<img data-file-id="11957" height="80" src="https://www.bosspiuvn.com/images/stepball_levels/{{ target.stepchartInfo.stepchartType.value }}/{{ target.stepchartInfo.stepchartLevel }}.png" width="80" style="border: 0;height: auto !important;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;"><br>
 <br>
 <strong>STEPMAKER:</strong> {{ target.stepmaker }}
                         </td>

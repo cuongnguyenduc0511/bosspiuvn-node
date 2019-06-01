@@ -2,29 +2,16 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Types.ObjectId;
 const { DB, SORT_TYPE, REQUEST_STATUS, STATUS_CODE, UPDATE_MODE } = require('../shared/constant');
 const sanitize = require('../shared/modules/sanitize');
 const { escapeRegExp } = require('../shared/modules/escapeReg');
 
 const RequestSchema = new Schema({
-	requestId: {
-		type: String,
-		required: true
-	},
-	song: {
-		type: Schema.Types.ObjectId,
-		required: true
-	},
+	requestId: { type: String, required: true },
+	song: { type: Schema.Types.ObjectId, required: true },
 	contentName: String,
-	requester: {
-		type: String,
-		required: true
-	},
-	stepmaker: {
-		type: String,
-		required: true
-	},
+	requester: { type: String, required: true },
+	stepmaker: { type: String, required: true },
 	stepchartInfo: {
 		stepchartType: {
 			type: String,
@@ -80,6 +67,7 @@ const RequestSchema = new Schema({
 		token: { type: String },
 		exp: { type: Date }
 	},
+	publishedVideoUrl: String,
 	isActivated: { type: Boolean, default: false },
 	isSpecial: { type: Boolean, default: false },
 	isOldRequest: { type: Boolean, default: false }
@@ -96,7 +84,7 @@ module.exports.getSession = async () => {
 
 module.exports.addData = async (newData) => {
 	try {
-    const result = await UCSRequest.create([newData], { session: session });
+		const result = await UCSRequest.create([newData], { session: session });
 		return Promise.resolve(result[0]);
 	} catch (err) {
 		const { name, _message, message } = err;
@@ -111,79 +99,6 @@ module.exports.addData = async (newData) => {
 		return Promise.reject(errorObj);
 	}
 };
-
-module.exports.getItemById = (id, callback) => {
-	UCSRequest.aggregate([
-		{
-			$lookup:
-			{
-				from: DB.STEPCHART_TYPE,
-				localField: 'stepchartInfo.stepchartType',
-				foreignField: 'stepchartTypeValue',
-				as: 'stepchartInfo.stepchartType'
-			},
-		},
-		{
-			$lookup:
-			{
-				from: DB.STATUS,
-				localField: "status",
-				foreignField: "statusValue",
-				as: "status"
-			}
-		},
-		{
-			$lookup:
-			{
-				from: DB.SONG,
-				localField: "song",
-				foreignField: "_id",
-				as: "songInfo"
-			}
-		},
-		{ $unwind: '$stepchartInfo.stepchartType' },
-		{ $unwind: '$songInfo' },
-		{ $unwind: '$status' },
-		{
-			$project: {
-				_id: 0,
-				requestId: 1,
-				song: {
-					value: "$songInfo._id",
-					name: "$songInfo.songName",
-					artist: '$songInfo.artist',
-					group: '$songInfo.seriesGroupCategory',
-					thumbnailUrl: "$songInfo.thumbnailUrl"
-				},
-				stepchartInfo: {
-					stepchartType: {
-						value: '$stepchartInfo.stepchartType.stepchartTypeValue',
-						shortLabel: '$stepchartInfo.stepchartType.shortTypeName',
-						longLabel: '$stepchartInfo.stepchartType.stepchartTypeName'
-					},
-					stepchartLevel: 1
-				},
-				contentName: 1,
-				stepmaker: 1,
-				requester: 1,
-				requestDate: 1,
-				ucsLink: 1,
-				requesterNote: '$note.requesterNote',
-				customNote: '$note.customNote',
-				playedBy: 1,
-				deleteToken: '$deleteRequestToken',
-				updateToken: '$updateRequestToken',
-				email: 1, // Sensitive Data
-				status: {
-					value: '$status.statusValue',
-					label: '$status.statusLabel'
-				},
-				isOldRequest: 1
-			}
-		},
-		{ $match: { requestId: id } }
-	], callback);
-}
 
 module.exports.getItemByIdAsync = async id => {
 	try {
@@ -343,9 +258,9 @@ module.exports.getPaginationData = async (recordPerPage, skip, query) => {
 			{ $unwind: "$pageInfo" },
 			{ $project: { items: 1, totalItems: "$pageInfo.totalItems" } },
 		]);
-		return Promise.resolve(result);	
+		return Promise.resolve(result);
 	} catch (err) {
-		return Promise.reject(err);	
+		return Promise.reject(err);
 	}
 }
 
@@ -357,16 +272,104 @@ module.exports.countAllItems = async () => {
 module.exports.updateRequestByID = async (requestId, updateData) => {
 	var opts = { runValidators: true, context: 'query', session: session };
 	try {
-		const result = UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $set: updateData }, opts);
+		const result = await UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $set: updateData }, opts);
 		return Promise.resolve(result);
 	} catch (err) {
 		return Promise.reject(err);
 	}
 };
 
+module.exports.updateRequestByIDPrototype = async (requestId, updateData) => {
+	var opts = { runValidators: true, context: 'query', session: session };
+	try {
+		const result = await Promise.resolve(UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $set: updateData }, opts).then(() => UCSRequest.aggregate([
+			{
+				$lookup:
+				{
+					from: DB.STEPCHART_TYPE,
+					localField: 'stepchartInfo.stepchartType',
+					foreignField: 'stepchartTypeValue',
+					as: 'stepchartInfo.stepchartType'
+				},
+			},
+			{
+				$lookup:
+				{
+					from: DB.STATUS,
+					localField: "status",
+					foreignField: "statusValue",
+					as: "status"
+				}
+			},
+			{
+				$lookup:
+				{
+					from: DB.SONG,
+					localField: "song",
+					foreignField: "_id",
+					as: "songInfo"
+				}
+			},
+			{ $unwind: '$stepchartInfo.stepchartType' },
+			{ $unwind: '$songInfo' },
+			{ $unwind: '$status' },
+			{
+				$project: {
+					_id: 0,
+					requestId: 1,
+					song: {
+						value: "$songInfo._id",
+						name: "$songInfo.songName",
+						artist: '$songInfo.artist',
+						group: '$songInfo.seriesGroupCategory',
+						thumbnailUrl: "$songInfo.thumbnailUrl"
+					},
+					stepchartInfo: {
+						stepchartType: {
+							value: '$stepchartInfo.stepchartType.stepchartTypeValue',
+							shortLabel: '$stepchartInfo.stepchartType.shortTypeName',
+							longLabel: '$stepchartInfo.stepchartType.stepchartTypeName'
+						},
+						stepchartLevel: 1
+					},
+					contentName: 1,
+					stepmaker: 1,
+					requestDate: 1,
+					ucsLink: 1,
+					requesterNote: '$note.requesterNote',
+					customNote: '$note.customNote',
+					playedBy: 1,
+					requester: 1,
+					deleteToken: '$deleteRequestToken',
+					updateToken: '$updateRequestToken',
+					activationToken: 1,
+					isActivated: 1,
+					publishedVideoUrl: 1,
+					email: 1, // Sensitive Data
+					status: {
+						value: '$status.statusValue',
+						label: '$status.statusLabel'
+					},
+					isOldRequest: 1
+				}
+			},
+			{ $match: { requestId } }
+		]).session(session))).then(data => {
+			return data[0]
+		})
+		// console.log('Prototype Update');
+		// console.log(result);
+		return Promise.resolve(result);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
+
 module.exports.removeFields = async (requestId, removeFields) => {
 	try {
-		const result = UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $unset: removeFields });
+		var opts = { session: session };
+		const result = await UCSRequest.findOneAndUpdate({ "requestId": requestId }, { $unset: removeFields }, opts);
 		return Promise.resolve(result);
 	} catch (err) {
 		return Promise.reject(err);
