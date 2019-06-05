@@ -12,21 +12,26 @@ const nodemailer = require('nodemailer');
 const hbsNodemailer = require('nodemailer-express-handlebars');
 const _ = require('lodash');
 const moment = require('moment');
+const sendGridTransport = require('nodemailer-sendgrid');
 
-const nodemailerTransport = nodemailer.createTransport({
-  host: process.env.MAILGUN_SMTP_HOST,
-  port: process.env.MAILGUN_SMTP_PORT,
-  auth: {
-    user: process.env.MAILGUN_SMTP_USERNAME,
-    pass: process.env.MAILGUN_SMTP_PASSWORD
-  }
-  // host: process.env.TEST_MAIL_SMTP_HOST,
-  // port: process.env.MAIL_SMTP_PORT,
-  // auth: {
-  //   user: process.env.TEST_EMAIL,
-  //   pass: process.env.TEST_EMAIL_PASSWORD
-  // }
-});
+// const nodemailerTransport = nodemailer.createTransport({
+//   // host: process.env.MAILGUN_SMTP_HOST,
+//   // port: process.env.MAILGUN_SMTP_PORT,
+//   // auth: {
+//   //   user: process.env.MAILGUN_SMTP_USERNAME,
+//   //   pass: process.env.MAILGUN_SMTP_PASSWORD
+//   // }
+//   host: 'smtp.sendgrid.net',
+//   port: 465,
+//   auth: {
+//     user: 'apikey',
+//     pass: process.env.SENDGRID_SMTP_KEY
+//   }
+// });
+
+const nodemailerTransport = nodemailer.createTransport(sendGridTransport({
+  apiKey: process.env.SENDGRID_API_KEY
+}));
 
 const nodemailerOptions = {
   viewEngine: {
@@ -168,14 +173,13 @@ module.exports.registerNewRequest = async (req, res) => {
       ucsLink,
       activationToken: {
         token: generateActivationToken(),
-        exp: moment().add(8, 'hours')
+        exp: moment().add(3, 'days')
       },
       email
     }
 
     const addedDoc = await requestModel.addData(submitData);
     const aggregated = await getFullDetailsRequest(addedDoc);
-    console.log(aggregated);
     await sendRegisterEmail(aggregated, req);
     await registerRequestSession.commitTransaction();
     registerRequestSession.endSession();
@@ -356,6 +360,7 @@ module.exports.updateRequestStatus = async (req, res) => {
       await sendCompletedRequestEmail(newUpdatedRequest);
     } else {
       await requestModel.removeFields(requestId, { expiredDate: 1 });
+      const newUpdatedRequest = await requestModel.updateRequestByIDPrototype(requestId, { status });
       await sendStandardRequestEmail(newUpdatedRequest);
     }
     await updateStatusSession.commitTransaction();
@@ -364,6 +369,7 @@ module.exports.updateRequestStatus = async (req, res) => {
         message: 'Request status has been updated, mail has been sent successfully'
     });
   } catch (err) {
+    console.log(err);
     await updateStatusSession.abortTransaction();
     updateStatusSession.endSession();  
     return res.status(STATUS_CODE.SERVER_ERROR).send({
@@ -384,10 +390,10 @@ async function sendRegisterEmail(addedRequest, req) {
     } = addedRequest;
     const { stepchartLevel, stepchartType } = stepchartInfo;
 
-    const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
+    const title = `BOSS_PIUVN UCS Tracking: Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been sent`;
 
     const mailOptions = {
-      from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
+      from: `BOSS_PIUVN Official <${process.env.TEST_EMAIL}>`,
       to: email,
       subject: title,
       template: 'register_body',
@@ -426,10 +432,10 @@ async function sendTokenEmail(requestItem, updateMode, tokenPayload) {
         break;
     }
 
-    const title = `[BOSS_PIUVN - UCS Request] - ${mode} Token for Request: ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
+    const title = `BOSS_PIUVN UCS Tracking: ${mode} request token for ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel}`
 
     const mailOptions = {
-      from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
+      from: `BOSS_PIUVN Official <${process.env.TEST_EMAIL}>`,
       to: email,
       subject: title,
       template: 'token_body',
@@ -465,10 +471,10 @@ async function sendErrorRequestEmail(requestItem, expiredDate) {
     } = requestItem;
     const { stepchartLevel, stepchartType } = stepchartInfo;
 
-    const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
+    const title = `BOSS_PIUVN UCS Tracking: Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has error`;
     
     const mailOptions = {
-      from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
+      from: `BOSS_PIUVN Official <${process.env.TEST_EMAIL}>`,
       to: email,
       subject: title,
       template: 'error_request_body',
@@ -492,10 +498,10 @@ async function sendCompletedRequestEmail(requestItem) {
   } = requestItem;
   const { stepchartLevel, stepchartType } = stepchartInfo;
 
-  const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Request Completed`;
+  const title = `BOSS_PIUVN UCS Tracking: Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} has been completed`;
   
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: `BOSS_PIUVN Official <${process.env.TEST_EMAIL}>`,
     to: email,
     subject: title,
     template: 'request_completed_body',
@@ -520,10 +526,10 @@ async function sendStandardRequestEmail(requestItem) {
   } = requestItem;
   const { stepchartLevel, stepchartType } = stepchartInfo;
 
-  const title = `[BOSS_PIUVN - UCS Request] - Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Status Changed`;
+  const title = `BOSS_PIUVN UCS Tracking: Request ${song.name} ${stepchartType.shortLabel}${(stepchartType.value === 'co-op') ? ` ${stepchartLevel}` : stepchartLevel} - Status Changed`;
 
   const mailOptions = {
-    from: `BOSS_PIUVN Official <${process.env.MAILGUN_SMTP_USERNAME}>`,
+    from: `BOSS_PIUVN Official <${process.env.TEST_EMAIL}>`,
     to: email,
     subject: title,
     template: 'standard_status_request_body',
