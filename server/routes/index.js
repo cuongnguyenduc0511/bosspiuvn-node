@@ -1,7 +1,8 @@
 const requestController = require('../controllers/requestController');
 const { TITLE_FORMAT } = require('../shared/constant');
 const express = require('express');
-const { activateRequestMiddleware, registerRequestMiddleware, updateRequestMiddleware } = require('../middleware/middleware');
+const { activateRequestMiddleware, registerRequestMiddleware, 
+    updateRequestMiddleware, resendActivationMiddleware } = require('../middleware/middleware');
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
@@ -76,6 +77,10 @@ router.post('/update-request', csrfProtection, updateRequestMiddleware, (req, re
 
 router.post('/delete-request', csrfProtection, (req, res, next) => {
     requestController.deleteRequestByToken(req, res);
+});
+
+router.post('/resend-activation', csrfProtection, resendActivationMiddleware, (req, res) => {
+    requestController.resendActivationEmail(req, res);
 });
 
 module.exports = router;

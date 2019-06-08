@@ -28,6 +28,9 @@
 					<strong>Status:</strong>
 					<span class="request-item__info__status badge badge-pill {[{ requestItem.status.clientBadgeStyle }]}">{[{ requestItem.status.label }]}</span>
 				</span>
+				<div id="resend-{[{ requestItem.requestId }]}" ng-if="requestItem.status.value === 'activation-pending'" class="request-item__option d-flex justify-content-end">
+					<button type="button" class="btn btn-info" ng-click="showUpdateModal(requestItem.requestId, 'Resend')"><i class="fas fa-envelope"></i> Resend Activation Email</button>
+				</div>
 				<div ng-if="requestItem.status.value !== 'completed' && requestItem.status.value !== 'upload-pending' && requestItem.status.value !== 'activation-pending'" class="request-item__option d-flex justify-content-end">
 					<button type="button" class="btn btn-primary" ng-click="showUpdateModal(requestItem.requestId, 'Update')"><i class="fas fa-edit"></i></button>
 					<button type="button" class="btn btn-danger" ng-click="showUpdateModal(requestItem.requestId, 'Delete')"><i class="fas fa-trash-alt"></i></button>

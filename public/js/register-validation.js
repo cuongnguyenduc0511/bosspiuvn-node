@@ -7,6 +7,11 @@ $.validator.addMethod("isEmailValid", function (value, element) {
     return this.optional(element) || /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
 }, "Please enter valid email");
 
+$.validator.addMethod('isEmailDomainBlacklist', function (value, element) {
+    return this.optional(element) || /^([\w-.]+@(?!yahoo)([\w-]+.)+[\w-]{2,4})?$/.test(value);    
+    // return this.optional(element) || /^[^@]+@(yahoo|ymail|rocketmail)\.(com|in|co\.uk)$/i.test(value);
+}, "Your email domain is not recommended, try using another email domain such as: Gmail, Naver, Outlook");
+
 const formRules = {
     requester: 'required',
     song: 'required',
@@ -20,6 +25,7 @@ const formRules = {
     email: {
         required: true,
         isEmailValid: true,
+        isEmailDomainBlacklist: true,
         maxlength: 63
     },
     terms: 'required'
@@ -41,6 +47,9 @@ const formErrorMessages = {
 }
 
 var formValidObj = $("#ucs-register-form").validate({
+    onfocusout: function (element) {
+        return
+    },
     rules: formRules,
     messages: formErrorMessages,
     errorElement: "div",

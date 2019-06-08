@@ -61,6 +61,37 @@ module.exports.getRequests = async (req, res) => {
   }
 };
 
+module.exports.resendActivationEmail = async (req, res) => {
+  const { getItemByIdAsync } = requestModel;
+  try {
+    const { requestId, email: submitEmail } = req.submitData;
+    const requestItemResult = await getItemByIdAsync(requestId);
+    if (requestItemResult.length <= 0) {
+      return res.status(STATUS_CODE.BAD_REQUEST).send({
+        message: 'Id does not exist / It could have been deleted'
+      });
+    }
+    
+    const requestItem = requestItemResult[0];
+    if (requestItem.email !== submitEmail) {
+      return res.status(STATUS_CODE.BAD_REQUEST).send({
+        message: 'Wrong email, please type your valid email'
+      });
+    }
+
+    await sendRegisterEmail(requestItem, req);
+    res.status(STATUS_CODE.SUCCESS).send({
+      message: 'Your request has been sent, please check your email',
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(STATUS_CODE.SERVER_ERROR).send({
+      message: 'An error occurred while resending activation email, please try again later',
+      err
+    });
+  }
+};
+
 module.exports.activateRequest = async (req, res) => {
   const { getItemByIdAsync } = requestModel;
   const { id: requestId, token } = req.query;

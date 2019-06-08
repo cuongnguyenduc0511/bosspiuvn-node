@@ -7,6 +7,10 @@ const DB = {
     STATUS: 'status'
 }
 
+const DEFAULT_WHITE_LIST_EMAILS = [
+    'bosspiuvn.official@gmail.com'
+]
+
 const STEPCHART_TYPES = {
     SINGLE: 'single',
     DOUBLE: 'double',
@@ -100,6 +104,7 @@ module.exports = {
     STEPCHART_LEVELS,
     STANDARD_STEPCHART_REQUIREMENT,
     COOP_STEPCHART_TYPES,
-    STANDARD_STEPCHART_LEVELS
+    STANDARD_STEPCHART_LEVELS,
+    DEFAULT_WHITE_LIST_EMAILS
 };
 

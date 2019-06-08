@@ -39,11 +39,11 @@ appModule.controller('trackingUcsCtrl', ($scope, $http, $q, $timeout) => {
 	}
 
 	$scope.onResetClick = function ($event) {
-		const currentMode = $event.target.getAttribute('mode');
-		const formId = `${currentMode.toLowerCase()}-request-form`;
+		const currentMode = $event.target.getAttribute('mode').toLowerCase();
+		var form = $('#' + currentMode + '-request-form');
 		$timeout(() => {
 			resetForm({
-				formId,
+				form,
 				currentMode
 			})
 		}, 1);

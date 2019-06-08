@@ -1,6 +1,6 @@
 const { isEmpty, isEqual, indexOf, values } = require('lodash');
-const { STATUS_CODE, REQUEST_STATUS } = require('../shared/constant');
-const { registerValidation , updateRequestValidation } = require('../validations/registerValidation');
+const { STATUS_CODE, REQUEST_STATUS, DEFAULT_WHITE_LIST_EMAILS } = require('../shared/constant');
+const { registerValidation , updateRequestValidation, resendActivationValidation } = require('../validations/registerValidation');
 const { showValidationErrors } = require('../modules/validate');
 const { decodeAndSanitizeObject, decodeAndSanitizeValue } = require('../shared/modules/sanitize')
 
@@ -27,7 +27,7 @@ module.exports.registerRequestMiddleware = (req, res, next) => {
     return res.status(STATUS_CODE.BAD_REQUEST).send(showValidationErrors(validation));
   }
   submitData.email = String(submitData.email).toLowerCase();
-  if (submitData.email === process.env.EMAIL) {
+  if (indexOf(DEFAULT_WHITE_LIST_EMAILS, submitData.email) !== -1) {
     return res.status(STATUS_CODE.BAD_REQUEST).send({
       message: `This email can not be used, please try another email`
     });
@@ -75,5 +75,28 @@ module.exports.updateStatusMiddleware = (req, res, next) => {
     });
   }
 
+  next();
+}
+
+module.exports.resendActivationMiddleware = (req, res, next) => {
+  const { requestId, email } = req.body;
+
+  let sanitizeData = { requestId, email };
+  decodeAndSanitizeObject(sanitizeData);
+  sanitizeData.email = String(sanitizeData.email).toLowerCase();
+  const validation = resendActivationValidation(sanitizeData);
+  if (!isEmpty(validation)) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: 'Validation Error',
+      errMsgs: showValidationErrors(validation)
+    });
+  }
+  
+  if (indexOf(DEFAULT_WHITE_LIST_EMAILS, sanitizeData.email) !== -1) {
+    return res.status(STATUS_CODE.BAD_REQUEST).send({
+      message: `This email can not be used, please try another email`
+    });
+  }
+  req.submitData = sanitizeData;
   next();
 }

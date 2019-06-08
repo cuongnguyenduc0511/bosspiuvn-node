@@ -11,7 +11,8 @@
       <div class="modal-body">
         <div class="row">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-          <form id="request-token-form" class="col-12">
+          
+          <form ng-show="updateMode === 'Update' || updateMode === 'Delete'" id="request-token-form" class="col-12 bss-form">
             <h3 class="text-center">Get {[{ updateMode }]} Token</h3>
             <div class="form-group row">
               <label for="email" class="col-lg-12 col-form-label">Email
@@ -27,109 +28,8 @@
             </button>
             <hr class="section-line">
           </form>
-          {{!-- <div ng-switch="updateMode">
-            <form ng-switch-when="Update" id="update-request-form" class="col-12">
-              <h3 class="text-center">Update Request Form</h3>
-              <h4>Basic Information</h4>
-              <div class="form-group row">
-                <label for="requester" class="col-lg-12 col-form-label">Your Name / Nickname
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="updateForm.requester" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="requester" placeholder="Enter your name / nickname">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="contentName" class="col-lg-12 col-form-label">Content Name</label>
-                <div class="col-lg-12">
-                  <input ng-model="updateForm.contentName" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="contentName" placeholder="Enter your content name">
-                </div>
-              </div>
-              <hr>
-              <h4>Stepchart Difficulty</h4>
-              <div class="form-group row">
-                <div class="col-lg-6 col-sm-12">
-                  <label for="updateStepchartType" class="col-form-label">Stepchart Type
-                    <span class="required">*</span>
-                  </label>
-                  <select ng-model="updateForm.stepchartType" ng-disabled="isRequestingSubmit || isRequestingToken" class="form-control" name="updateStepchartType">
-                    <option value="">Choose Stepchart Type</option>
-                    <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
-                  </select>
-                </div>
-                <div class="col-lg-6 col-sm-12">
-                  <label for="stepchartLevel" class="col-form-label">Stepchart Level
-                    <span class="required">*</span>
-                  </label>
-                  <select ng-model="updateForm.stepchartLevel" ng-disabled="isRequestingSubmit || isRequestingToken" class="form-control" name="updateStepchartLevel">
-                    <option value="">Choose Stepchart Level</option>
-                    <option ng-repeat="stepchartLevelItem in updateStepchartLevels" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
-                  </select>
-                </div>
-              </div>
-              <hr>
-              <h4>Stepchart Info</h4>
-              <div class="form-group row">
-                <label for="stepmaker" class="col-lg-12 col-form-label">Stepmaker
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="updateForm.stepmaker" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="stepmaker" placeholder="Enter STEPMAKER Name">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="ucsLink" class="col-lg-12 col-form-label">UCS Download Link
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="updateForm.ucsLink" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="ucsLink" placeholder="Enter UCS Chart Download Link">
-                </div>
-              </div>
-              <hr>
-              <h4>Note</h4>
-              <div class="form-group row">
-                <label for="requester_note" class="col-lg-12 col-form-label">Leave your note if you would like to remind us</label>
-                <div class="col-lg-12">
-                  <textarea ckeditor ng-model="updateForm.requesterNote" class="b-text-area" id="requesterNote" name="requesterNote"></textarea>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="updateToken" class="col-lg-12 col-form-label">Enter your update token
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="updateForm.updateToken" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="updateToken" placeholder="Enter update token">
-                </div>
-              </div>
-            </form>
-            <form ng-switch-when="Delete" id="delete-request-form" class="col-12">
-              <h3 class="text-center">Delete Request Form</h3>
-              <div class="form-group row">
-                <label for="confirmEmail" class="col-lg-12 col-form-label">Enter Your Email
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="deleteForm.email" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="confirmEmail" placeholder="Enter your email">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="deleteToken" class="col-lg-12 col-form-label">Enter your delete token
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="deleteForm.deleteToken" ng-disabled="isRequestingSubmit || isRequestingToken" type="text" class="form-control"
-                    name="deleteToken" placeholder="Enter delete token">
-                </div>
-              </div>
-            </form>
-          </div> --}}
-          <form ng-show="updateMode == 'Update'" id="update-request-form" class="col-12">
+          
+          <form ng-show="updateMode == 'Update'" mode='update' id="update-request-form" class="col-12 bss-form">
             <h3 class="text-center">Update Request Form</h3>
             <h4>Basic Information</h4>
             <div class="form-group row">
@@ -208,7 +108,8 @@
               </div>
             </div>
           </form>
-          <form ng-show="updateMode == 'Delete'" id="delete-request-form" class="col-12">
+          
+          <form ng-show="updateMode == 'Delete'" mode='delete' id="delete-request-form" class="col-12 bss-form">
             <h3 class="text-center">Delete Request Form</h3>
             <p style="color: red">* Once you delete request, it can't be recovered</p>
             <div class="form-group row">
@@ -230,6 +131,20 @@
               </div>
             </div>
           </form>
+
+          <form ng-show="updateMode == 'Resend'" mode='resend' id="resend-request-form" class="col-12 bss-form">
+            <h3 class="text-center">Resend Activation Form</h3>
+            <div class="form-group row">
+              <label for="resendEmail" class="col-lg-12 col-form-label">Enter Your Email
+                <span class="required">*</span>
+              </label>
+              <div class="col-lg-12">
+                <input ng-model="resendForm.email" ng-disabled="isRequestingSubmit" type="text" class="form-control"
+                  name="resendEmail" placeholder="Enter your email">
+              </div>
+            </div>
+          </form>
+
           <div class="col-12">
             <button ng-disabled="isRequestingSubmit || isRequestingToken" id="reset-form" mode="{[{ updateMode }]}" class="btn btn-info"
               ng-click="onResetClick($event)">Reset</button>
@@ -239,7 +154,7 @@
       <div class="modal-footer">
         <button type="button" id='#submit-form' ng-disabled="isRequestingSubmit || isRequestingToken" class="btn btn-{[{ submitButtonStyle }]}"
           mode="{[{ updateMode }]}" ng-click="submitUpdate($event)">
-          <i ng-if="isRequestingSubmit" class="fas fa-circle-notch fa-spin"></i> {[{ updateMode }]}</button>
+          <i ng-if="isRequestingSubmit" class="fas fa-circle-notch fa-spin"></i> {[{ submitButtonLabel }]}</button>
         <button ng-disabled="isRequestingSubmit || isRequestingToken" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

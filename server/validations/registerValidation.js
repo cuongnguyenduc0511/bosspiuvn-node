@@ -1,5 +1,5 @@
 const registerValidateInstance = require('validate.js');
-const {values, includes, omit, merge} = require('lodash');
+const {assign, values, includes, omit, merge} = require('lodash');
 const validateModule = require('../modules/validate').default;
 const { STEPCHART_LEVELS, STEPCHART_TYPES, COOP_STEPCHART_TYPES, 
 STANDARD_STEPCHART_REQUIREMENT, STANDARD_STEPCHART_LEVELS} = require('../shared/constant');
@@ -109,4 +109,20 @@ module.exports.updateRequestValidation = (formValue) => {
   updateContraints = merge(updateSchema, updateContraints);
 
   return validateModule(formValue, updateContraints, registerValidateInstance);
+}
+
+module.exports.resendActivationValidation = (formValue) => {
+  const resendSchema = {
+    requestId: {
+      presence: {
+        message: 'Request Id is required',
+        allowEmpty: false
+      }
+    }
+  }
+
+  let resendContraints = assign({}, { email: formContraints.email });
+  resendContraints = merge(resendSchema, resendContraints);
+
+  return validateModule(formValue, resendContraints, registerValidateInstance);
 }
