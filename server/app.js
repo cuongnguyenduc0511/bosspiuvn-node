@@ -27,11 +27,7 @@ var hbs = require('hbs');
 var engines = require('engines');
 
 var indexRouter = require('./routes/index');
-const { appRoutes } = require('./routes/api-index');
-
-var routers = appRoutes.map(route => {
-    return { path: `/${route}`, routerInstance: require(`./routes/${route}`) }
-});
+var apiRouter = require('./routes/api/index');
 
 var app = express();
 
@@ -128,16 +124,13 @@ app.use(flash());
 //SETUP Method override [PUT & DELETE] Form HTML5
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Mount csrfProtection before initialize route
+// // Mount csrfProtection before initialize route
 // const csrf = require('csurf');
 // const csrfProtection = csrf();
 // app.use(csrfProtection);
 
 app.use('/', indexRouter);
-for (var i = 0; i < routers.length; i++) {
-    const { path, routerInstance } = routers[i];
-    app.use(path, routerInstance);
-}
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
