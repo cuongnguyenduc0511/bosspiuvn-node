@@ -1,10 +1,10 @@
-const registerValidateInstance = require('validate.js');
-const {assign, values, includes, omit, merge} = require('lodash');
+const requestValidationInstance = require('validate.js');
+const {assign, values, includes, omit, merge, pick} = require('lodash');
 const validateModule = require('../modules/validate').default;
 const { STEPCHART_LEVELS, STEPCHART_TYPES, COOP_STEPCHART_TYPES, 
 STANDARD_STEPCHART_REQUIREMENT, STANDARD_STEPCHART_LEVELS} = require('../shared/constant');
 
-registerValidateInstance.validators.isValid = function(value, options, key, attributes) {
+requestValidationInstance.validators.isValid = function(value, options, key, attributes) {
   switch(key) {
     case 'stepchartType': {
       const stepchartTypes = values(STEPCHART_TYPES);
@@ -87,7 +87,7 @@ const formContraints = {
   }
 };
 
-module.exports.registerValidation = (formValue) => validateModule(formValue, formContraints, registerValidateInstance);
+module.exports.registerValidation = (formValue) => validateModule(formValue, formContraints, requestValidationInstance);
 
 module.exports.updateRequestValidation = (formValue) => {
   const updateSchema = {
@@ -108,7 +108,29 @@ module.exports.updateRequestValidation = (formValue) => {
   let updateContraints = omit(formContraints, ['song', 'email']);
   updateContraints = merge(updateSchema, updateContraints);
 
-  return validateModule(formValue, updateContraints, registerValidateInstance);
+  return validateModule(formValue, updateContraints, requestValidationInstance);
+}
+
+module.exports.deleteRequestValidation = (formValue) => {
+  const deleteSchema = {
+    requestId: {
+      presence: {
+        message: 'Request Id is required',
+        allowEmpty: false
+      }
+    },
+    deleteToken: {
+      presence: {
+        message: 'Delete token is required',
+        allowEmpty: false
+      }
+    }
+  }
+
+  let deleteContraints = pick(formContraints, ['email']);
+  deleteContraints = merge(deleteSchema, deleteContraints);
+  return validateModule(formValue, deleteContraints, requestValidationInstance);
+
 }
 
 module.exports.resendActivationValidation = (formValue) => {
@@ -124,5 +146,5 @@ module.exports.resendActivationValidation = (formValue) => {
   let resendContraints = assign({}, { email: formContraints.email });
   resendContraints = merge(resendSchema, resendContraints);
 
-  return validateModule(formValue, resendContraints, registerValidateInstance);
+  return validateModule(formValue, resendContraints, requestValidationInstance);
 }

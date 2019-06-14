@@ -7,6 +7,12 @@ const DB = {
     STATUS: 'status'
 }
 
+const FETCH_DATA_MODE = {
+    VIEW: 'view',
+    DETAILS: 'details',
+    PAGINATION: 'pagination'
+}
+
 const DEFAULT_WHITE_LIST_EMAILS = [
     'bosspiuvn.official@gmail.com'
 ]
@@ -105,6 +111,7 @@ module.exports = {
     STANDARD_STEPCHART_REQUIREMENT,
     COOP_STEPCHART_TYPES,
     STANDARD_STEPCHART_LEVELS,
-    DEFAULT_WHITE_LIST_EMAILS
+    DEFAULT_WHITE_LIST_EMAILS,
+    FETCH_DATA_MODE
 };
 

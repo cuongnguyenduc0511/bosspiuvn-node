@@ -2,7 +2,7 @@ const requestController = require('../controllers/requestController');
 const { TITLE_FORMAT } = require('../shared/constant');
 const express = require('express');
 const { activateRequestMiddleware, registerRequestMiddleware, 
-    updateRequestMiddleware, resendActivationMiddleware } = require('../middleware/middleware');
+    updateRequestMiddleware, deleteRequestMiddleware, resendActivationMiddleware, requestTokenMiddleware } = require('../middleware/middleware');
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
@@ -67,7 +67,7 @@ router.post('/register', csrfProtection, registerRequestMiddleware, (req, res) =
     requestController.registerNewRequest(req, res);
 })
 
-router.post('/request-token', csrfProtection, (req, res, next) => {
+router.post('/request-token', csrfProtection, requestTokenMiddleware, (req, res, next) => {
     requestController.requestToken(req, res);
 });
 
@@ -75,7 +75,7 @@ router.post('/update-request', csrfProtection, updateRequestMiddleware, (req, re
     requestController.updateRequestByToken(req, res);
 });
 
-router.post('/delete-request', csrfProtection, (req, res, next) => {
+router.post('/delete-request', csrfProtection, deleteRequestMiddleware, (req, res, next) => {
     requestController.deleteRequestByToken(req, res);
 });
 
