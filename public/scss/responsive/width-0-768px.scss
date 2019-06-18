@@ -5,7 +5,7 @@
 
 @media only screen and (max-width: 600px) and (orientation : portrait) {
   .page-header {
-    &.background {
+    &.background, &.background-filter {
       .page-header-logo {
         margin-top: 20px;
         transform: scale(1.2);
@@ -16,14 +16,30 @@
         line-height: 1.6em;
       }
     }
+
+    &.background-filter {
+      .page-header-logo {
+        margin-top: 10px;
+      }
+    }
   }
 }
 
 @media only screen and (max-width: 768px) and (orientation : landscape) {
   .page-header {
-    &.background {
+    &.background, &.background-filter {
       .page-header-logo {
         margin-top: -15px;
+      }
+      .page-header-text {
+        margin-top: -80px;
+        font-size: 2em;
+      }    
+    }
+    &.background-filter {
+      .page-header-logo {
+        margin-top: -60px;
+        transform: scale(0.8);
       }
       .page-header-text {
         margin-top: -80px;
@@ -37,7 +53,7 @@
   .page-header {
     &.background {
       .page-header-logo {
-        margin-top: -5px;
+        margin-top: -40px;
       }
       .page-header-text {
         margin-top: -64px;

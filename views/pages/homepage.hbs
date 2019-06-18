@@ -1,134 +1,14 @@
 <section class="sec-page-header">
-  <div class="page-header background background-2">
-    <div class="container-fluid">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-            <img class="img-fluid page-header-logo" src="/images/boss_piuvn-shadow.png" />
-            <h1 class="header-1 gold page-header-text">BOSS_PIUVN PUMP IT UP TEAM OFFICIAL PAGE</h1>
+    <div class="page-header background-filter background-filter-2">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+              <img class="img-fluid page-header-logo" src="/images/boss_piuvn-shadow.png" />
+              <h1 class="header-1 gold page-header-text">BOSS_PIUVN PUMP IT UP TEAM OFFICIAL PAGE</h1>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<section class="sec-register" ng-app="registerUcsApp" ng-controller="registerUcsCtrl">
-  <div class="register-wrapper">
-    <div ng-if="!isFullyLoaded" id="form-loader" class="overlay_container">
-      <i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
-    </div>
-    <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <h2 class='section-header header-1 red'>UCS REGISTER FORM</h2>
-          </div>
-          <form id="register-form" class="bss-form col-lg-6 col-md-8 ml-auto mr-auto">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            <section id="sec-form-profile" class="bss-section-form">
-              <h4 class='header-1 green'>Profile</h4>
-              <div class="form-group row">
-                <label for="requester" class="col-lg-12 col-form-label">Your Name / Nickname
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="form.requester" type="text" class="form-control" name="requester" placeholder="Enter your name / nickname">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="email" class="col-lg-12 col-form-label">Verification Email
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="form.email" type="text" class="form-control" name="email" placeholder="Enter your email">
-                </div>
-              </div>
-            </section>
-            <section id="sec-form-step-info" class="bss-section-form">
-              <h4 class="header-1 green">Stepchart Info</h4>
-              <div class="form-group row">
-                <label for="contentName" class="col-lg-12 col-form-label">Content Name</label>
-                <div class="col-lg-12">
-                  <input ng-model="form.contentName" type="text" class="form-control" name="contentName" placeholder="Enter your content name">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="song" class="col-lg-12 col-form-label">Song
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <select id="song" class="bss-select2" name="song">
-                    <option value="">Choose song</option>
-                    		<optgroup ng-repeat="(sectionIndex, section) in songs" label="<span class='option-group'>{[{ section.groupName }]}</span>">
-                          <option ng-repeat="item in section.items" value='{[{ item.value }]}'>{[{ item.title }]}</option>
-                        </optgroup>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-lg-6 col-sm-12 column-field">
-                  <label for="stepchartType" class="col-form-label">Stepchart Type
-                    <span class="required">*</span>
-                  </label>
-                  <div>
-                    <select ng-model="form.stepchartType" class="form-control" name="stepchartType">
-                      <option value="">Choose Stepchart Type</option>
-                      <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-sm-12 column-field">
-                  <label for="stepchartLevel" class="col-form-label">Stepchart Level
-                    <span class="required">*</span>
-                  </label>
-                  <div>
-                    <select ng-model="form.stepchartLevel" class="form-control" name="stepchartLevel">
-                      <option value="">Choose Stepchart Level</option>
-                      <option ng-repeat="stepchartLevelItem in stepchartLevels" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="stepmaker" class="col-lg-12 col-form-label">Stepmaker
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="form.stepmaker" type="text" class="form-control" name="stepmaker" placeholder="Enter STEPMAKER Name">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="ucsLink" class="col-lg-12 col-form-label">UCS Download Link
-                  <span class="required">*</span>
-                </label>
-                <div class="col-lg-12">
-                  <input ng-model="form.ucsLink" type="text" class="form-control" name="ucsLink" placeholder="Enter UCS Chart Download Link">
-                </div>
-              </div>
-            </section>
-            <section id="sec-form-note" class="bss-section-form">
-              <h4 class="header-1 green">Note</h4>
-              <div class="form-group row">
-                <label for="requester_note" class="col-lg-12 col-form-label">Leave your note if you would like to remind us</label>
-                <div class="col-lg-12">
-                  <textarea class="b-text-area" id="requester_note" name="requester_note"></textarea>
-                </div>
-              </div>
-            </section>          
-            <div class="form-group">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="terms" id="terms">
-                <label class="form-check-label" for="terms">
-                  I have read and accept
-                  <a href='/faq-rules' target="_blank">UCS Rules</a>
-                  <span class="required">*</span>
-                </label>
-              </div>
-            </div>
-            <button class="btn submit">Submit</button>
-            <button type="button" id="reset" class="btn reset">Reset</button>
-          </form>
-        </div>
-    </div>
-  </div>
-  {{> register-preview}}
 </section>
 {{#section 'header_components'}}
   <link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">

@@ -1,6 +1,6 @@
 @mixin background-filter($color1, $color2, $imageUrl) {
-    background: -webkit-linear-gradient(135deg, $color1 0%, 
-    $color2 100%), url($imageUrl);      
+    background: -webkit-linear-gradient(135deg, $color1 0%, $color2 100%), url($imageUrl) center;
+    background-size: cover;   
 }
 
 .page-header {
@@ -17,10 +17,10 @@
     &.background {
         max-height: 500px;
         .page-header-logo {
-            margin-top: -50px;
+            margin-top: -110px;
         }
         .page-header-text {
-            font-size: 2.3em;
+            font-size: 2.8em;
             text-align: center;
             margin-top: -75px;
         }
@@ -33,6 +33,15 @@
     }
 
     &.background-filter {
+        max-height: 100vh;
+        .page-header-logo {
+            margin-top: -130px;
+        }
+        .page-header-text {
+            font-size: 2.8em;
+            text-align: center;
+            margin-top: -80px;
+        }
         &-1 {
             @include background-filter(rgba(100, 155, 121, 0.829), rgba(184, 112, 31, 0.575), '../images/team-battle-3.jpg');   
         }  

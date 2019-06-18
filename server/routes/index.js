@@ -29,15 +29,23 @@ router.get('/register', csrfProtection, (req, res, next) => {
     });
 });
 
-
 router.get('/ucs-tracking', csrfProtection, (req, res, next) => {
-    res.render('pages/ucs-tracking', {
+    res.render('pages/homepage', {
         title: `UCS Tracking ${TITLE_FORMAT}`,
-        layout: 'master_layout/layout',
-        root: root,
+        layout: 'master_layout/layout-ver2',
+        active: { ucsTracking: true },
         csrfToken: req.csrfToken()
     });
 });
+
+// router.get('/ucs-tracking', csrfProtection, (req, res, next) => {
+//     res.render('pages/ucs-tracking', {
+//         title: `UCS Tracking ${TITLE_FORMAT}`,
+//         layout: 'master_layout/layout',
+//         root: root,
+//         csrfToken: req.csrfToken()
+//     });
+// });
 
 router.get('/ucs-song', (req, res, next) => {
     res.render('pages/song', {
@@ -59,15 +67,6 @@ router.get('/series', (req, res, next) => {
     const data = require('../../public/series.json');
     res.send(data);
 });
-
-// router.get('/register', csrfProtection, (req, res, next) => {
-//     res.render('pages/register', {
-//         title: `Register UCS ${TITLE_FORMAT}`,
-//         layout: 'master_layout/layout2',
-//         root: root,
-//         csrfToken: req.csrfToken()
-//     });
-// });
 
 router.get('/request-activation', activateRequestMiddleware, (req, res) => {
     requestController.activateRequest(req, res);

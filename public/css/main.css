@@ -1,5 +1,5 @@
 body {
-  margin-top: 20px;
+  margin-top: 80px;
 }
 
 * {
@@ -138,10 +138,10 @@ body {
   max-height: 500px;
 }
 .page-header.background .page-header-logo {
-  margin-top: -50px;
+  margin-top: -110px;
 }
 .page-header.background .page-header-text {
-  font-size: 2.3em;
+  font-size: 2.8em;
   text-align: center;
   margin-top: -75px;
 }
@@ -151,26 +151,44 @@ body {
 .page-header.background-2 {
   background-image: url("../images/xx_bg4.jpg");
 }
+.page-header.background-filter {
+  max-height: 100vh;
+}
+.page-header.background-filter .page-header-logo {
+  margin-top: -130px;
+}
+.page-header.background-filter .page-header-text {
+  font-size: 2.8em;
+  text-align: center;
+  margin-top: -80px;
+}
 .page-header.background-filter-1 {
-  background: -webkit-linear-gradient(135deg, rgba(100, 155, 121, 0.829) 0%, rgba(184, 112, 31, 0.575) 100%), url("../images/team-battle-3.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(100, 155, 121, 0.829) 0%, rgba(184, 112, 31, 0.575) 100%), url("../images/team-battle-3.jpg") center;
+  background-size: cover;
 }
 .page-header.background-filter-2 {
-  background: -webkit-linear-gradient(135deg, rgba(97, 173, 142, 0.829) 0%, rgba(114, 157, 207, 0.575) 100%), url("../images/new-team.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(97, 173, 142, 0.829) 0%, rgba(114, 157, 207, 0.575) 100%), url("../images/new-team.jpg") center;
+  background-size: cover;
 }
 .page-header.background-filter-3 {
-  background: -webkit-linear-gradient(135deg, rgba(201, 209, 88, 0.829) 0%, rgba(216, 162, 91, 0.575) 100%), url("../images/team-leader.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(201, 209, 88, 0.829) 0%, rgba(216, 162, 91, 0.575) 100%), url("../images/team-leader.jpg") center;
+  background-size: cover;
 }
 .page-header.background-filter-4 {
-  background: -webkit-linear-gradient(135deg, rgba(204, 74, 102, 0.829) 0%, rgba(212, 72, 72, 0.575) 100%), url("../images/footwork.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(204, 74, 102, 0.829) 0%, rgba(212, 72, 72, 0.575) 100%), url("../images/footwork.jpg") center;
+  background-size: cover;
 }
 .page-header.background-filter-5 {
-  background: -webkit-linear-gradient(135deg, rgba(100, 212, 169, 0.829) 0%, rgba(99, 165, 209, 0.575) 100%), url("../images/team-battle-4.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(100, 212, 169, 0.829) 0%, rgba(99, 165, 209, 0.575) 100%), url("../images/team-battle-4.jpg") center;
+  background-size: cover;
 }
 .page-header.background-filter-6 {
-  background: -webkit-linear-gradient(135deg, rgba(147, 218, 119, 0.829) 0%, rgba(129, 194, 99, 0.575) 100%), url("../images/team.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(147, 218, 119, 0.829) 0%, rgba(129, 194, 99, 0.575) 100%), url("../images/team.jpg") center;
+  background-size: cover;
 }
 .page-header.background-filter-7 {
-  background: -webkit-linear-gradient(135deg, rgba(119, 218, 210, 0.829) 0%, rgba(160, 84, 196, 0.575) 100%), url("../images/team-battle-2.jpg");
+  background: -webkit-linear-gradient(135deg, rgba(119, 218, 210, 0.829) 0%, rgba(160, 84, 196, 0.575) 100%), url("../images/team-battle-2.jpg") center;
+  background-size: cover;
 }
 
 .overlay_container {
@@ -370,6 +388,11 @@ body .preview-content .preview-field .preview-value:after {
     margin-bottom: 0;
   }
 }
+@media only screen and (max-width: 800px) and (orientation: portrait) {
+  .page-header.background .page-header-text {
+    font-size: 2.3em;
+  }
+}
 @media only screen and (max-width: 992px) and (orientation: landscape) {
   .page-header.background .page-header-logo {
     margin-top: -35px;
@@ -381,28 +404,39 @@ body .preview-content .preview-field .preview-value:after {
   }
 }
 @media only screen and (max-width: 600px) and (orientation: portrait) {
-  .page-header.background .page-header-logo {
+  .page-header.background .page-header-logo, .page-header.background-filter .page-header-logo {
     margin-top: 20px;
     transform: scale(1.2);
   }
-  .page-header.background .page-header-text {
+  .page-header.background .page-header-text, .page-header.background-filter .page-header-text {
     margin-top: -50px;
     font-size: 1.8em;
     line-height: 1.6em;
   }
+  .page-header.background-filter .page-header-logo {
+    margin-top: 10px;
+  }
 }
 @media only screen and (max-width: 768px) and (orientation: landscape) {
-  .page-header.background .page-header-logo {
+  .page-header.background .page-header-logo, .page-header.background-filter .page-header-logo {
     margin-top: -15px;
   }
-  .page-header.background .page-header-text {
+  .page-header.background .page-header-text, .page-header.background-filter .page-header-text {
+    margin-top: -80px;
+    font-size: 2em;
+  }
+  .page-header.background-filter .page-header-logo {
+    margin-top: -60px;
+    transform: scale(0.8);
+  }
+  .page-header.background-filter .page-header-text {
     margin-top: -80px;
     font-size: 2em;
   }
 }
 @media only screen and (max-width: 640px) and (orientation: landscape) {
   .page-header.background .page-header-logo {
-    margin-top: -5px;
+    margin-top: -40px;
   }
   .page-header.background .page-header-text {
     margin-top: -64px;
@@ -416,11 +450,21 @@ body .preview-content .preview-field .preview-value:after {
     font-size: 1.4em;
   }
 }
-@media only screen and (min-width: 320px) and (max-width: 460px) and (orientation: portrait) {
-  body .page-header.background .page-header-logo {
-    margin-top: 30px;
+@media only screen and (min-width: 320px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+  .page-header.background .page-header-text, .page-header.background-filter .page-header-text {
+    margin-top: -20px;
+    font-size: 0.98em;
+    line-height: 1.6em;
   }
-  body .page-header.background .page-header-text {
+  .page-header.background-filter .page-header-logo {
+    margin-top: -50px;
+  }
+}
+@media only screen and (min-width: 321px) and (max-width: 460px) and (orientation: portrait) {
+  body .page-header.background .page-header-logo, body .page-header.background-filter .page-header-logo {
+    margin-top: -20px;
+  }
+  body .page-header.background .page-header-text, body .page-header.background-filter .page-header-text {
     margin-top: -30px;
     font-size: 1.1em;
     line-height: 1.6em;
@@ -433,20 +477,16 @@ body .preview-content .preview-field .preview-value:after {
     padding-right: 0;
   }
 }
-@media only screen and (min-width: 320px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  .page-header.background .page-header-text {
-    margin-top: -20px;
-    font-size: 0.98em;
-    line-height: 1.6em;
-  }
-}
 @media only screen and (min-width: 320px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
-  .page-header.background .page-header-logo {
+  .page-header.background .page-header-logo, .page-header.background-filter .page-header-logo {
     margin-top: 10px;
   }
-  .page-header.background .page-header-text {
+  .page-header.background .page-header-text, .page-header.background-filter .page-header-text {
     margin-top: -55px;
     font-size: 1.4em;
+  }
+  .page-header.background-filter .page-header-logo {
+    margin-top: -50px;
   }
 }
 
