@@ -1,0 +1,44 @@
+.bss-navbar {
+  box-shadow: 0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  background-color: black;
+  &-logo {
+      max-width: 200px;
+  }
+  .navbar-nav {
+    .nav-item {
+      margin-right: 10px;
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .nav-link {
+        color: white;
+        font-size: 16px;
+        font-family: 'XoloniumRegular';
+        font-weight: bolder;
+        text-transform: uppercase;
+  
+        &.active, &:hover {
+          color: yellow;
+        }
+
+        &.active {
+          &:hover {
+            transition: unset;
+            transform: unset;
+          }
+        }
+        
+        &:hover {
+          transition: all 0.3s ease;
+          transform: scale(1.1);
+        }
+  
+        i {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}

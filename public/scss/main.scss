@@ -1,0 +1,16 @@
+@import './styles.scss';
+@import './fonts.scss';
+@import './responsive/mixins.scss';
+
+@import './navbar.scss';
+@import './footer.scss';
+@import './page-header.scss';
+@import './loader.scss';
+
+@import './home.scss';
+@import './register.scss';
+
+@import './responsive/width-0-1200px.scss';
+@import './responsive/width-0-992px.scss';
+@import './responsive/width-0-768px.scss';
+@import './responsive/width-0-480px.scss';

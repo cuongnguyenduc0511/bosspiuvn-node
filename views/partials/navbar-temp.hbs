@@ -1,7 +1,7 @@
-<nav class="navbar fixed-top navbar-expand-xl bss-nav-bar">
+<nav class="navbar fixed-top navbar-expand-xl bss-navbar">
   <div class="container-fluid">
     <div class="navbar-brand">
-      <img class="b-navbar-logo" src="/images/boss-nav-logo.png" />
+      <img class="bss-navbar-logo" src="/images/boss-nav-logo.png" />
     </div>
     <button class="navbar-toggler" type="button" id="sidebarCollapse">
         <i class="fas fa-bars"></i>
@@ -10,15 +10,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/">
+          <a class="nav-link {{#if active.home}}active{{/if}}" href="/">
             <i class="fas fa-home"></i>Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/ucs-tracking">
+          <a class="nav-link  {{#if active.ucsTracking}}active{{/if}}" href="/ucs-tracking">
             <i class="fas fa-compass"></i>UCS Tracking System</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/register">
+          <a class="nav-link {{#if active.register}}active{{/if}}" href="/register">
             <i class="fas fa-plus-circle"></i>Register UCS Request</a>
         </li>
         <li class="nav-item">
@@ -26,7 +26,7 @@
             <i class="fas fa-music"></i>Song List</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/faq-rules">
+          <a class="nav-link {{#if active.faqRules}}active{{/if}}" href="/faq-rules">
             <i class="fas fa-question-circle"></i>Faq & Rules</a>
         </li>
       </ul>

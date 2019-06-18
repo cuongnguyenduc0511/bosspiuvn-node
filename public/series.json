@@ -3,42 +3,50 @@
         {
             "title": "PUMP IT UP 1ST - PERFECT COLLECTION",
             "imgFilename": "1st-perfect.png",
-            "order": 1
+            "order": 1,
+            "categoryId": "1st-perfect"
         },
         {
             "title": "PUMP IT UP EXTRA - PREX 3",
             "imgFilename": "extra-prex3.png",
-            "order": 2
+            "order": 2,
+            "categoryId": "extra-prex3"
         },
         {
             "title": "PUMP IT UP EXCEED - ZERO",
             "imgFilename": "exceed-zero.png",
-            "order": 3
+            "order": 3,
+            "categoryId": "exceed-zero"
         },
         {
             "title": "PUMP IT UP NX - NX ABSOLUTE",
             "imgFilename": "nx-nxa.png",
-            "order": 4
+            "order": 4,
+            "categoryId": "nx-nxa"
         },
         {
             "title": "PUMP IT UP FIESTA - FIESTA 2",
             "imgFilename": "fiesta-fiesta2.png",
-            "order": 5
+            "order": 5,
+            "categoryId": "fiesta-fiesta2"
         },
         {
             "title": "PUMP IT UP PRIME",
             "imgFilename": "prime.png",
-            "order": 6
+            "order": 6,
+            "categoryId": "prime"
         },
         {
             "title": "PUMP IT UP PRIME 2",
             "imgFilename": "prime2.png",
-            "order": 7
+            "order": 7,
+            "categoryId": "prime2"
         },
         {
             "title": "PUMP IT UP XX - 20TH ANNIVERSARY EDITION",
             "imgFilename": "xx.png",
-            "order": 8
+            "order": 8,
+            "categoryId": "xx"
         }
     ]
 }

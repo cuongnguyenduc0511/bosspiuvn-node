@@ -7,19 +7,19 @@ module.exports = function (grunt) {
           style: 'expanded'
         },
         files: {                         // Dictionary of files
-          'css/css1.css': 'scss/css1.scss',       // 'destination': 'source'
-          'css/css2.css': 'scss/css2.scss'
+          'public/css/main.css': 'public/scss/main.scss',       // 'destination': 'source'
+          // 'css/css2.css': 'scss/css2.scss'
         }
       }
     },  
     concat: {
       css: {
         src: [
-          'css/css1.css',
-          'css/css2.css',
+          'public/css/bootstrap.min.css',
+          'public/css/main.css',
         ],
-        // dest: 'css/all.css'
-        dest: 'css/<%= pkg.name %>.css'
+        dest: 'public/css/bosspiuvn-main.css'
+        // dest: 'css/<%= pkg.name %>.css'
       },
       js: {
         src: [
@@ -32,8 +32,8 @@ module.exports = function (grunt) {
     },
     cssmin: {
       css: {
-        src: 'css/<%= pkg.name %>.css',
-        dest: 'css/<%= pkg.name %>.min.css'
+        src: 'public/css/bosspiuvn-main.css',
+        dest: 'public/css/bosspiuvn-main.min.css'
       },
     },
     uglify: {
@@ -44,7 +44,7 @@ module.exports = function (grunt) {
     },
     watch: {
       css: {
-        files: ['scss/*.scss'],
+        files: ['public/scss/*.scss', 'public/scss/responsive/*.scss'],
         tasks: ['sass:dist', 'concat:css', 'cssmin:css']
       },
       js: {

@@ -1,0 +1,49 @@
+@media only screen and (max-width: 768px) and (orientation : portrait) {
+  .page-header-text {
+  }
+}
+
+@media only screen and (max-width: 600px) and (orientation : portrait) {
+  .page-header {
+    &.background {
+      .page-header-logo {
+        margin-top: 20px;
+        transform: scale(1.2);
+      }
+      .page-header-text {
+        margin-top: -50px;
+        font-size: 1.8em;
+        line-height: 1.6em;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) and (orientation : landscape) {
+  .page-header {
+    &.background {
+      .page-header-logo {
+        margin-top: -15px;
+      }
+      .page-header-text {
+        margin-top: -80px;
+        font-size: 2em;
+      }    
+    }
+  }
+}
+
+@media only screen and (max-width: 640px) and (orientation : landscape) {
+  .page-header {
+    &.background {
+      .page-header-logo {
+        margin-top: -5px;
+      }
+      .page-header-text {
+        margin-top: -64px;
+        font-size: 1.8em;
+        line-height: 1.6em;
+      }
+    }
+  }
+}

@@ -1,0 +1,172 @@
+@mixin multiLineEllipsis($lineHeight: 1.2em, $lineCount: 1, $bgColor: white){
+  overflow: hidden;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount; 
+  text-align: justify;
+  margin-right: -1em;
+  padding-right: 1em;
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: $bgColor;
+  }
+}
+
+body {
+  .sec-register {
+    background-size: cover;
+    background-position: center center;
+    background-image: url('../images/background-texture.png');
+    .required {
+      color: #dc3545;
+    }
+    h2 {
+      font-style: italic;
+      text-align: center;
+    }
+    .register-wrapper {
+      padding: 40px 20px 20px;
+      position: relative;
+    }
+    .bss-form {
+      padding-bottom: 20px;
+      padding-top: 20px;
+      #requester-note {
+        max-height: 600px;
+      }
+      label {
+        font-family: 'XoloniumBold'; 
+        font-weight: normal; 
+        font-style: italic; 
+        color: #eff7ef;
+        &.active {
+          color: yellow;
+          transition: .15s ease-in-out;
+        } 
+        &.label-invalid {
+          color: #dc3545;
+        }
+      }
+      .form-control {
+        // &.active {
+        //   border: yellow 2px solid
+        // }  
+        &.is-invalid {
+          border-color: #dc3545;
+          &:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(206, 52, 25, 0.829)
+          }
+        }
+        &:focus {
+          border-color: yellow;
+          box-shadow: 0 0 0 0.2rem rgba(252, 252, 71, 0.829)
+        }
+      }
+      .submit {
+        background-color: white;
+        color: black;
+        &:hover {
+          background-color: black;
+          color: yellow
+        }
+        font-family: 'XoloniumRegular'; 
+        font-weight: 200;
+      }
+      .reset {
+        font-family: 'XoloniumRegular'; 
+        font-weight: 200;
+        background-color: red;
+        color: white;
+        &:hover {
+          background-color: yellow;
+          color: red
+        }
+      }
+    }
+  }
+
+  .submit-button {
+    background-color: yellow;
+    color: black;
+    &:hover {
+      background-color: black;
+      color: yellow;
+      &:disabled {
+        background-color: yellow;
+        color: black;    
+      }
+    }
+    font-family: 'XoloniumRegular'; 
+    font-weight: 200;
+  }
+
+  .option-group {
+    color: red;
+    padding-left: 5px;
+  }
+
+  .preview-thumbnail {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;  
+    margin-bottom: 20px;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    max-height: 250px; 
+    &.loading {
+      background-image: url('../images/loading-spinner.gif');
+      background-repeat: no-repeat;
+      background-position: 50% 50%;  
+      height: 250px;
+    }
+  }
+  .preview-content {
+    .preview-field {
+      margin: 20px 0 20px;
+      .stepball {
+        width: 60px;
+      }
+      .preview-field-name {
+        font-weight: bolder;
+        color: darkblue
+      }
+      .preview-value {
+        @include multiLineEllipsis($lineHeight: 1.5em, $lineCount: 2, $bgColor: white);
+      }
+    }
+  }
+}
+.tox-notifications-container {display: none !important;}
+.tinymce-mobile-editor-socket.tinymce-mobile-scrollable {
+  touch-action: none;
+}
+
+.select2-container {
+  // &.select2-container--focus, &.select2-container--open {
+  //   border: red 2px solid;
+  //   border-radius: 5px;
+  // }
+  .select2-selection--single {
+    height: calc(1.5em + .75rem + 2px);
+    .select2-selection__arrow {
+      top: 8px;
+    }
+    .select2-selection__rendered {
+      height: 100%;
+      padding: 6px 6px 6px 12px;
+    }
+  }
+}

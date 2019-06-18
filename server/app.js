@@ -73,7 +73,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Client Browser detection (IE)
 app.use(function (req, res, next) {
     var parser = new UAParser();
-    const notCompatibleBrowser = ['IE', 'IEMobile', 'Safari']
+    const notCompatibleBrowser = ['IEMobile', 'Safari']
     var ua = req.headers['user-agent'];
     var browserName = parser.setUA(ua).getBrowser().name;
 

@@ -45,6 +45,21 @@ module.exports.getAllData = (callback) => {
   ], callback);
 }
 
+module.exports.getSongsField = async () => {
+  try {
+    const result = await Song.aggregate([
+      { $match: { isAvailable: true } },
+      { $project: { _id: 0, value: "$_id", songName: "$songName", artist: 1, group: '$seriesGroupCategory', thumbnailUrl: 1 } },  
+      { 
+        $group : {_id : "$group", items: { $push: "$$ROOT" }, total : { $sum : 1 }}
+      },            
+    ]);
+    return Promise.resolve(result);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
+
 module.exports.getSongById = async (id) => {
   try {
     const result = await Song.aggregate([

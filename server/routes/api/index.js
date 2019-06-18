@@ -21,4 +21,8 @@ apiRouter.get('/song-artists', (req, res, next) => {
     commonController.getArtists(req, res);
 });
 
+apiRouter.get('/commons', (req, res) => {
+    commonController.getCommonData(req, res);
+})
+
 module.exports = apiRouter;

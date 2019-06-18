@@ -1,0 +1,63 @@
+.footer {
+  padding: 50px 0 19px;
+  text-align: center;
+  display: flex;
+  background: url(../images/footerBg1.jpg) center top no-repeat;
+  overflow: hidden;
+  background-size: cover;
+
+  &-copyright {
+    p {
+      font-size: 15px;
+      line-height: 15px;
+      color: white;
+    }  
+  }
+
+  .social-network {
+    margin-bottom: 32px;
+    margin-bottom: 32px;
+    a {
+        color: white;
+        margin-right: 50px; 
+
+        #facebook {
+          &:hover {
+            color: rgb(60,90,153);                  
+          }  
+        }
+
+        #twitter {
+          &:hover {
+            color: #00aced;            
+          }  
+        }
+
+        #youtube {
+          &:hover {
+            color: red;                     
+          }  
+        }
+
+        i {
+          &:hover {
+            transition: all 0.3 s ease;    
+          }
+        }
+
+        &:last-child {
+            margin-right: -8px;
+        }
+    }
+  }
+
+  &-brand {
+    margin-bottom: 20px;
+    .brand-item {
+      align-self: center;
+      img {
+        max-width: 230px;
+      }
+    }
+  }
+}
