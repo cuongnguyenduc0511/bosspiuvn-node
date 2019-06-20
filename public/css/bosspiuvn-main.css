@@ -380,6 +380,41 @@ body .preview-content .preview-field .preview-value:after {
   padding: 6px 6px 6px 12px;
 }
 
+body .page-template-ucs-tracking {
+  background-size: cover;
+  background-position: center center;
+  background-image: url("../images/background-texture.png");
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel {
+  position: relative;
+  margin: 1rem 0;
+  padding: 1em 1em;
+  border-radius: 0.28571429rem;
+  width: 100%;
+  display: inline-block;
+  background: linear-gradient(#121212 0%, #303030 100%);
+  box-shadow: 0px 0px 0px 2px #FFD500;
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form label {
+  font-family: "XoloniumBold";
+  font-weight: normal;
+  font-style: italic;
+  color: #eff7ef;
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form label.active {
+  color: yellow;
+  transition: 0.15s ease-in-out;
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form label.label-invalid {
+  color: #dc3545;
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form div[class*=col-] {
+  margin-bottom: 10px;
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form div[class*=col-]:last-child {
+  margin-bottom: 15px;
+}
+
 @media only screen and (max-width: 992px) {
   .footer-brand .brand-item {
     margin-bottom: 50px;

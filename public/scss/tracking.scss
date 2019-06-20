@@ -1,0 +1,46 @@
+body {
+    .page-template-ucs-tracking {
+        background-size: cover;
+        background-position: center center;
+        background-image: url('../images/background-texture.png');
+        .sec-ucs-search {
+          .search-panel {
+              position: relative;
+              // -webkit-box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+              // box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+              margin: 1rem 0;
+              padding: 1em 1em;
+              border-radius: .28571429rem;
+              width: 100%;
+              display: inline-block;
+              background: linear-gradient(#121212 0%, #303030 100%);
+              box-shadow: 0px 0px 0px 2px #FFD500;
+  
+              // background: #536976;  /* fallback for old browsers */
+              // background: -webkit-linear-gradient(to right, #292E49, #536976);  /* Chrome 10-25, Safari 5.1-6 */
+              // background: linear-gradient(to right, #292E49, #536976); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+              #search-form {
+                  label {
+                      font-family: 'XoloniumBold'; 
+                      font-weight: normal; 
+                      font-style: italic; 
+                      color: #eff7ef;
+                      &.active {
+                        color: yellow;
+                        transition: .15s ease-in-out;
+                      } 
+                      &.label-invalid {
+                        color: #dc3545;
+                      }
+                  }
+                  div[class*="col-"] {
+                      margin-bottom: 10px;
+                      &:last-child {
+                          margin-bottom: 15px;
+                      }
+                  }
+              }
+          }
+        }    
+    }
+}

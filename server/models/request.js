@@ -1,7 +1,8 @@
 const { model: requestModel, getSchema } = require('../db-schema/request');
 const { FETCH_DATA_MODE, UPDATE_MODE, SORT_TYPE } = require('../shared/constant');
-const { find, concat, escapeRegExp, assign, isEmpty } = require('lodash');
+const { find, concat, assign, isEmpty } = require('lodash');
 const { decodeAndSanitizeObject } = require('../shared/modules/sanitize');
+const { escapeRegExp } = require('../shared/modules/escapeReg');
 
 let requestSession = null
 
@@ -120,14 +121,15 @@ module.exports.searchQuery = req => {
   }
 
   decodeAndSanitizeObject(params);
-  escapeRegExp(params.search);
 
   if (search) {
-    const searchValue = params.search;
-    Object.assign(query, {
+    const searchValue = escapeRegExp(params.search);
+    console.log(searchValue)
+    assign(query, {
       $or: [{ "stepmaker": { $regex: searchValue, $options: 'gi' } }, { "requester": { $regex: searchValue, $options: 'gi' } }, { "contentName": { $regex: searchValue, $options: 'gi' } }, { 'song.name': { $regex: new RegExp(searchValue), $options: 'imsx' } }]
     });
   }
+
 
   if (!isEmpty(params.stepchart_type)) {
     assign(query, {

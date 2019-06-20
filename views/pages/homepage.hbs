@@ -1,18 +1,62 @@
-<section class="sec-page-header">
+<section class="page-template-ucs-tracking">
+  <section class="sec-page-header">
     <div class="page-header background-filter background-filter-2">
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center">
-              <img class="img-fluid page-header-logo" src="/images/boss_piuvn-shadow.png" />
-              <h1 class="header-1 gold page-header-text">BOSS_PIUVN PUMP IT UP TEAM OFFICIAL PAGE</h1>
+            <img class="img-fluid page-header-logo" src="/images/boss_piuvn-shadow.png" />
+            <h1 class="header-1 gold page-header-text">BOSS_PIUVN PUMP IT UP TEAM OFFICIAL PAGE</h1>
           </div>
         </div>
       </div>
     </div>
+  </section>
+  <section class="sec-ucs-search">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 ml-auto mr-auto search-panel">
+          {{!-- <div ng-if="isStepchartTypeLoaded" id="form-loader" class="overlay_container">
+            <i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
+          </div> --}}
+          <form id="search-form">
+            <div class="form-group row">
+              <div class="col-lg-8 ml-auto mr-auto">
+                <label for="search" class="col-form-label">
+                  <i class="fas fa-search"></i> Search</label>
+                <input ng-model="searchForm.search" type="text" class="form-control" name="search"
+                  placeholder="Type keyword (Stepmaker, Requester, Content Name, Song)">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-lg-6">
+                <label for="search" class="col-form-label">Stepchart Type</label>
+                <select ng-model="searchForm.stepchart_type" class="form-control" name="stepchartType">
+                  <option value="">Choose Stepchart Type</option>
+                  <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{
+                    stepchartType.title }]}</option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <label for="search" class="col-form-label">Stepchart Type</label>
+                <select ng-model="searchForm.stepchart_type" class="form-control" name="stepchartType">
+                  <option value="">Choose Stepchart Type</option>
+                  <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{
+                    stepchartType.title }]}</option>
+                </select>
+              </div>
+            </div>
+            <button id="search" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 </section>
 {{#section 'header_components'}}
-  <link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" />
+<link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" />
 {{/section}}
 {{#section 'footer_components'}}
 <script src="/js/bootstrap.min.js"></script>
@@ -28,5 +72,5 @@
 <script type="text/javascript" src="/lib/sanitize-html.min.js"></script>
 <script type="text/javascript" src="/lib/decode-html.js"></script>
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
-<script src="/js/test/register.js"></script>
+<script src="/js/test/tracking.js"></script>
 {{/section}}

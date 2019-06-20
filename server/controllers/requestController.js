@@ -11,6 +11,11 @@ const paginationModule = require('../shared/modules/pagination');
 module.exports.getRequestById = async (req, res) => {
   const { id: requestId } = req.params;
   const result = await requestModel.getItemById(requestId);
+  if (isEmpty(result)) {
+    return res.send({
+      message: 'Result not found'
+    }) 
+  }
   res.send({
     ...result
   })

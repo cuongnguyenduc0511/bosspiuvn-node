@@ -14,6 +14,10 @@ requestRouter.get('', (req, res, next) => {
     requestController.getRequests(req, res);
 });
 
+requestRouter.get('/:id/details', (req, res) => {
+    requestController.getRequestById(req, res);
+});
+
 // *** End Fetching Items
 
 module.exports = requestRouter;
