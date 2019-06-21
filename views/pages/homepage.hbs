@@ -1,4 +1,4 @@
-<section class="page-template-ucs-tracking">
+<section class="page-template-ucs-tracking" ng-app="ucsTrackingApp" ng-controller="ucsTrackingAppCtrl">
   <section class="sec-page-header">
     <div class="page-header background-filter background-filter-2">
       <div class="container-fluid">
@@ -29,19 +29,17 @@
             </div>
             <div class="form-group row">
               <div class="col-lg-6">
-                <label for="search" class="col-form-label">Stepchart Type</label>
-                <select ng-model="searchForm.stepchart_type" class="form-control" name="stepchartType">
+                <label for="search-form-step-type" class="col-form-label">Stepchart Type</label>
+                <select ng-model="searchForm.stepchartType" class="form-control" id="search-form-step-type" name="search-form-step-type">
                   <option value="">Choose Stepchart Type</option>
-                  <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{
-                    stepchartType.title }]}</option>
+                  <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
                 </select>
               </div>
               <div class="col-lg-6">
-                <label for="search" class="col-form-label">Stepchart Type</label>
-                <select ng-model="searchForm.stepchart_type" class="form-control" name="stepchartType">
-                  <option value="">Choose Stepchart Type</option>
-                  <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{
-                    stepchartType.title }]}</option>
+                <label for="search-form-step-level" class="col-form-label">Stepchart Level</label>
+                <select ng-model="searchForm.stepchartLevel" class="form-control" id="search-form-step-level" name="search-form-step-level">
+                  <option value="">Choose Stepchart Level</option>
+                  <option ng-repeat="stepchartLevel in stepchartLevels" value="{[{ stepchartLevel }]}">{[{ stepchartLevel }]}</option>
                 </select>
               </div>
             </div>
@@ -53,6 +51,20 @@
       </div>
     </div>
   </section>
+
+  <section class="sec-request-list">
+    <div class="request-list-wrapper container-fluid">
+      <div class="row">
+        <div class="col-12 request-item">
+
+        </div>
+        <div class="col-12 request-item">
+
+        </div>
+      </div>
+    </div>
+  </section>
+
 </section>
 {{#section 'header_components'}}
 <link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">

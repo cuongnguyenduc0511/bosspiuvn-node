@@ -41,6 +41,24 @@ body {
                   }
               }
           }
-        }    
+        }
+        .sec-request-list {
+            $animation_duration: 0.4s;
+            padding: 10px;
+            display: none;
+            -webkit-animation: fadein $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadein $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadein $animation_duration; /* Internet Explorer */
+            -o-animation: fadein $animation_duration; /* Opera < 12.1 */
+            animation: fadein $animation_duration;     
+            .request-list-wrapper {
+                .request-item {
+                    background-color: green;
+                    height: 200px;
+                    max-height: 200px;
+                    margin-bottom: 20px;
+                }
+            }
+        }
     }
 }

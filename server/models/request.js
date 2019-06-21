@@ -99,7 +99,9 @@ module.exports.getPaginationData = async (recordPerPage, skip, query) => {
       { $project: { items: 1, totalItems: "$pageInfo.totalItems" } }
     ])
     const result = await requestModel.aggregate(concatSchema);
-    return Promise.resolve(result);
+    return Promise.resolve({
+      result: !isEmpty(result) ? result[0] : null
+    });
   } catch (err) {
     return Promise.reject(err);
   }

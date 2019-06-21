@@ -6,7 +6,7 @@ const { ID_LENGTH, STATUS_CODE, UPDATE_MODE, REQUEST_STATUS, ERROR_STATUS_TYPES,
 const { generateToken, generateActivationToken } = require('../modules/tokenModules');
 const moment = require('moment');
 const { sendTokenEmail, sendRegisterEmail, sendStatusEmail } = require('./requestEmail');
-const paginationModule = require('../shared/modules/pagination');
+const paginationModule = require('../modules/paginationModules');
 
 module.exports.getRequestById = async (req, res) => {
   const { id: requestId } = req.params;
@@ -24,14 +24,11 @@ module.exports.getRequestById = async (req, res) => {
 module.exports.getRequests = async (req, res) => {
   try {
     const paginationResult = await paginationModule.getData(req, res, requestModel);
-    let statusCode = !isEmpty(paginationResult.items) && paginationResult.items.length > 0 ? 200 : 404;
-    res.status(statusCode).send(paginationResult);
+    res.status(STATUS_CODE.SUCCESS).send(paginationResult);
   } catch (err) {
-    const errorStatus = err.status || STATUS_CODE.SERVER_ERROR;
-    console.log(err);
-    res.status(errorStatus).send({
+    res.status(STATUS_CODE.SERVER_ERROR).send({
       message: 'An error occurred while fetching data, please try again later',
-      err
+      err: err.message || err
     });
   }
 };
