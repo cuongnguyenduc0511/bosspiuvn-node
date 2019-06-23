@@ -159,7 +159,7 @@ body {
   color: red;
 }
 .footer .social-network a i:hover {
-  transition: all 0.3 s ease;
+  transition: all 0.3s ease;
 }
 .footer .social-network a:last-child {
   margin-right: -8px;
@@ -425,8 +425,7 @@ body .preview-content .preview-field .preview-value:after {
 }
 
 body .page-template-ucs-tracking {
-  background-size: cover;
-  background-position: center center;
+  background-repeat: repeat;
   background-image: url("../images/background-texture.png");
 }
 body .page-template-ucs-tracking .sec-ucs-search .search-panel {
@@ -458,6 +457,15 @@ body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form div[
 body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form div[class*=col-]:last-child {
   margin-bottom: 15px;
 }
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form .item-per-page {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form .item-per-page select {
+  max-width: 20%;
+  margin: 0 5px;
+}
 body .page-template-ucs-tracking .sec-request-list {
   padding: 10px;
   display: none;
@@ -472,12 +480,121 @@ body .page-template-ucs-tracking .sec-request-list {
   animation: fadein 0.4s;
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item {
-  background-color: green;
-  height: 200px;
-  max-height: 200px;
+  background: linear-gradient(#121212 0%, #303030 100%);
+  box-shadow: 0px 0px 0px 2px #EEEEEE;
+  border-radius: 0.28571429rem;
+  padding: 10px;
+  display: flex;
   margin-bottom: 20px;
 }
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .thumbnail-wrapper {
+  padding: 0;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .thumbnail-wrapper .thumbnail {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100% !important;
+  width: auto !important;
+  max-height: 250px !important;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
+  color: white;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .title {
+  font-size: 20px;
+  color: yellow;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field {
+  padding: 10px 0;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field:last-child {
+  padding-bottom: 0;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field.step-difficulty {
+  display: flex;
+  align-items: center;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field.step-difficulty .stepball-mobile {
+  margin-left: 5px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field.step-difficulty .stepball-mobile img {
+  max-height: 80px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field .status-badge {
+  font-size: inherit;
+  padding: 10px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field .field-value {
+  font-weight: bolder;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .stepball-xl {
+  position: absolute;
+  right: 26px;
+  top: 14px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .stepball-xl img {
+  max-height: 130px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .menu-options {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+body .page-template-ucs-tracking .sec-request-list .bss-pagination {
+  flex-wrap: wrap;
+}
+body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item {
+  cursor: pointer;
+}
+body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item .page-link {
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item:hover .page-link {
+  color: yellow;
+  transition: all 0.5s ease;
+}
+body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.active .page-link {
+  border-radius: 50%;
+  background-color: yellow;
+  color: black;
+}
+body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.disabled .page-link {
+  color: gray;
+}
+body .page-template-ucs-tracking .sec-not-found {
+  padding: 20px;
+  color: white;
+}
+body .page-template-ucs-tracking .sec-not-found .row {
+  justify-content: center;
+}
+body .page-template-ucs-tracking .sec-not-found .not-found-icon {
+  font-size: 40vh;
+}
+body .page-template-ucs-tracking .sec-not-found .not-found-message {
+  margin-top: 20px;
+}
 
+@media only screen and (max-width: 1024px) {
+  body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item {
+    flex-direction: column;
+  }
+  body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
+    padding: 20px 5px 20px;
+    margin-bottom: 20px;
+  }
+  body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .menu-options {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+  body .page-template-ucs-tracking .sec-ucs-search {
+    padding: 0 10px;
+  }
+}
 @media only screen and (max-width: 992px) {
   .footer-brand .brand-item {
     margin-bottom: 50px;
@@ -553,6 +670,17 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
   .page-header.background .page-header-text {
     margin-top: -40px;
     font-size: 1.4em;
+  }
+
+  body .page-template-ucs-tracking .sec-ucs-search {
+    padding: 0 10px;
+  }
+  body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form .item-per-page {
+    margin-top: 15px;
+    justify-content: flex-start;
+  }
+  body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form .item-per-page select {
+    max-width: 30%;
   }
 }
 @media only screen and (min-width: 320px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {

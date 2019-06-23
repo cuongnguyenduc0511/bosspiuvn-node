@@ -4,11 +4,13 @@ const queryString = require('querystring');
 
 module.exports.getData = async (req, res, modelInstance) => {
   const pageParam = req.query.page;
+  const recordPerPageParam = req.query.item_per_page;
   const currentPage = (isNaN(pageParam) || pageParam <= 0 || !pageParam) ? 1 : parseInt(pageParam);
+  const recordPerPage = (isNaN(recordPerPageParam) || recordPerPageParam <= 0 || !recordPerPageParam) ? RECORD_PER_PAGE : parseInt(recordPerPageParam);
   const self = this;
 
   try {
-    const paginationResult = await getPaginationData(req, res, currentPage, modelInstance);
+    const paginationResult = await getPaginationData(req, res, currentPage, recordPerPage, modelInstance);
     if (isEmpty(paginationResult)) {
       // recursion when current page is exceed with total pages
       self.getData(req, res, modelInstance);
@@ -20,9 +22,10 @@ module.exports.getData = async (req, res, modelInstance) => {
   }
 }
 
-async function getPaginationData(req, res, currentPage, modelInstance) {
+async function getPaginationData(req, res, currentPage, recordPerPage, modelInstance) {
   let indexPage = (currentPage - 1) > 0 ? (currentPage - 1) : 0;
-  let skip = RECORD_PER_PAGE * indexPage;
+
+  let skip = recordPerPage * indexPage;
 
   // Clone query obj
   let requestQuery = cloneDeep(req.query);
@@ -38,7 +41,7 @@ async function getPaginationData(req, res, currentPage, modelInstance) {
       }); 
     }
 
-    let paginationResult = await modelInstance.getPaginationData(RECORD_PER_PAGE, skip, dbQuery);
+    let paginationResult = await modelInstance.getPaginationData(recordPerPage, skip, dbQuery);
 
     if (isEmpty(paginationResult.result)) {
         return Promise.resolve({
@@ -50,7 +53,7 @@ async function getPaginationData(req, res, currentPage, modelInstance) {
     const { result: { totalItems } } = paginationResult;
     paginationResult = assign({}, { ...paginationResult.result });
     let totalPages, prevPage, nextPage;
-    totalPages = Math.ceil(totalItems / RECORD_PER_PAGE);
+    totalPages = Math.ceil(totalItems / recordPerPage);
     paginationResult.totalPages = totalPages;
 
     if (currentPage > totalPages) {

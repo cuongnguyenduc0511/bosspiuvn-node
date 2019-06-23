@@ -7,6 +7,25 @@
       }
     }
   }
+  
+  body {
+    .page-template-ucs-tracking {
+      .sec-ucs-search {
+        padding: 0 10px;
+        .search-panel {
+          #search-form {
+            .item-per-page {
+              margin-top: 15px;
+              justify-content: flex-start;
+              select {
+                max-width: 30%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (min-width:320px) and (max-width:480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {

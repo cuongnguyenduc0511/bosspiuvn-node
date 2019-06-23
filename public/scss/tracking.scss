@@ -1,13 +1,10 @@
 body {
     .page-template-ucs-tracking {
-        background-size: cover;
-        background-position: center center;
+        background-repeat: repeat;
         background-image: url('../images/background-texture.png');
         .sec-ucs-search {
           .search-panel {
               position: relative;
-              // -webkit-box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
-              // box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
               margin: 1rem 0;
               padding: 1em 1em;
               border-radius: .28571429rem;
@@ -15,10 +12,7 @@ body {
               display: inline-block;
               background: linear-gradient(#121212 0%, #303030 100%);
               box-shadow: 0px 0px 0px 2px #FFD500;
-  
-              // background: #536976;  /* fallback for old browsers */
-              // background: -webkit-linear-gradient(to right, #292E49, #536976);  /* Chrome 10-25, Safari 5.1-6 */
-              // background: linear-gradient(to right, #292E49, #536976); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
               #search-form {
                   label {
                       font-family: 'XoloniumBold'; 
@@ -39,6 +33,15 @@ body {
                           margin-bottom: 15px;
                       }
                   }
+                  .item-per-page {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    select {
+                        max-width: 20%;
+                        margin: 0 5px;
+                    }
+                  }
               }
           }
         }
@@ -53,11 +56,110 @@ body {
             animation: fadein $animation_duration;     
             .request-list-wrapper {
                 .request-item {
-                    background-color: green;
-                    height: 200px;
-                    max-height: 200px;
+                    background: linear-gradient(#121212 0%, #303030 100%);
+                    box-shadow: 0px 0px 0px 2px #EEEEEE;
+                    border-radius: .28571429rem;
+                    padding: 10px;    
+                    display: flex;
                     margin-bottom: 20px;
+                    .thumbnail-wrapper {
+                        padding: 0;
+                        .thumbnail {
+                            display: block;
+                            margin-left: auto;
+                            margin-right: auto;  
+                            max-width: 100%!important;
+                            width: auto!important;
+                            max-height: 250px!important;                
+                        }    
+                    }
+                    .details {
+                        color: white;
+                        .title {
+                            font-size: 20px;
+                            color: yellow;
+                        }
+                        .field {
+                            padding: 10px 0;
+                            &:last-child {
+                                padding-bottom: 0;
+                            }
+                            &.step-difficulty {
+                                display: flex;
+                                align-items: center;
+                                .stepball-mobile {
+                                    margin-left: 5px;
+                                    img {
+                                        max-height: 80px;
+                                    }
+                                }
+                            }
+                            .status-badge {
+                                font-size: inherit;
+                                padding: 10px;
+                            }
+                            .field-value {
+                                font-weight: bolder
+                            }
+                        }  
+                    }
+                    .stepball-xl {
+                        position: absolute;
+                        right: 26px;
+                        top: 14px;
+                        img {
+                            max-height: 130px;
+                        }
+                    }
+                    .menu-options {
+                        position: absolute;
+                        right: 10px;
+                        bottom: 10px;
+                    }
                 }
+            }
+            .bss-pagination {
+                flex-wrap: wrap;
+                .page-item {
+                    cursor: pointer;
+                    .page-link {
+                        background-color: transparent;
+                        border: none;
+                        color: white;
+                    }
+                    &:hover {
+                        .page-link {
+                            color: yellow;
+                            transition: all 0.5s ease;
+                        }
+                    }
+                    &.active {
+                        .page-link {
+                            border-radius: 50%;
+                            background-color: yellow;
+                            color: black;
+                        }
+                    }
+                    &.disabled {
+                        .page-link {
+                            color: gray;
+                        }
+                    }
+                }
+                
+            }
+        }
+        .sec-not-found {
+            padding: 20px;
+            color: white;
+            .row {
+                justify-content: center;
+            }
+            .not-found-icon {
+                font-size: 40vh;
+            }
+            .not-found-message {
+                margin-top: 20px;
             }
         }
     }

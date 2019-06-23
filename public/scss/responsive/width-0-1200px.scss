@@ -1,0 +1,25 @@
+@media only screen and (max-width: 1024px) {
+  body {
+    .page-template-ucs-tracking {
+      .sec-request-list {
+        .request-list-wrapper {
+          .request-item {
+            flex-direction: column;
+            .details {
+              padding: 20px 5px 20px;
+              margin-bottom: 20px;
+            }
+            .menu-options {
+              position: absolute;
+              right: 10px;
+              bottom: 10px;
+            }
+          }
+        }
+      }
+      .sec-ucs-search {
+        padding: 0 10px;
+      }
+    }
+  }
+} 

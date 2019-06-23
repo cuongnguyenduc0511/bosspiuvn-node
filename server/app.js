@@ -19,7 +19,7 @@ var methodOverride = require('method-override');
 
 //Connect to MongoDB / Mongoose ODM
 var mongoose = require('mongoose');
-mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true });
+mongoose.connect(process.env.PROD_DB_CONNECTION_STRING, { useNewUrlParser: true });
 
 //Handlebars sections setup
 var express_handlebars_sections = require('express-handlebars-sections');
