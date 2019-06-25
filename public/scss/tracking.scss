@@ -149,17 +149,25 @@ body {
                 
             }
         }
-        .sec-not-found {
+        .sec-not-found, .sec-error, .sec-request-timeout {
             padding: 20px;
             color: white;
             .row {
                 justify-content: center;
             }
-            .not-found-icon {
-                font-size: 40vh;
+            .icon {
+                font-size: 12em;
             }
-            .not-found-message {
+            .message {
                 margin-top: 20px;
+            }
+            span.click-here {
+                color: #007bff;
+                cursor: pointer;
+                &:hover {
+                    color: yellow;
+                }
+                transition: all 0.2s ease;
             }
         }
     }

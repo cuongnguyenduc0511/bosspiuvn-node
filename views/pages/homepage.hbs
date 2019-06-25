@@ -11,13 +11,13 @@
       </div>
     </div>
   </section>
-  <section class="sec-ucs-search">
+  <section ng-if="!isError" class="sec-ucs-search">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xl-8 col-lg-8 ml-auto mr-auto search-panel">
-          {{!-- <div ng-if="isStepchartTypeLoaded" id="form-loader" class="overlay_container">
+          <div ng-if="!isFullyLoaded" id="form-loader" class="overlay_container">
             <i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
-          </div> --}}
+          </div>
           <form id="search-form">
             <div class="form-group row">
               <div class="col-lg-8 ml-auto mr-auto">
@@ -73,21 +73,43 @@
     </div>
   </section>
 
-  <section ng-if="isNotFound" class="sec-not-found">
+  <section ng-cloak ng-if="isFetchingRequestTimeout" class="sec-request-timeout">
     <div class="container">
       <div class="row">
         <div class="col-xl-8 text-center">
-          <i class="far fa-sad-tear not-found-icon"></i>
-          <h3 class="not-found-message">Whoops!! Looks like we couldn't find any matches. Please try another search</h3>
+          <i class="fas fa-sync-alt icon"></i>
+          <h3 class="message">Request timeout, please click <span class="click-here">here</span> to reload</h3>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec-request-list">
+  <section ng-cloak ng-if="isError" class="sec-error">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 text-center">
+          <i class="fas fa-exclamation-triangle icon"></i>
+          <h3 class="message">An error occurred while fetching data, please try again later</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ng-cloak ng-if="isNotFound" class="sec-not-found">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 text-center">
+          <i class="far fa-sad-tear icon"></i>
+          <h3 class="message">Whoops!! Looks like we couldn't find any matches. Please try another search</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ng-if="!isError" class="sec-request-list">
     <div class="request-list-wrapper container-fluid">
       <div class="row">
-        <div class="col-12 request-item" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
+        <div ng-cloak class="col-12 request-item" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
           <div class="col-auto thumbnail-wrapper">
             <img class="thumbnail" ng-src="{[{ requestItem.song.thumbnailUrl || '//:0' }]}">
           </div>
@@ -134,7 +156,7 @@
       </div>
     </div>
 
-    <div ng-cloak ng-if="trackingResult && trackingResult.items.length > 0" class="d-flex justify-content-center">
+    <div ng-cloak ng-if="trackingResult && trackingResult.items.length > 0 && !isError" class="d-flex justify-content-center">
       <ul class="bss-pagination pagination">
         <li ng-class="trackingResult.currentPage === 1 ? 'page-item disabled' : 'page-item'">
           <span class="page-link" page="1" ng-click="changePage($event)">First</span>

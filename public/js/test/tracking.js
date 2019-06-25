@@ -1,8 +1,11 @@
 var baseUrl = window.location.protocol + '//' + window.location.host;
 var apiUrl = baseUrl + '/api'
+var REQUEST_TIME_OUT = 10000;
 
 function getCommonData() {
-  return axios.get(apiUrl + '/commons');
+  return axios.get(apiUrl + '/commons', {
+    timeout: REQUEST_TIME_OUT
+  });
 }
 
 function getRequestList(params = null) {
@@ -11,10 +14,10 @@ function getRequestList(params = null) {
     case 'object':
       axiosInstance = axios.get(apiUrl + '/requests', {
         params,
-        timeout: 20000,
+        timeout: REQUEST_TIME_OUT,
       }); break;
     default: axiosInstance = axios.get(`${apiUrl}/requests${params}`, {
-      timeout: 20000,
+      timeout: REQUEST_TIME_OUT,
     }); break;
   }
   return axiosInstance;
@@ -23,6 +26,9 @@ function getRequestList(params = null) {
 var ucsTrackingAppModule = angular.module('ucsTrackingApp', []);
 
 ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $q) {
+  $scope.isFullyLoaded = false;
+  $scope.searchForm = {};
+
   var fetchData = function () {
     return Promise.resolve(
       $q.when(axios.all([getCommonData(), getRequestList()])).then(axios.spread(function (commonData, requestData) {
@@ -35,7 +41,12 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         }
       })).catch(function (error) {
         console.log(error.response || error);
-        return Promise.reject(error);
+        if (error.code === 'ECONNABORTED') {
+          console.log('Timeout');
+          $scope.isFetchingRequestTimeout = true;		
+        } else {
+          $scope.isError = true;
+        }    
       })
     );
   }
@@ -54,56 +65,18 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
     $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
 
+    $scope.isFullyLoaded = true;
     $scope.$digest();
     setTimeout(function() {
       $('.sec-request-list').show();
     }, 2000)
   }).catch(function (error) {
     console.log(error.response || error);
-  })
-
-  $('select[id="search-form-step-type"]').change(function () {
-    var selectedType = $(this).val(),
-        coopStepchartLevels = $scope.coopStepLevels,
-        standardStepchartLevels = $scope.standardStepLevels;
-
-		switch (selectedType) {
-			case 'co-op':
-				if ($scope.searchFormStepchartLevels !== coopStepchartLevels) {
-					$scope.searchFormStepchartLevels = coopStepchartLevels;
-				}
-				break;
-			case '': {
-				$scope.searchFormStepchartLevels = _.concat(standardStepchartLevels, coopStepchartLevels);
-				break;
-			}
-			default:
-				if ($scope.searchFormStepchartLevels !== standardStepchartLevels) {
-					$scope.searchFormStepchartLevels = standardStepchartLevels;
-				}
-		}
-		$scope.$digest();
-  });
-  
-  $('select[id="search-form-item-per-pages"]').change(function () {
-    var itemPerPage = $(this).val();
-    if(!_.isEmpty($scope.trackingResult)) {
-      var queryParams = $scope.trackingResult.query.params;
-
-      const newQueryParams = {
-        stepchart_type: queryParams.stepchart_type,
-        stepchart_level: queryParams.stepchart_level,
-        search: queryParams.search,
-        item_per_page: itemPerPage
-      }
-
-      fetchRequestList(newQueryParams);
-    }
-	});
+  })  
 
   $scope.onSearch = function (event) {
     event.preventDefault();
-		let params = $scope.searchForm;
+    var params = $scope.searchForm;
     fetchRequestList(params);
   }
 
@@ -136,6 +109,8 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     });
     
     //set to false;
+    $scope.isFetchingRequestTimeout = false;		
+    $scope.isError = false;
     $scope.isNotFound = false;
 
     $q.when(getRequestList(params)).then(function(requestData) {
@@ -157,13 +132,76 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         }
       }
     }).catch(function (error) {
-      console.log(error.response || error);
+      // console.log(error.response || error);
+      if (error.code === 'ECONNABORTED') {
+        console.log('Timeout');
+        $scope.isFetchingRequestTimeout = true;		
+      } else {
+        $scope.isError = true;
+      }
     }).finally(function() {
       Swal.hideLoading();
 			Swal.close();
       window.scrollTo(0, $('#search-form').offset().top);
     })
   }
+
+  $(function () {
+    $('#search-form').find('.form-control').each(function (index, elem) {
+      $(elem).focus(function () {
+        $(elem).addClass('active');
+        $(elem).prev().addClass('active');
+      })
+  
+      $(elem).blur(function () {
+        $(elem).removeClass('active');
+        $(elem).prev().removeClass('active');
+      })
+    });
+  
+    $('#search-form label').click(function (e) {
+      e.preventDefault();
+    })
+  
+    $('select[id="search-form-step-type"]').change(function () {
+      var selectedType = $(this).val(),
+          coopStepchartLevels = $scope.coopStepLevels,
+          standardStepchartLevels = $scope.standardStepLevels;
+      switch (selectedType) {
+        case 'co-op':
+          if ($scope.searchFormStepchartLevels !== coopStepchartLevels) {
+            $scope.searchFormStepchartLevels = coopStepchartLevels;
+          }
+          break;
+        case '': {
+          $scope.searchFormStepchartLevels = _.concat(standardStepchartLevels, coopStepchartLevels);
+          break;
+        }
+        default:
+          if ($scope.searchFormStepchartLevels !== standardStepchartLevels) {
+            $scope.searchFormStepchartLevels = standardStepchartLevels;
+          }
+      }
+      $scope.$digest();
+    });
+    
+    $('select[id="search-form-item-per-pages"]').change(function () {
+      var itemPerPage = $(this).val();
+      if(!_.isEmpty($scope.trackingResult)) {
+        var queryParams = $scope.trackingResult.query.params;
+  
+        const newQueryParams = {
+          stepchart_type: queryParams.stepchart_type,
+          stepchart_level: queryParams.stepchart_level,
+          search: queryParams.search,
+          item_per_page: itemPerPage
+        }
+  
+        fetchRequestList(newQueryParams);
+      }
+    });
+  
+  })
 
 })
 
@@ -177,28 +215,6 @@ ucsTrackingAppModule.config(['$compileProvider', function ($compileProvider) {
   $compileProvider.commentDirectivesEnabled(false);
   $compileProvider.cssClassDirectivesEnabled(false);
 }]);
-
-$(function () {
-  $('#search-form').find('.form-control').each(function (index, elem) {
-    $(elem).focus(function () {
-      $(elem).addClass('active');
-      $(elem).prev().addClass('active');
-    })
-
-    $(elem).blur(function () {
-      $(elem).removeClass('active');
-      $(elem).prev().removeClass('active');
-    })
-  });
-
-  $('#search-form label').click(function (e) {
-    e.preventDefault();
-  })
-
-  // $('#search').click(function () {
-  //   console.log('button clicked');
-  // })
-})
 
 function generateItemsOfPaginationLeft(currentPage) {
 	let items = [];

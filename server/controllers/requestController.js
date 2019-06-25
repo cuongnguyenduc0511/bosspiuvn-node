@@ -26,6 +26,7 @@ module.exports.getRequests = async (req, res) => {
     const paginationResult = await paginationModule.getData(req, res, requestModel);
     res.status(STATUS_CODE.SUCCESS).send(paginationResult);
   } catch (err) {
+    console.log(err);
     res.status(STATUS_CODE.SERVER_ERROR).send({
       message: 'An error occurred while fetching data, please try again later',
       err: err.message || err
