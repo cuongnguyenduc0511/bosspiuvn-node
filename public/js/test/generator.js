@@ -7,7 +7,7 @@ var header = "";
 var footer = "";
 
 function getCommonData() {
-  return axios.get(apiUrl + '/commons');
+  return axios.get(apiUrl + '/commons?details=1');
 }
 
 function getSongs() {
@@ -41,6 +41,8 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
         }
         $scope.p1Disabled = true;
         $scope.p2Disabled = true;
+        $scope.form.stepchartLevel2 = '';
+        $scope.form.player2 = '';
         break;
       case 'single': {
         if ($scope.stepchartLevels !== standardStepchartLevels) {
@@ -80,7 +82,6 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
       case 'co-op':
         var coopValue = $(this).val();
         $scope.coopFullName = coopAlias[coopValue] || '';
-        console.log($scope.coopFullName);
         break;
       default:
         $scope.coopFullName = '';
@@ -100,12 +101,24 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
   function generateTitle() {
     var form = $scope.form;
     var selectedStepType = _.find($scope.stepchartTypes, {'value': form.stepchartType});
-    var diffLabel = selectedStepType.shortLabel;
-    var title = form.songName + (form.songNameAlias ? ' (' + form.songNameAlias + ')' : '');
-    var difficulty = diffLabel + form.stepchartLevel + (form.stepchartLevel2 ? (' & ' + diffLabel + form.stepchartLevel2) : '')
-    var version = '| PUMP IT UP XX (20th Anniversary Edition) Patch ' + form.version + ' ✔';
-    var fullTitle = title + ' ' + difficulty + ' ' + version;
-    return fullTitle;
+    switch (selectedStepType.value) {
+      case 'co-op': {
+        var diffLabel = selectedStepType.shortLabel;
+        var title = form.songName + (form.songNameAlias ? ' (' + form.songNameAlias + ')' : '');
+        var difficulty = diffLabel + ' ' + form.stepchartLevel + ' / ' + $scope.coopFullName;
+        var version = '| PUMP IT UP XX (20th Anniversary Edition) Patch ' + form.version + ' ✔';
+        var fullTitle = title + ' ' + difficulty + ' ' + version;
+        return fullTitle;
+      }
+      default: {
+        var diffLabel = selectedStepType.shortLabel;
+        var title = form.songName + (form.songNameAlias ? ' (' + form.songNameAlias + ')' : '');
+        var difficulty = diffLabel + form.stepchartLevel + (form.stepchartLevel2 ? (' & ' + diffLabel + form.stepchartLevel2) : '')
+        var version = '| PUMP IT UP XX (20th Anniversary Edition) Patch ' + form.version + ' ✔';
+        var fullTitle = title + ' ' + difficulty + ' ' + version;
+        return fullTitle;
+      }
+    }
   }
 
   function generateDescription() {
@@ -116,17 +129,55 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
 
   function generateSEOTags() {
     var form = $scope.form;
-    var songName = $scope.form.songName.toLowerCase();
-    var songNameAlias = $scope.form.songNameAlias;
-    var artist = $scope.form.artist.toLowerCase();
-    var artistAlias = $scope.form.artistAlias;
+    var songName = !_.isEmpty($scope.form.songName) ? $scope.form.songName.toLowerCase() : '';
+    var songNameAlias = !_.isEmpty($scope.form.songNameAlias) ? $scope.form.songNameAlias.toLowerCase() : '';
+    var artist = !_.isEmpty($scope.form.artist) ? $scope.form.artist.toLowerCase() : '';
+    var artistAlias = !_.isEmpty($scope.form.artistAlias) ? $scope.form.artistAlias.toLowerCase() : '';
     var selectedStepType = _.find($scope.stepchartTypes, {'value': form.stepchartType});
     var diffLabel = selectedStepType.longLabel.toLowerCase();
+
     var tag1 = songName + (!_.isEmpty(songNameAlias) ? (', ' + songNameAlias) : '');
-    var tag2 = songName + ' ' + diffLabel + (!_.isEmpty(songNameAlias) ? (' ,' + songNameAlias + ' ' + diffLabel) : '');
-    var tag3 = `${artist} ${!_.isEmpty(artistAlias) ? (',' + artistAlias + ',') : ','} pump it up xx, 펌프 잇 업 XX, patch ${form.version}, boss_piuvn, bosspiuvn`;
-    // var tags = `${songName}, ${songNameAlias}, ${songName + ` ${diffLabel}`}, ${songNameAlias + ` ${diffLabel}`}`
-    return tag1 + ', ' + tag2 + ', ' + tag3;
+    var tag2 = songName + ' ' + diffLabel + (!_.isEmpty(songNameAlias) ? (' ,' + songNameAlias + ' ' + diffLabel) : '');    
+    var tag3 = diffSEO();
+    var tag4 = `${artist} ${!_.isEmpty(artistAlias) ? (',' + artistAlias + ',') : ','} pump it up xx, 펌프 잇 업 XX, patch ${form.version}, boss_piuvn, bosspiuvn`;
+    return tag1 + ', ' + tag2 + ', ' + tag3 + ', ' + tag4;
+  }
+
+  function diffSEO() {
+    var form = $scope.form;
+    var selectedStepType = _.find($scope.stepchartTypes, {'value': form.stepchartType});
+
+    switch (selectedStepType.value) {
+      case 'co-op': {
+        // case co-op
+        console.log('coop');
+        var stepchartLevel = form.stepchartLevel;
+        var songName = !_.isEmpty(form.songName) ? form.songName.toLowerCase() : '';
+        var diffLabel = selectedStepType.shortLabel.toLowerCase();
+        var songNameAlias = !_.isEmpty(form.songNameAlias) ? form.songNameAlias.toLowerCase() : '';
+        var tag = songName + ' ' + diffLabel + ' ' + stepchartLevel + ', ' + songName + ' ' + $scope.coopFullName;
+        var tag2 = !_.isEmpty(songNameAlias) ? 
+         songNameAlias + ' ' + diffLabel + ' ' + stepchartLevel + ', ' + songNameAlias + ' ' + $scope.coopFullName 
+        :  '';
+        return tag + ', ' + tag2;
+      }
+      default: {
+        var stepchartLevel = form.stepchartLevel;
+        var stepchartLevel2 = form.stepchartLevel2;    
+        var songName = !_.isEmpty(form.songName) ? form.songName.toLowerCase() : '';
+        var songNameAlias = !_.isEmpty(form.songNameAlias) ? form.songNameAlias.toLowerCase() : '';
+    
+        var diffLabel = selectedStepType.shortLabel.toLowerCase();
+        
+        var tag = songName + ' ' + diffLabel + stepchartLevel + (!_.isEmpty(stepchartLevel2)  ? (', ' +  songName + ' ' + diffLabel + stepchartLevel2) : '')
+        var tag2 = !_.isEmpty(songNameAlias) ?
+          (
+            songNameAlias + ' ' + diffLabel + stepchartLevel + (!_.isEmpty(stepchartLevel2)  ? (', ' +  songNameAlias + ' ' + diffLabel + stepchartLevel2) : '')
+          )
+          : '';
+        return tag + (!_.isEmpty(tag2) ? (' ,' + tag2) : '');    
+      }
+    }
   }
 
 });

@@ -1,6 +1,6 @@
 const statusModel = require('../models/status');
 const stepchartTypesModel = require('../models/stepchartTypes');
-const { STATUS_CODE, STANDARD_STEPCHART_LEVELS, COOP_STEPCHART_TYPES } = require('../shared/constant');
+const { STATUS_CODE, FULL_STANDARD_STEPCHART_LEVELS, STANDARD_STEPCHART_LEVELS, COOP_STEPCHART_TYPES } = require('../shared/constant');
 const songModel = require('../models/song');
 const artistModel = require('../models/artists');
 const { map, assign, omit, forEach, sortBy } = require('lodash');
@@ -100,10 +100,11 @@ module.exports.getArtists = (req, res) => {
 module.exports.getCommonData = async (req, res) => {
   try {
     const stepchartTypesData = await stepchartTypesModel.getStandardStepchartTypes();
+    console.log(req.query);
     res.status(STATUS_CODE.SUCCESS).json({
       stepchartTypes: stepchartTypesData,
       stepchartLevels: {
-        standard: STANDARD_STEPCHART_LEVELS,
+        standard: req.query.details === '1' ? FULL_STANDARD_STEPCHART_LEVELS : STANDARD_STEPCHART_LEVELS,
         coop: COOP_STEPCHART_TYPES
       }
     });
