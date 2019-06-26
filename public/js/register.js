@@ -1,5 +1,5 @@
-const baseUrl = window.location.protocol + '//' + window.location.host;
-const apiUrl = baseUrl + '/api'
+var baseUrl = window.location.protocol + '//' + window.location.host;
+var apiUrl = baseUrl + '/api'
 
 function getCommonData() {
   return axios.get(apiUrl + '/commons');
@@ -19,8 +19,8 @@ registerAppModule.controller('registerUcsCtrl', function ($scope, $http, $q) {
     return Promise.resolve(
       $q.when(axios.all([getCommonData(), getSongs()])).then(axios.spread(function (commonData, songData) {
         // Both requests are now complete
-        const commonDataResult = commonData.data;
-        const songDataResult = songData.data;
+        var commonDataResult = commonData.data;
+        var songDataResult = songData.data;
         return {
           common: commonDataResult,
           songs: songDataResult
@@ -33,7 +33,7 @@ registerAppModule.controller('registerUcsCtrl', function ($scope, $http, $q) {
   }
 
   Promise.all([fetchData(), initTextArea()]).then(function (data) {
-    const commonData = data[0].common;
+    var commonData = data[0].common;
     let songData = data[0].songs;
     $scope.standardStepLevels = commonData.stepchartLevels.standard;
     $scope.coopStepLevels = commonData.stepchartLevels.coop;
@@ -215,8 +215,8 @@ function sanitizeFormInput() {
   $("#register-form").each(function () {
     var inputs = $(this).find(':input[type="text"]');
     Array.prototype.forEach.call(inputs, function (input) {
-      const targetInput = $(input);
-      const sanitizedValue = decodeHTMLEntities(sanitizeParam(targetInput.val()));
+      var targetInput = $(input);
+      var sanitizedValue = decodeHTMLEntities(sanitizeParam(targetInput.val()));
       targetInput.val(sanitizedValue);
       // //update angular ng-model
       $(input)[0].dispatchEvent(new Event("input", { bubbles: true }));
@@ -294,7 +294,7 @@ $.validator.addMethod("isEmailValid", function (value, element) {
 //     // return this.optional(element) || /^[^@]+@(yahoo|ymail|rocketmail)\.(com|in|co\.uk)$/i.test(value);
 // }, "Your email domain is not recommended, try using another email domain such as: Gmail, Naver, Outlook");
 
-const formRules = {
+var formRules = {
   requester: 'required',
   song: 'required',
   stepchartLevel: 'required',
@@ -312,7 +312,7 @@ const formRules = {
   terms: 'required'
 };
 
-const formErrorMessages = {
+var formErrorMessages = {
   requester: "Please enter your name / nickname",
   song: "Please choose song",
   stepchartLevel: "Please choose stepchart level",
@@ -353,7 +353,7 @@ var formValidObj = $("#register-form").validate({
     }
   },
   highlight: function (element, errorClass, errorClassFormGroup) {
-    const targetElem = $(element);
+    var targetElem = $(element);
 
     targetElem.parents('.form-group').find('.col-form-label').addClass('label-invalid');
 
@@ -361,12 +361,12 @@ var formValidObj = $("#register-form").validate({
       targetElem.parents('.form-group').addClass(errorClassFormGroup);
       targetElem.addClass(errorClass);
     } else if (targetElem.hasClass('bss-select2') && targetElem.is('select')) {
-      const select2Elem = targetElem.next().find("span[aria-labelledby='select2-" + targetElem.attr('id') + "-container']");
+      var select2Elem = targetElem.next().find("span[aria-labelledby='select2-" + targetElem.attr('id') + "-container']");
       select2Elem.addClass('select2-invalid');
     }
   },
   unhighlight: function (element, errorClass, errorClassFormGroup) {
-    const targetElem = $(element);
+    var targetElem = $(element);
 
     targetElem.parents('.form-group').find('.col-form-label').removeClass('label-invalid');
 
@@ -374,7 +374,7 @@ var formValidObj = $("#register-form").validate({
       targetElem.parents(".form-group").removeClass(errorClassFormGroup);
       targetElem.removeClass(errorClass);
     } else if (targetElem.hasClass("bss-select2") && targetElem.is('select')) {
-      const select2Elem = targetElem.next().find("span[aria-labelledby='select2-" + targetElem.attr('id') + "-container']");
+      var select2Elem = targetElem.next().find("span[aria-labelledby='select2-" + targetElem.attr('id') + "-container']");
       select2Elem.removeClass('select2-invalid');
     }
   },
@@ -394,7 +394,7 @@ $('#reset').click(function () {
 
 function resetForm() {
   formValidObj.resetForm();
-  const form = $('#register-form');
+  var form = $('#register-form');
   form.find('input:text, select, textarea').val('');
   form.find('input:radio, input:checkbox').prop('checked', false);
   $('select').val(null).trigger("change");
