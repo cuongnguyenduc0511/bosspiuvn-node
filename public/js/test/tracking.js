@@ -68,9 +68,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
   
       $scope.isFullyLoaded = true;
       $scope.$digest();
-      setTimeout(function() {
-        $('.sec-request-list').show();
-      }, 2000)
+      $('.sec-request-list').show();
     }).catch(function (error) {
       console.log(error.response || error);
     });
@@ -78,18 +76,21 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
 
   firstLoad();
 
+  $scope.onReload = function(event) {
+    if(!$scope.isFullyLoaded) {
+      console.log('full app load');
+      firstLoad();
+    } else {
+      console.log('list load');
+      var params = $scope.searchForm;
+      fetchRequestList(params);  
+    }
+  }
+
   $scope.onSearch = function (event) {
     event.preventDefault();
     var params = $scope.searchForm;
     fetchRequestList(params);
-  }
-
-  $scope.onReload = function (event) {
-    if (!$scope.isFullyLoaded) {
-      firstLoad();
-    } else {
-      // 
-    }
   }
 
   $scope.changePage = function (event) {

@@ -6,19 +6,22 @@
           <div class="col-lg-12 col-sm-12 column-field">
             <label for="version" class="col-form-label">Version
             </label>
-            <input ng-model="form.version" type="text" class="form-control" name="version" placeholder="Enter Patch Version">
+            <input ng-model="form.version" type="text" class="form-control" name="version"
+              placeholder="Enter Patch Version">
           </div>
         </div>
         <div class="form-group row">
           <div class="col-lg-6 col-sm-12 column-field">
             <label for="song-name" class="col-form-label">Song Name
             </label>
-            <input ng-model="form.songName" type="text" class="form-control" name="song-name" placeholder="Enter Song Name">
+            <input ng-model="form.songName" type="text" class="form-control" name="song-name"
+              placeholder="Enter Song Name">
           </div>
           <div class="col-lg-6 col-sm-12 column-field">
             <label for="song-name-alias" class="col-form-label">Song Name Alias (Korea)
             </label>
-            <input ng-model="form.songNameAlias" type="text" class="form-control" name="song-name-alias" placeholder="Enter Song Alias Name">
+            <input ng-model="form.songNameAlias" type="text" class="form-control" name="song-name-alias"
+              placeholder="Enter Song Alias Name">
           </div>
         </div>
 
@@ -31,7 +34,8 @@
           <div class="col-lg-6 col-sm-12 column-field">
             <label for="artist-alias" class="col-form-label">Artist Alias (Korea)
             </label>
-            <input ng-model="form.artistAlias" type="text" class="form-control" name="artist-alias" placeholder="Enter Artist Alias Name">
+            <input ng-model="form.artistAlias" type="text" class="form-control" name="artist-alias"
+              placeholder="Enter Artist Alias Name">
           </div>
         </div>
 
@@ -43,27 +47,11 @@
             <div>
               <select ng-model="form.stepchartType" class="form-control" name="stepchartType">
                 <option value="">Choose Stepchart Type</option>
-                <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
+                <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{
+                  stepchartType.title }]}</option>
               </select>
             </div>
           </div>
-          {{!-- <div class="col-lg-6 col-sm-12 column-field">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="is-default" checked>Default
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="is-o2jam">O2JAM
-              </label>
-            </div>
-            <div class="form-check disabled">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="is-ez2ac">EZ2AC
-              </label>
-            </div>
-          </div> --}}
         </div>
 
         <h2>P1 Side / CO-OP (Main)</h2>
@@ -75,7 +63,8 @@
             <div>
               <select ng-model="form.stepchartLevel" class="form-control" name="stepchartLevel">
                 <option value="">Choose Stepchart Level</option>
-                <option ng-repeat="stepchartLevelItem in stepchartLevels" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
+                <option ng-repeat="stepchartLevelItem in stepchartLevels" value="{[{ stepchartLevelItem }]}">{[{
+                  stepchartLevelItem }]}</option>
               </select>
             </div>
           </div>
@@ -83,6 +72,11 @@
             <label for="player1" class="col-form-label">Player 1 Name / CO-OP
             </label>
             <input ng-model="form.player1" type="text" class="form-control" name="player1" placeholder="Enter Player 1">
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="stepartist" class="col-form-label">Step Artist
+            </label>
+            <input ng-model="form.stepArtist" type="text" class="form-control" name="stepartist" placeholder="Enter Step artist">
           </div>
         </div>
 
@@ -93,31 +87,65 @@
               <span class="required">*</span>
             </label>
             <div>
-              <select ng-disabled="p2Disabled" ng-model="form.stepchartLevel2" class="form-control" name="stepchartLevel2">
+              <select ng-disabled="p2Disabled" ng-model="form.stepchartLevel2" class="form-control"
+                name="stepchartLevel2">
                 <option value="">Choose Stepchart Level</option>
-                <option ng-repeat="stepchartLevelItem in stepchartLevels2" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
+                <option ng-repeat="stepchartLevelItem in stepchartLevels2" value="{[{ stepchartLevelItem }]}">{[{
+                  stepchartLevelItem }]}</option>
               </select>
             </div>
           </div>
           <div class="col-lg-6 col-sm-12 column-field">
             <label for="player2" class="col-form-label">Player 2 Name
             </label>
-            <input ng-disabled="p2Disabled" ng-model="form.player2" type="text" class="form-control" name="player2" placeholder="Enter Player 2">
+            <input ng-disabled="p2Disabled" ng-model="form.player2" type="text" class="form-control" name="player2"
+              placeholder="Enter Player 2">
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="stepartist2" class="col-form-label">Step Artist
+            </label>
+            <input ng-disabled="p2Disabled" ng-model="form.stepArtist2" type="text" class="form-control" name="stepartist2" placeholder="Enter Step artist">
           </div>
 
         </div>
 
-        
+
         <button id='generate' class="btn btn-primary">Generate</button>
         {{!-- <button type="button" id="reset" class="btn reset">Reset</button> --}}
       </form>
     </div>
   </div>
+
+  <div class="modal fade" id="generate-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h3>{[{ descTitle }]}</h3>
+          <textarea id="description" name="description"></textarea>
+          <span>SEO Tags</span>
+          <p>{[{ descSEOTags }]}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </section>
 
 {{#section 'header_components'}}
 <link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" /> {{/section}} {{#section 'footer_components'}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" /> {{/section}}
+{{#section 'footer_components'}}
 <script src="/js/bootstrap.min.js"></script>
 <script src="/lib/lodash.js"></script>
 <script src="/lib/axios.min.js"></script>
