@@ -46,12 +46,26 @@ router.get('/ucs-tracking', csrfProtection, (req, res, next) => {
 //         csrfToken: req.csrfToken()
 //     });
 // });
+router.get('/generator', (req, res, next) => {
+    res.render('pages/desc-generator', {
+        title: `Description Generator ${TITLE_FORMAT}`,
+        layout: 'master_layout/layout-generator'
+    });
+});
+
 
 router.get('/ucs-song', (req, res, next) => {
     res.render('pages/song', {
         title: `Song List ${TITLE_FORMAT}`,
         layout: 'master_layout/layout2',
         root: root,
+    });
+});
+
+router.get('/song-test', (req, res, next) => {
+    res.render('pages/song-test', {
+        title: `Song List ${TITLE_FORMAT}`,
+        layout: 'master_layout/layout-ver2',
     });
 });
 

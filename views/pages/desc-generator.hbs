@@ -1,0 +1,134 @@
+<section class="page-template-generator" ng-app="descGenApp" ng-controller="descGenAppCtrl">
+  <div class="container">
+    <div class="row">
+      <form id="tag-generator-form" class="bss-form col-lg-10 col-md-8 ml-auto mr-auto">
+        <div class="form-group row">
+          <div class="col-lg-12 col-sm-12 column-field">
+            <label for="version" class="col-form-label">Version
+            </label>
+            <input ng-model="form.version" type="text" class="form-control" name="version" placeholder="Enter Patch Version">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="song-name" class="col-form-label">Song Name
+            </label>
+            <input ng-model="form.songName" type="text" class="form-control" name="song-name" placeholder="Enter Song Name">
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="song-name-alias" class="col-form-label">Song Name Alias (Korea)
+            </label>
+            <input ng-model="form.songNameAlias" type="text" class="form-control" name="song-name-alias" placeholder="Enter Song Alias Name">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="artist" class="col-form-label">Artist
+            </label>
+            <input ng-model="form.artist" type="text" class="form-control" name="artist" placeholder="Enter Artist">
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="artist-alias" class="col-form-label">Artist Alias (Korea)
+            </label>
+            <input ng-model="form.artistAlias" type="text" class="form-control" name="artist-alias" placeholder="Enter Artist Alias Name">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="stepchartType" class="col-form-label">Stepchart Type
+              <span class="required">*</span>
+            </label>
+            <div>
+              <select ng-model="form.stepchartType" class="form-control" name="stepchartType">
+                <option value="">Choose Stepchart Type</option>
+                <option ng-repeat="stepchartType in stepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="is-default" checked>Default
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="is-o2jam">O2JAM
+              </label>
+            </div>
+            <div class="form-check disabled">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="is-ez2ac">EZ2AC
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <h2>P1 Side / CO-OP (Main)</h2>
+        <div class="form-group row">
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="stepchartLevel" class="col-form-label">Stepchart Level
+              <span class="required">*</span>
+            </label>
+            <div>
+              <select ng-model="form.stepchartLevel" class="form-control" name="stepchartLevel">
+                <option value="">Choose Stepchart Level</option>
+                <option ng-repeat="stepchartLevelItem in stepchartLevels" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="player1" class="col-form-label">Player 1 Name / CO-OP
+            </label>
+            <input ng-model="form.player1" type="text" class="form-control" name="player1" placeholder="Enter Player 1">
+          </div>
+        </div>
+
+        <h2>P2 Side</h2>
+        <div class="form-group row">
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="stepchartLevel2" class="col-form-label">Stepchart Level
+              <span class="required">*</span>
+            </label>
+            <div>
+              <select ng-disabled="p2Disabled" ng-model="form.stepchartLevel2" class="form-control" name="stepchartLevel2">
+                <option value="">Choose Stepchart Level</option>
+                <option ng-repeat="stepchartLevelItem in stepchartLevels2" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12 column-field">
+            <label for="player2" class="col-form-label">Player 2 Name
+            </label>
+            <input ng-disabled="p2Disabled" ng-model="form.player2" type="text" class="form-control" name="player2" placeholder="Enter Player 2">
+          </div>
+
+        </div>
+
+        
+        <button id='generate' class="btn btn-primary">Generate</button>
+        {{!-- <button type="button" id="reset" class="btn reset">Reset</button> --}}
+      </form>
+    </div>
+  </div>
+</section>
+
+{{#section 'header_components'}}
+<link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" /> {{/section}} {{#section 'footer_components'}}
+<script src="/js/bootstrap.min.js"></script>
+<script src="/lib/lodash.js"></script>
+<script src="/lib/axios.min.js"></script>
+<script src="/lib/angular.min.js"></script>
+<script src="/lib/angular-filter.min.js"></script>
+<script src="/lib/jquery.validate.min.js"></script>
+<script src="/lib/jquery.lazy.min.js"></script>
+<script src="/lib/sweet-alert-2/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+<script type="text/javascript" src="/lib/sanitize-html.min.js"></script>
+<script type="text/javascript" src="/lib/decode-html.js"></script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+<script src="/js/test/generator.js"></script> {{/section}}

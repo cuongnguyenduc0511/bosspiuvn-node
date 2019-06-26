@@ -51,33 +51,45 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     );
   }
 
-  Promise.all([fetchData()]).then(function (data) {
-    var commonData = data[0].common;
-    var trackingResult = data[0].requestPagination;
-    $scope.trackingResult = trackingResult.paginationResult;
-    $scope.standardStepLevels = commonData.stepchartLevels.standard;
-    $scope.coopStepLevels = commonData.stepchartLevels.coop;
-    $scope.searchFormStepchartTypes = commonData.stepchartTypes;
-    $scope.searchFormStepchartLevels = _.concat($scope.standardStepLevels, $scope.coopStepLevels);
+  function firstLoad() {
+    Promise.all([fetchData()]).then(function (data) {
+      var commonData = data[0].common;
+      var trackingResult = data[0].requestPagination;
+      $scope.trackingResult = trackingResult.paginationResult;
+      $scope.standardStepLevels = commonData.stepchartLevels.standard;
+      $scope.coopStepLevels = commonData.stepchartLevels.coop;
+      $scope.searchFormStepchartTypes = commonData.stepchartTypes;
+      $scope.searchFormStepchartLevels = _.concat($scope.standardStepLevels, $scope.coopStepLevels);
+  
+      var currentPage = $scope.trackingResult.currentPage;
+      var totalPages = $scope.trackingResult.totalPages;
+      $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
+      $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
+  
+      $scope.isFullyLoaded = true;
+      $scope.$digest();
+      setTimeout(function() {
+        $('.sec-request-list').show();
+      }, 2000)
+    }).catch(function (error) {
+      console.log(error.response || error);
+    });
+  }
 
-    var currentPage = $scope.trackingResult.currentPage;
-    var totalPages = $scope.trackingResult.totalPages;
-    $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
-    $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
-
-    $scope.isFullyLoaded = true;
-    $scope.$digest();
-    setTimeout(function() {
-      $('.sec-request-list').show();
-    }, 2000)
-  }).catch(function (error) {
-    console.log(error.response || error);
-  })  
+  firstLoad();
 
   $scope.onSearch = function (event) {
     event.preventDefault();
     var params = $scope.searchForm;
     fetchRequestList(params);
+  }
+
+  $scope.onReload = function (event) {
+    if (!$scope.isFullyLoaded) {
+      firstLoad();
+    } else {
+      // 
+    }
   }
 
   $scope.changePage = function (event) {

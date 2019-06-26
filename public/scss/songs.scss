@@ -1,0 +1,22 @@
+
+.page-template-song {
+    background-repeat: repeat;
+    background-image: url('../images/background-texture.png');
+    .sec-series-carousel-wrapper {
+        padding: 30px 0;
+        .owl-item.active.center {
+            .series-item {
+                background-image: url('../images/selected-series.png');
+                background-size: 100% 100%;
+            }
+        }
+        .series-item {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            .series-img {
+                max-width: 500px;
+            }    
+        }
+    }    
+}
