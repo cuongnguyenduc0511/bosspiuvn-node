@@ -29,14 +29,19 @@ function getSongs() {
 var songPageAppModule = angular.module('songApp', []);
 
 songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
-  $scope.isCarouselInit = null;
+  $scope.isCarouselInit = false;
   $('.owl-carousel').on('initialized.owl.carousel', function (event) {
-    console.log('carousel init');
+    setTimeout(function () {
+      var currentSeries = $('.owl-item.active.center').find('.series-img').attr('series');
+      var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
+      $scope.isCarouselInit = true;
+      $scope.songList = currentSeriesObj.items;
+      $scope.$digest();
+    })
   });
 
   $q.when(getSongs()).then(response => {
     $scope.series = response.data;
-    console.log(response.data);
   }).catch(error => {
     const { response } = error;
     console.log(response || error);
@@ -44,11 +49,43 @@ songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
     initializeCarousel();
   });
 
+  $('.owl-carousel').on('changed.owl.carousel', function (event) {
+    if ($scope.isCarouselInit) {
+      abortLoadingImages().then(function() {
+        var currentSeries = $('.owl-item.active.center').find('.series-img').attr('series');
+        var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
+        $scope.songList = currentSeriesObj.items;  
+        $scope.$digest();
+      })
+    }
+  });
+
   function initializeCarousel() {
-    setTimeout(function() {
+    setTimeout(function () {
       initCarousel();
-    }, 5000)
+    })
   }
+
+  function abortLoadingImages() {
+    const loadingThumbs = $('img.song-thumbnail');
+    console.log(loadingThumbs);
+    return Promise.resolve(loadingThumbs.each(function() {
+      $(this).attr("src", "");
+    }))
+  }
+
+  $scope.moveCarousel = function(direction) {
+    // prev or next
+    moveCarousel(direction);
+  }
+
+  function moveCarousel(direction) {
+    const moveEvents = `${direction}.owl.carousel`;
+    $timeout(() => {
+      songCarousel.trigger(moveEvents);
+    }, 1);
+  }
+
 });
 
 songPageAppModule.config(function ($interpolateProvider) {

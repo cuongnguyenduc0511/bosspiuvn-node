@@ -10,6 +10,7 @@ body {
   font-family: "XoloniumBold";
   font-weight: normal;
   font-style: normal;
+  color: black;
 }
 .header-1.gold {
   text-shadow: 0 0 2px #febf04, 0 0 2px #febf04, 0 0 2px #febf04, 0 0 2px #febf04, 0 0 2px #febf04, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
@@ -270,6 +271,11 @@ body .sec-register {
 body .sec-register .required {
   color: #dc3545;
 }
+body .sec-register #register-header {
+  margin-bottom: 40px;
+  margin-top: 20px;
+  pointer-events: none;
+}
 body .sec-register h2 {
   font-style: italic;
   text-align: center;
@@ -277,6 +283,15 @@ body .sec-register h2 {
 body .sec-register .register-wrapper {
   padding: 40px 20px 20px;
   position: relative;
+}
+body .sec-register #register-form {
+  background: #0f0f0f;
+  background: -moz-linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
+  background: -webkit-linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
+  background: linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0f0f0f",endColorstr="#24292b",GradientType=1);
+  box-shadow: 0px 0px 0px 2px #EEEEEE;
+  border-radius: 0.28571429rem;
 }
 body .sec-register .bss-form {
   padding-bottom: 20px;
@@ -462,15 +477,15 @@ body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form .ite
 body .page-template-ucs-tracking .sec-request-list {
   padding: 10px;
   display: none;
-  -webkit-animation: fadein 0.4s;
+  -webkit-animation: fadein 0.5s;
   /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 0.4s;
+  -moz-animation: fadein 0.5s;
   /* Firefox < 16 */
-  -ms-animation: fadein 0.4s;
+  -ms-animation: fadein 0.5s;
   /* Internet Explorer */
-  -o-animation: fadein 0.4s;
+  -o-animation: fadein 0.5s;
   /* Opera < 12.1 */
-  animation: fadein 0.4s;
+  animation: fadein 0.5s;
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item {
   background: linear-gradient(#121212 0%, #303030 100%);
@@ -529,6 +544,11 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .stepball-xl img {
   max-height: 130px;
 }
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .btn-resend {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .menu-options {
   position: absolute;
   right: 10px;
@@ -557,18 +577,137 @@ body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.ac
 body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.disabled .page-link {
   color: gray;
 }
-body .page-template-ucs-tracking .sec-not-found {
+body .page-template-ucs-tracking .sec-not-found, body .page-template-ucs-tracking .sec-error, body .page-template-ucs-tracking .sec-request-timeout {
   padding: 20px;
   color: white;
 }
-body .page-template-ucs-tracking .sec-not-found .row {
+body .page-template-ucs-tracking .sec-not-found .row, body .page-template-ucs-tracking .sec-error .row, body .page-template-ucs-tracking .sec-request-timeout .row {
   justify-content: center;
 }
-body .page-template-ucs-tracking .sec-not-found .not-found-icon {
-  font-size: 40vh;
+body .page-template-ucs-tracking .sec-not-found .icon, body .page-template-ucs-tracking .sec-error .icon, body .page-template-ucs-tracking .sec-request-timeout .icon {
+  font-size: 12em;
 }
-body .page-template-ucs-tracking .sec-not-found .not-found-message {
+body .page-template-ucs-tracking .sec-not-found .message, body .page-template-ucs-tracking .sec-error .message, body .page-template-ucs-tracking .sec-request-timeout .message {
   margin-top: 20px;
+}
+body .page-template-ucs-tracking .sec-not-found span.click-here, body .page-template-ucs-tracking .sec-error span.click-here, body .page-template-ucs-tracking .sec-request-timeout span.click-here {
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+body .page-template-ucs-tracking .sec-not-found span.click-here:hover, body .page-template-ucs-tracking .sec-error span.click-here:hover, body .page-template-ucs-tracking .sec-request-timeout span.click-here:hover {
+  color: yellow;
+}
+body .section-divider {
+  border-color: yellow;
+  border-width: 5px;
+}
+body .form-section {
+  margin: 25px 0;
+}
+body form .form-control.is-invalid {
+  border-color: #dc3545;
+}
+body form .form-control.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(206, 52, 25, 0.829);
+}
+body form .form-control:focus {
+  border-color: yellow;
+  box-shadow: 0 0 0 0.2rem rgba(252, 252, 71, 0.829);
+}
+body form #requester-note {
+  max-height: 600px;
+}
+body #update-modal .modal-header button.close span {
+  color: yellow;
+}
+body #update-modal .remind-note {
+  color: #dc3545;
+}
+body #update-modal label {
+  font-family: "XoloniumBold";
+  font-weight: normal;
+  font-style: italic;
+  color: #eff7ef;
+}
+body #update-modal label.active {
+  color: yellow;
+  transition: 0.15s ease-in-out;
+}
+body #update-modal label.label-invalid {
+  color: #dc3545;
+}
+body #update-modal .modal-content {
+  background: linear-gradient(#121212 0%, #303030 100%);
+  box-shadow: 0px 0px 0px 2px #EEEEEE;
+}
+body #update-modal .modal-content .modal-header h5 {
+  color: yellow;
+}
+body #update-modal .modal-content .modal-body {
+  color: white;
+}
+body #update-modal .btn-submit i {
+  margin-right: 5px;
+}
+
+.page-template-song {
+  background-repeat: repeat;
+  background-image: url("../images/background-texture.png");
+}
+.page-template-song .sec-series-carousel-wrapper {
+  padding: 30px 0;
+}
+.page-template-song .sec-series-carousel-wrapper .owl-item.active.center .series-item {
+  background-image: url("../images/selected-series.png");
+  background-size: 100% auto;
+}
+.page-template-song .sec-series-carousel-wrapper .series-item {
+  padding: 20px;
+}
+.page-template-song .sec-series-carousel-wrapper .navigation-carousel {
+  display: flex;
+  justify-content: center;
+}
+.page-template-song .sec-series-carousel-wrapper .navigation-carousel button {
+  margin-right: 10px;
+}
+.page-template-song .sec-song-list-wrapper .song-item {
+  margin-bottom: 20px;
+  -webkit-animation: fadein 0.8s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.8s;
+  /* Firefox < 16 */
+  -ms-animation: fadein 0.8s;
+  /* Internet Explorer */
+  -o-animation: fadein 0.8s;
+  /* Opera < 12.1 */
+  animation: fadein 0.8s;
+}
+.page-template-song .sec-song-list-wrapper .song-item .card {
+  margin: 0 auto;
+  height: 100%;
+  background: linear-gradient(#121212 0%, #303030 100%);
+  box-shadow: 0px 0px 0px 2px #EEEEEE;
+  border-radius: 0.28571429rem;
+}
+.page-template-song .sec-song-list-wrapper .song-item .card .song-thumbnail {
+  max-height: 250px;
+}
+.page-template-song .sec-song-list-wrapper .song-item .card .song-thumbnail.loading {
+  background-image: url("../images/loading-spinner.gif");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  height: 250px;
+}
+.page-template-song .sec-song-list-wrapper .song-item h5 {
+  font-size: 20px;
+  color: yellow;
+}
+.page-template-song .sec-song-list-wrapper .song-item p {
+  font-size: 14px;
+  color: white;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -657,6 +796,11 @@ body .page-template-ucs-tracking .sec-not-found .not-found-message {
     margin-top: -64px;
     font-size: 1.8em;
     line-height: 1.6em;
+  }
+}
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
+    margin-bottom: 40px;
   }
 }
 @media only screen and (max-width: 480px) and (orientation: portrait) {

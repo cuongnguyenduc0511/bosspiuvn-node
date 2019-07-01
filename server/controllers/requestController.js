@@ -48,15 +48,15 @@ module.exports.activateRequest = async (req, res) => {
       )
     }
 
-    const { isActivated: isRequestActivated, activationToken: { token: requestItemToken } } = requestItem;
-
-    if (isRequestActivated) {
+    if (requestItem.isActivated) {
       return res.status(STATUS_CODE.SUCCESS).send(
         `<h2 style="color: blue">Request ID: ${requestId} is already activated</h2>`
       )
     }
 
-    if (submitToken === requestItemToken && !isRequestActivated) {
+    const { activationToken: { token: requestItemToken } } = requestItem;
+
+    if (submitToken === requestItemToken && !requestItem.isActivated) {
       await requestModel.updateRequestByID(requestId, { 
         $unset: { activationToken: 1 }, 
         $set: { isActivated: true, status: REQUEST_STATUS.PENDING }
@@ -187,7 +187,7 @@ module.exports.requestToken = async (req, res) => {
 
       const { updateMode, registeredEmail } = updateResult;
       res.status(STATUS_CODE.SUCCESS).send({
-        message: `Your ${updateMode} token has been sent to your email: ${registeredEmail}`
+        message: `Your ${updateMode} token will be sent to your email shortly: ${registeredEmail}`
       })
     } else {
       return res.status(STATUS_CODE.BAD_REQUEST).send({

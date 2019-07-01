@@ -1,0 +1,208 @@
+<section class="page-template-ucs-tracking" ng-app="ucsTrackingApp" ng-controller="ucsTrackingAppCtrl">
+  <section class="sec-page-header">
+    <div class="page-header background-filter background-filter-2">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <img class="img-fluid page-header-logo" src="/images/boss_piuvn-shadow.png" />
+            <h1 class="header-1 gold page-header-text">BOSS_PIUVN PUMP IT UP TEAM OFFICIAL PAGE</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section ng-if="!isError && !isFetchingRequestTimeout" class="sec-ucs-search">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 ml-auto mr-auto search-panel">
+          <div ng-if="!isFullyLoaded" id="form-loader" class="overlay_container">
+            <i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
+          </div>
+          <form id="search-form">
+            <div class="form-group row">
+              <div class="col-lg-8 ml-auto mr-auto">
+                <label for="search" class="col-form-label">
+                  <i class="fas fa-search"></i> Search</label>
+                <input ng-model="searchForm.search" type="text" class="form-control" name="search"
+                  placeholder="Type keyword (Stepmaker, Requester, Content Name, Song)">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-lg-6">
+                <label for="search-form-step-type" class="col-form-label">Stepchart Type</label>
+                <select ng-model="searchForm.stepchart_type" class="form-control" id="search-form-step-type"
+                  name="search-form-step-type">
+                  <option value="">Choose Stepchart Type</option>
+                  <option ng-repeat="stepchartType in searchFormStepchartTypes" value="{[{ stepchartType.value }]}">{[{
+                    stepchartType.title }]}</option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <label for="search-form-step-level" class="col-form-label">Stepchart Level</label>
+                <select ng-model="searchForm.stepchart_level" class="form-control" id="search-form-step-level"
+                  name="search-form-step-level">
+                  <option value="">Choose Stepchart Level</option>
+                  <option ng-repeat="stepchartLevel in searchFormStepchartLevels" value="{[{ stepchartLevel }]}">{[{
+                    stepchartLevel }]}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <button id="search" type="button" class="btn btn-primary" ng-click="onSearch($event)">
+                    <i class="fas fa-search"></i> Search
+                </button>
+              </div>
+              <div class="col-sm-8 item-per-page">
+                <span style="color: white">Show</span>
+                <select ng-model="searchForm.item_per_page" class="form-control" id="search-form-item-per-pages"
+                name="search-form-item-per-pages">
+                  <option value="">15</option>
+                  <option value="30">30</option>
+                  <option value="45">45</option>
+                </select>
+                <span style="color: white">items per page</span>
+              </div>
+            </div>
+            {{!-- <button id="search" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i> Search
+            </button> --}}
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ng-cloak ng-if="isFetchingRequestTimeout" class="sec-request-timeout">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 text-center">
+          <i class="fas fa-sync-alt icon"></i>
+          <h3 class="message">Request timeout, please click <span class="click-here" ng-click="onReload($event)">here</span> to reload</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ng-cloak ng-if="isError" class="sec-error">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 text-center">
+          <i class="fas fa-exclamation-triangle icon"></i>
+          <h3 class="message">An error occurred while fetching data, please try again later</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ng-cloak ng-if="isNotFound" class="sec-not-found">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 text-center">
+          <i class="far fa-sad-tear icon"></i>
+          <h3 class="message">Whoops!! Looks like we couldn't find any matches. Please try another search</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ng-if="!isError" class="sec-request-list">
+    <div class="request-list-wrapper container-fluid">
+      <div class="row">
+        <div ng-cloak class="col-12 request-item" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
+          <div class="col-auto thumbnail-wrapper">
+            <img class="thumbnail" ng-src="{[{ requestItem.song.thumbnailUrl || '//:0' }]}">
+          </div>
+          <div class="col-auto details">
+            <h4 class="title">
+              {[{ requestItem.song.name }]} {[{ requestItem.stepchartInfo.stepchartType.value === 'co-op' ? requestItem.stepchartInfo.stepchartType.shortLabel
+              + ' ' + requestItem.stepchartInfo.stepchartLevel : requestItem.stepchartInfo.stepchartType.shortLabel + requestItem.stepchartInfo.stepchartLevel
+              }]} | UCS by {[{ requestItem.stepmaker }]}
+            </h4>
+            <div class="field">
+              <span class="field-name">Requester: </span>
+              <span class="field-value">{[{ requestItem.requester }]}</span>
+            </div>
+            <div class="field">
+              <span class="field-name">Step artist: </span>
+              <span class="field-value">{[{ requestItem.stepmaker }]}</span>
+            </div>
+            <div class="field">
+              <span class="field-name">Content Name: </span>
+              <span class="field-value">{[{ requestItem.contentName ? requestItem.contentName : 'No content name' }]}</span>
+            </div>
+            <div class="field step-difficulty d-lg-none">
+              <span class="field-name">Difficulty: </span>
+              <div class="stepball-mobile">
+                  <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
+              </div>
+            </div>
+            <div class="field">
+              <span class="field-name">Status: </span>
+              <span class="badge badge-primary status-badge {[{ requestItem.status.clientBadgeStyle }]}">{[{ requestItem.status.label }]}</span>
+            </div>
+          </div>
+          <div class="stepball-xl d-none d-lg-block">
+            <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
+          </div>
+          <div class="menu-options">
+            <button type="button" class="btn btn-primary" ng-click="openModal($event)" mode="update"><i class="fas fa-edit"></i> <span
+                class="d-none d-xl-block">Update</span></button>
+            <button type="button" class="btn btn-danger" ng-click="openModal($event)" mode="delete"><i class="fas fa-trash-alt"></i> <span
+                class="d-none d-xl-block">Delete</span></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div ng-cloak ng-if="trackingResult && trackingResult.items.length > 0 && !isError" class="d-flex justify-content-center">
+      <ul class="bss-pagination pagination">
+        <li ng-class="trackingResult.currentPage === 1 ? 'page-item disabled' : 'page-item'">
+          <span class="page-link" page="1" ng-click="changePage($event)">First</span>
+        </li>
+        <li ng-class="!trackingResult.prevPage ? 'page-item disabled' : 'page-item'">
+          <span class="page-link" page="{[{ trackingResult.prevPage }]}" ng-click="changePage($event)">Previous</span>
+        </li>
+        <li class="page-item" ng-repeat="leftPaginationItem in leftPaginationItems">
+          <span class="page-link" page="{[{ leftPaginationItem }]}" ng-click="changePage($event)">{[{ leftPaginationItem }]}</span>
+        </li>
+        <li class="page-item active">
+          <span class="page-link">
+            {[{ trackingResult.currentPage }]}
+          </span>
+        </li>
+        <li class="page-item" ng-repeat="rightPaginationItem in rightPaginationItems">
+          <span class="page-link" page="{[{ rightPaginationItem }]}" ng-click="changePage($event)">{[{ rightPaginationItem }]}</span>
+        </li>
+        <li ng-class="!trackingResult.nextPage ? 'page-item disabled' : 'page-item'">
+          <span class="page-link" page="{[{ trackingResult.nextPage }]}" ng-click="changePage($event)">Next</span>
+        </li>
+        <li ng-class="!trackingResult.nextPage ? 'page-item disabled' : 'page-item'">
+          <span class="page-link" page="{[{ trackingResult.totalPages }]}" ng-click="changePage($event)">Last</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</section>
+{{#section 'header_components'}}
+<link rel="stylesheet" href="lib/sweet-alert-2/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" />
+{{/section}}
+{{#section 'footer_components'}}
+<script src="/js/bootstrap.min.js"></script>
+<script src="/lib/lodash.js"></script>
+<script src="/lib/axios.min.js"></script>
+<script src="/lib/angular.min.js"></script>
+<script src="/lib/angular-filter.min.js"></script>
+<script src="/lib/jquery.validate.min.js"></script>
+<script src="/lib/jquery.lazy.min.js"></script>
+<script src="/lib/sweet-alert-2/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+<script type="text/javascript" src="/lib/sanitize-html.min.js"></script>
+<script type="text/javascript" src="/lib/decode-html.js"></script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+<script src="/js/test/tracking.js"></script>
+{{/section}}

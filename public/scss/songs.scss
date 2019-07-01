@@ -7,16 +7,53 @@
         .owl-item.active.center {
             .series-item {
                 background-image: url('../images/selected-series.png');
-                background-size: 100% 100%;
+                background-size: 100% auto;
             }
         }
         .series-item {
+            padding: 20px; 
+        }
+        .navigation-carousel {
+            button {
+                margin-right: 10px;
+            }
             display: flex;
             justify-content: center;
-            padding: 20px;
-            .series-img {
-                max-width: 500px;
-            }    
         }
-    }    
+    }
+    .sec-song-list-wrapper {
+        .song-item {
+            margin-bottom: 20px;
+            $animation_duration: 0.8s;
+            -webkit-animation: fadein $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadein $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadein $animation_duration; /* Internet Explorer */
+            -o-animation: fadein $animation_duration; /* Opera < 12.1 */
+            animation: fadein $animation_duration;     
+            .card {
+                margin: 0 auto;
+                height: 100%;
+                background: linear-gradient(#121212 0%, #303030 100%);
+                box-shadow: 0px 0px 0px 2px #EEEEEE;
+                border-radius: 0.28571429rem;
+                .song-thumbnail {
+                    max-height: 250px;
+                    &.loading {
+                        background-image: url('../images/loading-spinner.gif');
+                        background-repeat: no-repeat;
+                        background-position: 50% 50%;  
+                        height: 250px;                  
+                    }
+                }
+            }
+            h5 {
+                font-size: 20px;
+                color: yellow;
+            }
+            p {
+                font-size: 14px;
+                color: white;
+            }
+        }
+    }
 }

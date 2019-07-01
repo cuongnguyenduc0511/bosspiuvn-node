@@ -46,7 +46,7 @@ body {
           }
         }
         .sec-request-list {
-            $animation_duration: 0.4s;
+            $animation_duration: 0.5s;
             padding: 10px;
             display: none;
             -webkit-animation: fadein $animation_duration; /* Safari, Chrome and Opera > 12.1 */
@@ -111,6 +111,11 @@ body {
                             max-height: 130px;
                         }
                     }
+                    .btn-resend {
+                      position: absolute;
+                      right: 10px;
+                      bottom: 10px;
+                    }
                     .menu-options {
                         position: absolute;
                         right: 10px;
@@ -171,4 +176,70 @@ body {
             }
         }
     }
+    .section-divider {
+        border-color: yellow;
+        border-width: 5px;
+    }
+    .form-section {
+        margin: 25px 0;
+    }
+    form {
+      .form-control {
+        &.is-invalid {
+          border-color: #dc3545;
+          &:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(206, 52, 25, 0.829)
+          }
+        }
+        &:focus {
+          border-color: yellow;
+          box-shadow: 0 0 0 0.2rem rgba(252, 252, 71, 0.829)
+        }
+      }        
+      #requester-note {
+        max-height: 600px;
+      }
+    }
+    #update-modal {
+        .modal-header {
+          button.close {
+            span {
+              color: yellow;
+            }
+          }
+        }
+        .remind-note {
+          color: #dc3545;
+        }
+        label {
+            font-family: 'XoloniumBold'; 
+            font-weight: normal; 
+            font-style: italic; 
+            color: #eff7ef;
+            &.active {
+              color: yellow;
+              transition: .15s ease-in-out;
+            } 
+            &.label-invalid {
+              color: #dc3545;
+            }
+        }
+        .modal-content {
+            background: linear-gradient(#121212 0%, #303030 100%);
+            box-shadow: 0px 0px 0px 2px #EEEEEE;
+            .modal-header {
+                h5 {
+                    color: yellow;
+                }
+            }
+            .modal-body {
+                color: white;
+            }
+        }
+        .btn-submit {
+            i { margin-right: 5px; }
+        }
+    }
+    
 }
