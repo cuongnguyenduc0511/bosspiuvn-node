@@ -9,138 +9,105 @@ const accessTokenController = require('../controllers/accessTokenController');
 const { JWT_ID_LENGTH, STATUS_CODE } = require('../shared/constant');
 const { validateForm } = require('../modules/validate');
 
-const authValidation = {
-    username: {
-        presence: {
-            message: 'Username is required',
-            allowEmpty: false
-        },
-        length: {
-            minimum: 6,
-            message: `Username must be at least 6 characters`
-        }
-    },
-    password: {
-        presence: {
-            message: 'Password is required',
-            allowEmpty: false
-        },
-        length: {
-            minimum: 6,
-            message: `Password must be at least 6 characters`
-        }
-    }
-};
-
-module.exports.addUser = function (req, res, next) {
-    const { username, password, firstName, lastName } = req.body;
+module.exports.addUser = async (req, res, next) => {
+  try {
+    const { username, password, nickName } = req.submitData;
     var newUser = {
-        username: username,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        createdAt: moment()
+      username: username,
+      password: password,
+      nickName: nickName,
+      createdAt: moment()
     }
-
-    userModel.addUser(newUser, function (err, data) {
-        if (err) {
-            res.send(err);
-        } else {
-            res.send({
-                message: 'User created !!'
-            });
-        }
+    await userModel.addUser(newUser);  
+    res.status(STATUS_CODE.SUCCESS).send({
+      message: 'User has been created'
     })
+  } catch(err) {
+    console.log(err);
+    res.status(STATUS_CODE.SERVER_ERROR).send({
+      message: 'An error occurred while creating users, please try again later'
+    })
+  }
+  // userModel.addUser(newUser, function (err, data) {
+  //   if (err) {
+  //     res.send(err);
+  //   } else {
+  //     res.send({
+  //       message: 'User created !!'
+  //     });
+  //   }
+  // })
 };
 
 module.exports.authenticate = async (req, res) => {
-    const { username, password } = req.body;
+  try {
+    const { username, password } = req.submitData;
 
     const authUser = {
-        username: decodeAndSanitizeValue(username),
-        password: decodeAndSanitizeValue(password),
+      username,
+      password
     }
-
+  
     const { USER_NOT_EXISTS, INVALID_PASSWORD, AUTH_SUCCESS, AUTH_ERROR } = authMessages;
+  
+    const userData = await userModel.findUser(authUser);
 
-    const validFormObj = validateForm(authUser, authValidation);
-    const isValid = _.isEmpty(validFormObj);
-
-    if (isValid) {
-        try {
-            const userData = await userModel.findUser(authUser);
-            if (_.isEmpty(userData)) {
-                return res.status(STATUS_CODE.UNAUTHORIZED).send({
-                    message: USER_NOT_EXISTS
-                })
-            }
-
-            const isPasswordMatch = await userModel.comparePassword(authUser.password, userData.password);
-            if (isPasswordMatch) {
-                const accessToken = await createAccessToken(userData);
-                res.status(STATUS_CODE.SUCCESS).send({
-                    message: AUTH_SUCCESS,
-                    accessToken
-                })
-            } else {
-                return res.status(STATUS_CODE.UNAUTHORIZED).send({
-                    message: INVALID_PASSWORD
-                })
-            }
-        }
-        catch (err) {
-            return res.status(500).send({
-                message: AUTH_ERROR,
-                err
-            })
-        }
-    } else {
-        return res.status(STATUS_CODE.BAD_REQUEST).send({
-            message: 'Validation Error',
-            validation: validFormObj
-        })
+    if (_.isEmpty(userData)) {
+      return res.status(STATUS_CODE.UNAUTHORIZED).send({
+        message: USER_NOT_EXISTS
+      })
     }
+
+    const isPasswordMatch = await userModel.comparePassword(authUser.password, userData.password);
+    if (isPasswordMatch) {
+      const accessToken = await createAccessToken(userData);
+      res.status(STATUS_CODE.SUCCESS).send({
+        message: AUTH_SUCCESS,
+        accessToken
+      })
+    } else {
+      return res.status(STATUS_CODE.UNAUTHORIZED).send({
+        message: INVALID_PASSWORD
+      })
+    }
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(STATUS_CODE.SERVER_ERROR).send({
+      message: AUTH_ERROR
+    })
+  }
 };
 
 async function createAccessToken(userData) {
-    const jwtId = randomString(JWT_ID_LENGTH);
-    const currentTime = moment();
-    const tokenExpTime = moment().add(1, 'day');
+  const jwtId = randomString(JWT_ID_LENGTH);
+  const currentTime = moment();
+  const tokenExpTime = moment().add(1, 'day');
 
-    const accessToken = {
-        userId: userData._id,
-        tokenId: jwtId,
-        accessDate: currentTime,
-        expiryDate: tokenExpTime,
-        isRevoked: false
+  const accessToken = {
+    userId: userData._id,
+    tokenId: jwtId,
+    accessDate: currentTime,
+    expiryDate: tokenExpTime,
+    isRevoked: false
+  }
+
+  return Promise.resolve(accessTokenController.addToken(accessToken).then(data => {
+    let payload = {
+      userId: userData._id
     }
-
-    return Promise.resolve(accessTokenController.addToken(accessToken).then(data => {
-        let payload = {
-            userId: userData._id
-        }
-        const issuer = 'bosspiuvn';
-        let token = jwt.sign(payload, 'secretKey', { jwtid: jwtId, audience: 'bosspiuvn', issuer, expiresIn: tokenExpTime.unix() });
-        return Promise.resolve(token);
-    }).catch(err => {
-        return Promise.reject(err);
-    }));
+    const issuer = 'bosspiuvn';
+    let token = jwt.sign(payload, 'secretKey', { jwtid: jwtId, audience: 'bosspiuvn', issuer, expiresIn: tokenExpTime.unix() });
+    return Promise.resolve(token);
+  }).catch(err => {
+    return Promise.reject(err);
+  }));
 }
 
-module.exports.getUserInfo = function (req, res, next) {
-    const userId = req.userId;
-    console.log(userId);
-    userModel.getUserById(userId, function (err, userData) {
-        if (err) throw err;
-        if (!userData) {
-            res.status(401).send({
-                message: authMessages.USER_NOT_EXISTSS
-            });
-        } else {
-            res.status(200).json({
-                firstName: userData.firstName,
-                lastName: userData.lastName
-            })
-        }
-    });
+module.exports.getUserInfo = async (req, res, next) => {
+  const userId = req.userId;
+  const result = await userModel.getUserById(userId);
+  res.send({
+    nickName: 'Zhao X'
+  });
 }

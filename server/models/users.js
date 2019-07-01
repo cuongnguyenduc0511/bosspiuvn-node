@@ -1,86 +1,63 @@
 // jshint ignore: start
-
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+const { model: Users } = require('../db-schema/user');
+const bcrypt = require('bcrypt');
 const { SALT_ROUNDS } = require('../shared/constant');
+var mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
-const UserSchema = new Schema({
-    username: {
-        type: String,
-        trim: true,
-        required: true
-    },
-    password: {
-        type: String,
-        trim: true,
-        required: true
-    },
-    firstName: {
-        type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        required: true
-    },
-    isLocked: {
-        type: Boolean,
-        required: true,
-        default: false
-    }
-}, { collection: 'users' });
-
-
-var Users = mongoose.model('users', UserSchema);
-
-module.exports.addUser = function (newData, callback) {
-    bcrypt.hash(newData.password, SALT_ROUNDS, function (err, hash) {
-        newData.password = hash
-        var newUser = new Users(newData);
-        newUser.save(callback);
-    });
+module.exports.addUser = async (newData) => {
+  try {
+    const hashPassword = await bcrypt.hash(newData.password, SALT_ROUNDS);
+    console.log(hashPassword);
+    newData.password = hashPassword;
+    var newUser = new Users(newData);
+    const result = await newUser.save();
+    return Promise.resolve(result);
+  } catch (err) {
+    return Promise.reject(err);
+  }
 };
 
 module.exports.findUser = async function (userData) {
-    const username = userData.username;
-    const query = {
-        username: username
-    }
-    
-    try {
-        const result = await Users.findOne(query);
-        return Promise.resolve(result);
-    } catch (err) {
-        console.log(err);
-        return Promise.reject(err);
-    }
+  const username = userData.username;
+  const query = {
+    username: username
+  }
+
+  try {
+    const result = await Users.findOne(query);
+    return Promise.resolve(result);
+  } catch (err) {
+    console.log(err);
+    return Promise.reject(err);
+  }
 };
 
-module.exports.getUserById = function (userId, callback) {
+module.exports.getUserById = async (userId) => {
+  try {
     const query = {
-        _id: ObjectId(userId)
+      _id: ObjectId(userId)
     }
-    Users.findOne(query, callback);
+    const result = await Users.findOne(query);  
+    return Promise.resolve(result);
+  } catch(err) {
+    console.log(err);
+    return Promise.reject(err);
+  }
 };
 
-module.exports.getUsers = function (callback) {
-    Users.aggregate([
-        { $project: { _id: 1, nickname: 1 } }
-    ], callback);
-}
+// module.exports.getUsers = function (callback) {
+//     Users.aggregate([
+//         { $project: { _id: 1, nickname: 1 } }
+//     ], callback);
+// }
 
 module.exports.comparePassword = async function (inputPassword, hash) {
-    try {
-        const isMatch = bcrypt.compare(inputPassword, hash);
-        return Promise.resolve(isMatch);
-    } catch (err) {
-        return Promise.reject(err);
-    }
+  try {
+    const isMatch = bcrypt.compare(inputPassword, hash);
+    return Promise.resolve(isMatch);
+  } catch (err) {
+    return Promise.reject(err);
+  }
 };
