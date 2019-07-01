@@ -11,7 +11,7 @@
       </div>
     </div>
   </section>
-  <section ng-if="!isError" class="sec-ucs-search">
+  <section ng-if="!isError && !isFetchingRequestTimeout" class="sec-ucs-search">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xl-8 col-lg-8 ml-auto mr-auto search-panel">
@@ -78,7 +78,7 @@
       <div class="row">
         <div class="col-xl-8 text-center">
           <i class="fas fa-sync-alt icon"></i>
-          <h3 class="message">Request timeout, please click <span class="click-here">here</span> to reload</h3>
+          <h3 class="message">Request timeout, please click <span class="click-here" ng-click="onReload($event)">here</span> to reload</h3>
         </div>
       </div>
     </div>

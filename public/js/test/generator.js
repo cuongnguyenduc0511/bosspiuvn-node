@@ -6,6 +6,13 @@ var descGenAppModule = angular.module('descGenApp', []);
 var header = "";
 var footer = "";
 
+tinymce.init({
+  selector: '#description',
+  menubar: false,
+  statusbar: false,
+  height: 350
+});
+
 function getCommonData() {
   return axios.get(apiUrl + '/commons?details=1');
 }
@@ -43,6 +50,7 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
         $scope.p2Disabled = true;
         $scope.form.stepchartLevel2 = '';
         $scope.form.player2 = '';
+        $scope.form.stepArtist2 = '';
         break;
       case 'single': {
         if ($scope.stepchartLevels !== standardStepchartLevels) {
@@ -71,6 +79,7 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
         $scope.p2Disabled = true;
         $scope.form.stepchartLevel2 = '';
         $scope.form.player2 = '';
+        $scope.form.stepArtist2 = '';
         break;
     }
     $scope.$digest();
@@ -91,11 +100,10 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
   });
 
   $('#generate').click(function() {
-    var title = generateTitle();
-    console.log('title');
-    console.log(title);
-    var seoTags = generateSEOTags();
-    console.log(seoTags);
+    $scope.descTitle = generateTitle();
+    $scope.descSEOTags = generateSEOTags();
+    generateDescription();
+    $('#generate-modal').modal('show');
   });  
 
   function generateTitle() {
@@ -122,9 +130,96 @@ descGenAppModule.controller('descGenAppCtrl', function ($scope, $http, $q) {
   }
 
   function generateDescription() {
+    var form = $scope.form;
+    var songName = form.songName;
+    var songNameAlias = form.songNameAlias;
+    var artist = form.artist;
+    var artistAlias = form.artistAlias;
+    var stepArtistP1 = form.stepArtist;
+    var stepArtistP2 = form.stepArtist2;
+
     var selectedStepType = _.find($scope.stepchartTypes, {'value': form.stepchartType});
     var diffLabel = selectedStepType.shortLabel;
-    return fullTitle;
+    var stepchartLevel = form.stepchartLevel;    
+    var stepchartLevel2 = form.stepchartLevel2;    
+    var player1 = form.player1; 
+    var player2 = form.player2;    
+
+    // desc
+    var description = '<p>PUMP IT UP XX: 20th Anniversary Edition ' + form.version + ' (International Version)</p>';
+    // song & artist
+    description += '<p>■ Song: ' + songName + (!_.isEmpty(songNameAlias) ? (' (' + songNameAlias  + ')' ): '') + '</p>';
+    description += '<p>■ Artist: ' + artist + (!_.isEmpty(artistAlias) ? (' (' + artistAlias  + ')' ): '') + '</p>';
+    
+    // Stepmaker
+    if (_.isEmpty(stepArtistP2) || _.isEqual(stepArtistP1, stepArtistP2)) {
+      description += '<p>■ Stepmaker: ' + stepArtistP1;
+    } else {
+        description += '<p>■ Stepmaker: ' + stepArtistP1 + ' (' + diffLabel + stepchartLevel + '), ' + stepArtistP2 + ' (' + diffLabel + stepchartLevel2 + ')';
+    }
+
+    // Difficulty
+    if(selectedStepType.value !== 'co-op') {
+      var longLabel = selectedStepType.longLabel;
+      if(_.isEmpty(stepchartLevel2)) {
+        description += '<p>■ Difficulty: ' + diffLabel + stepchartLevel + ' (' +  longLabel + ' ' + stepchartLevel + ')';
+      } else {
+        description += '<p>■ Difficulty: </p>' +
+        '<p>Left: ' + diffLabel + stepchartLevel + ' (' +  longLabel + ' ' + stepchartLevel + ')</p>' +
+        '<p>Right: ' + diffLabel + stepchartLevel2 + ' (' +  longLabel + ' ' + stepchartLevel2 + ')</p>';
+      }
+    }
+
+    // Player
+    if(_.isEmpty(player2)) {
+      description += '<p>■ Player: ' + player1;
+    } else {
+      description += '<p>■ Player: ' + player1 + ' (P1 Side), ' + player2 + ' (P2 Side)';
+    }
+
+    // Footer
+    description += '<p>&nbsp;</p>' +
+    '<p>[VIETNAM]</p>' +
+    '<p>&nbsp;</p>' +
+    '<p>► Follow our team new webpage:</p>' +
+    '<p>https://www.bosspiuvn.com</p>' +
+    '<p>► Follow our facebook page:</p>' +
+    '<p>https://www.facebook.com/bosspiuvnpumpitupteamofficial/</p>' +
+    '<p>&nbsp;</p>' +
+    '<p>► Follow our Twitter:&nbsp;</p>' +
+    '<p>https://twitter.com/BOSS_PIUVN</p>' +
+    '<p>&nbsp;</p>' +
+    "<p>► Follow Smurf's Town Gamezone (LANG XI TRUM) Facebook page:</p>" +
+    '<p>https://www.facebook.com/LangXiTrumNowzone/</p>' +
+    '<p>&nbsp;</p>' +
+    '<p>► More PIU artworks here, Please visit and like page:</p>' +
+    '<p>Gyo Design+</p>' +
+    '<p>https://www.facebook.com/GyoDesigns/</p>' +
+    '<p>&nbsp;</p>' +
+    '<p>Step-art Line:</p>' +
+    '<p>https://www.facebook.com/stepartline/</p>' +
+    '<p>https://stepart-line.deviantart.com/</p>' +
+    '<p>&nbsp;</p>';
+
+    if(selectedStepType.value !== 'co-op') {
+      description += '<p>' + songName + ' ' + diffLabel + stepchartLevel + '</p>';
+      if (!_.isEmpty(songNameAlias)) {
+        description += '<p>' + songNameAlias + ' ' + diffLabel + stepchartLevel + '</p>';
+      }
+      if(!_.isEmpty(stepchartLevel2)) {
+        description += '<p>' + songName + ' ' + diffLabel + stepchartLevel2 + '</p>';
+        if (!_.isEmpty(songNameAlias)) {
+          description += '<p>' + songNameAlias + ' ' + diffLabel + stepchartLevel2 + '</p>';
+        }  
+      }
+    }
+    // description += '<p>' + songName + diffLabel + stepchartLevel + '</p>';
+
+    description += '<p>&nbsp;</p>' +
+    '<p>&nbsp;</p>' +
+    '<p>*** BOSS_PIUVN PUMP IT UP TEAM OFFICIAL ***</p>'
+
+    tinymce.get('description').setContent(description);
   }
 
   function generateSEOTags() {
