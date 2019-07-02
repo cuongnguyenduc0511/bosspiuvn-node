@@ -12,6 +12,18 @@
           padding: 0 10px;
         }
       }
+      .sec-team-members {
+        div[class*='col-'] {
+          padding: 0;
+        }
+        .team-member-wrapper {
+          .team-member-item {
+            p {
+              padding: 0;
+            }
+          }
+        }
+      }
       .sec-our-duty {
         .duty-wrapper {
           div[class*='col-'] {

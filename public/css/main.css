@@ -276,10 +276,39 @@ body {
   background-repeat: repeat;
   background-image: url("../images/background-texture.png");
 }
+.page-template-home .sec-about-us p {
+  padding: 0 30px;
+}
 .page-template-home .sec-about-us .team-logo {
   max-width: 300px;
   margin: 15px 0 30px;
   box-shadow: 8px 8px 20px -7px #e9e9e9, -1px -1px 20px 0px #e9e9e9;
+}
+.page-template-home .sec-team-members h2 {
+  text-shadow: 0 0 2px #97ad36, 0 0 2px #97ad36, 0 0 2px #97ad36, 0 0 2px #97ad36, 0 0 2px #97ad36, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+}
+.page-template-home .sec-team-members .team-member-wrapper {
+  margin-top: 30px;
+}
+.page-template-home .sec-team-members .team-member-wrapper .team-member-item {
+  background: linear-gradient(#121212 0%, #303030 100%);
+  box-shadow: 0px 0px 0px 2px #FFD500;
+  border-radius: 0.28571429rem;
+  padding: 30px 10px 10px;
+  max-width: 90%;
+  height: 100%;
+  margin: 0 auto 10px auto;
+}
+.page-template-home .sec-team-members .team-member-wrapper .team-member-item .team-member-avatar {
+  max-width: 200px;
+  margin-bottom: 10px;
+}
+.page-template-home .sec-team-members .team-member-wrapper .team-member-item h5 {
+  color: yellow;
+}
+.page-template-home .sec-team-members .team-member-wrapper .team-member-item p {
+  padding: 0 10px;
+  text-align: center;
 }
 .page-template-home .sec-our-duty .duty-wrapper {
   margin: 30px auto 0;
@@ -309,7 +338,6 @@ body {
 }
 .page-template-home .bss-section p {
   color: white;
-  padding: 0 30px;
 }
 .page-template-home .bss-section strong {
   color: yellow;
@@ -868,6 +896,12 @@ body #update-modal .btn-submit i {
   }
   body .page-template-home .sec-about-us p {
     padding: 0 10px;
+  }
+  body .page-template-home .sec-team-members div[class*=col-] {
+    padding: 0;
+  }
+  body .page-template-home .sec-team-members .team-member-wrapper .team-member-item p {
+    padding: 0;
   }
   body .page-template-home .sec-our-duty .duty-wrapper div[class*=col-] {
     margin-bottom: 30px;
