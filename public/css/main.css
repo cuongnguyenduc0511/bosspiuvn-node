@@ -15,6 +15,12 @@ body {
 .header-1.gold {
   text-shadow: 0 0 2px #febf04, 0 0 2px #febf04, 0 0 2px #febf04, 0 0 2px #febf04, 0 0 2px #febf04, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
 }
+.header-1.cyan-blue {
+  text-shadow: 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+}
+.header-1.cyan-blue {
+  text-shadow: 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 2px #5fa9cf, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+}
 .header-1.red {
   text-shadow: 0 0 2px red, 0 0 2px red, 0 0 2px red, 0 0 2px red, 0 0 2px red, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
 }
@@ -196,6 +202,9 @@ body {
 .page-header.background-2 {
   background-image: url("../images/xx_bg4.jpg");
 }
+.page-header.background-3 {
+  background-image: url("../images/p2w_bg4.jpg");
+}
 .page-header.background-filter {
   max-height: 100vh;
 }
@@ -261,6 +270,49 @@ body {
   height: 50px;
   width: 50px;
   color: black;
+}
+
+.page-template-home {
+  background-repeat: repeat;
+  background-image: url("../images/background-texture.png");
+}
+.page-template-home .sec-about-us .team-logo {
+  max-width: 300px;
+  margin: 15px 0 30px;
+  box-shadow: 8px 8px 20px -7px #e9e9e9, -1px -1px 20px 0px #e9e9e9;
+}
+.page-template-home .sec-our-duty .duty-wrapper {
+  margin: 30px auto 0;
+  max-width: 80%;
+}
+.page-template-home .sec-our-duty .duty-wrapper img {
+  margin-bottom: 10px;
+}
+.page-template-home .sec-our-duty .duty-wrapper h4 {
+  color: white;
+  font-size: 1.2rem;
+}
+.page-template-home .sec-highlights h2 {
+  text-shadow: 0 0 2px #61cfa1, 0 0 2px #61cfa1, 0 0 2px #61cfa1, 0 0 2px #61cfa1, 0 0 2px #61cfa1, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+}
+.page-template-home .sec-highlights #highlight-video-carousel .item-video {
+  height: 500px;
+}
+.page-template-home .sec-highlights #highlight-video-carousel.owl-theme .owl-dots .owl-dot.active span {
+  background: yellow;
+}
+.page-template-home .bss-section {
+  padding: 20px 10px;
+}
+.page-template-home .bss-section h2 {
+  font-size: 3rem;
+}
+.page-template-home .bss-section p {
+  color: white;
+  padding: 0 30px;
+}
+.page-template-home .bss-section strong {
+  color: yellow;
 }
 
 body .sec-register {
@@ -726,6 +778,15 @@ body #update-modal .btn-submit i {
   body .page-template-ucs-tracking .sec-ucs-search {
     padding: 0 10px;
   }
+  body .page-template-home .sec-our-duty .duty-wrapper {
+    max-width: 100%;
+  }
+  body .page-template-home .sec-our-duty .duty-wrapper div[class*=col-] {
+    margin-bottom: 30px;
+  }
+  body .page-template-home .sec-our-duty .duty-wrapper .col-lg-6:nth-last-child(-n+2) .col-md-6:nth-last-child(-n+2) .col-sm-6:nth-last-child(-n+2) {
+    margin-bottom: 5px;
+  }
 }
 @media only screen and (max-width: 992px) {
   .footer-brand .brand-item {
@@ -801,6 +862,27 @@ body #update-modal .btn-submit i {
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
     margin-bottom: 40px;
+  }
+  body .page-template-home .sec-about-us .team-logo {
+    max-width: 200px;
+  }
+  body .page-template-home .sec-about-us p {
+    padding: 0 10px;
+  }
+  body .page-template-home .sec-our-duty .duty-wrapper div[class*=col-] {
+    margin-bottom: 30px;
+  }
+  body .page-template-home .sec-our-duty .duty-wrapper div[class*=col-]:last-child {
+    margin-bottom: 0;
+  }
+  body .page-template-home .sec-our-duty .duty-wrapper .col-xs-12:nth-last-child(-n+2) {
+    margin-bottom: 30px;
+  }
+  body .page-template-home .sec-our-duty h4 {
+    font-size: 1rem;
+  }
+  body .page-template-home .bss-section h2 {
+    font-size: 2rem;
   }
 }
 @media only screen and (max-width: 480px) and (orientation: portrait) {

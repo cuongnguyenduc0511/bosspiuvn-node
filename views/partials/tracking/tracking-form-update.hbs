@@ -1,0 +1,86 @@
+<section ng-if="modalInstance.mode === 'update'" class="update-form-wrapper">
+  <h5>
+    <i class="fas fa-edit"></i> Update Request Form</h5>
+  <span class="remind-note">
+    <strong>Note: </strong>Once you update your request, old data (included Content Name, Notes) will be overridden</span>
+  <form id="update-form" mode="update">
+    <section class="form-section">
+      <h5 class="header-1 green">Basic Info</h5>
+      <div class="form-group row">
+        <label for="contentName" class="col-lg-12 col-form-label">Your Name / Nickname</label>
+        <div class="col-lg-12">
+          <input ng-model="updateForm.requester" type="text" class="form-control" name="requester" placeholder="Enter your content name">
+        </div>
+      </div>
+    </section>
+    <section class="form-section">
+      <h5 class="header-1 green">Stepchart Info</h5>
+      <div class="form-group row">
+        <label for="contentName" class="col-lg-12 col-form-label">Content Name</label>
+        <div class="col-lg-12">
+          <input ng-model="updateForm.contentName" type="text" class="form-control" name="contentName" placeholder="Enter your content name">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-6 col-sm-12 column-field">
+          <label for="stepchartType" class="col-form-label">Stepchart Type
+            <span class="required">*</span>
+          </label>
+          <div>
+            <select ng-model="updateForm.stepchartType" class="form-control" name="stepchartType" id="update-form-step-type">
+              <option value="">Choose Stepchart Type</option>
+              <option ng-repeat="stepchartType in updateFormStepchartTypes" value="{[{ stepchartType.value }]}">{[{ stepchartType.title }]}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6 col-sm-12 column-field">
+          <label for="stepchartLevel" class="col-form-label">Stepchart Level
+            <span class="required">*</span>
+          </label>
+          <div>
+            <select ng-model="updateForm.stepchartLevel" class="form-control" name="stepchartLevel">
+              <option value="">Choose Stepchart Level</option>
+              <option ng-repeat="stepchartLevelItem in updateFormStepchartLevels" value="{[{ stepchartLevelItem }]}">{[{ stepchartLevelItem }]}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="stepmaker" class="col-lg-12 col-form-label">Stepmaker
+          <span class="required">*</span>
+        </label>
+        <div class="col-lg-12">
+          <input ng-model="updateForm.stepmaker" type="text" class="form-control" name="stepmaker" placeholder="Enter STEPMAKER Name">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="ucsLink" class="col-lg-12 col-form-label">UCS Download Link
+          <span class="required">*</span>
+        </label>
+        <div class="col-lg-12">
+          <input ng-model="updateForm.ucsLink" type="text" class="form-control" name="ucsLink" placeholder="Enter UCS Chart Download Link">
+        </div>
+      </div>
+    </section>
+    <section id="sec-form-note" class="bss-section-form">
+      <h5 class="header-1 green">Note</h5>
+      <div class="form-group row">
+        <label for="requester_note" class="col-lg-12 col-form-label">Leave your note if you would like to remind us</label>
+        <div class="col-lg-12">
+          <textarea id="requester_note" name="requester_note"></textarea>
+        </div>
+      </div>
+    </section>
+    <div class="form-group row">
+      <label for="updateToken" class="col-lg-12 col-form-label">Update Token
+        <span class="required">*</span>
+      </label>
+      <div class="col-lg-12">
+        <input ng-model="updateForm.updateToken" type="text" class="form-control" name="updateToken" placeholder="Enter your update token">
+      </div>
+    </div>
+  </form>
+  <button type="button" id="reset-form" class="btn btn-danger" mode="update" ng-click="onFormReset($event)">Reset</button>
+</section>

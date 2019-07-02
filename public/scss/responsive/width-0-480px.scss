@@ -1,7 +1,41 @@
 @media only screen and (min-width: 320px) and (max-width: 480px) {
-  body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
-    margin-bottom: 40px;
+  body {
+    .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
+      margin-bottom: 40px;
+    }
+    .page-template-home {
+      .sec-about-us {
+        .team-logo {
+          max-width: 200px;
+        }
+        p {
+          padding: 0 10px;
+        }
+      }
+      .sec-our-duty {
+        .duty-wrapper {
+          div[class*='col-'] {
+            margin-bottom: 30px;
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+          .col-xs-12:nth-last-child(-n+2) {
+            margin-bottom: 30px;
+          }
+        } 
+        h4 {
+          font-size: 1rem;
+        }
+      }
+      .bss-section {
+        h2 {
+            font-size: 2rem;
+        }
+      }
+    } 
   }
+   
 }
 
 @media only screen and (max-width:480px) and (orientation: portrait) {

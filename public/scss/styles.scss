@@ -18,6 +18,12 @@ body {
   &.gold {
     @include text-color-with-shadow(#febf04);
   }
+  &.cyan-blue {
+    @include text-color-with-shadow(#5fa9cf);
+  }
+  &.cyan-blue {
+    @include text-color-with-shadow(#5fa9cf);
+  }
   &.red {
     @include text-color-with-shadow(red);
   }
