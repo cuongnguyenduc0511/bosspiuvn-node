@@ -3,11 +3,17 @@
     <div class="navbar-brand">
       <img class="bss-navbar-logo" src="/images/boss-nav-logo.png" />
     </div>
-    <button class="navbar-toggler" type="button" id="sidebarCollapse">
-        <i class="fas fa-bars"></i>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+      data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <div class="navbar-collapse-logo">
+        <img class="bss-navbar-logo" src="/images/BOSS_PIUVN.png" />
+      </div>
+
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link {{#if active.home}}active{{/if}}" href="/">

@@ -1,3 +1,92 @@
+@media only screen and (min-width: 1200px) {
+  .bss-navbar {
+    .navbar-nav {
+      .nav-item {
+        .nav-link {
+          &:hover {
+            transition: all 0.3s ease;
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }  
+}
+
+@media only screen and (max-width: 1200px) {
+  .bss-navbar {
+    .navbar-collapse {
+      &-logo {
+        display: flex;
+        margin-top: 20px;
+        flex-direction: column;
+        align-items: center;
+        img {
+          max-width: 230px;
+          padding: 0 10px;
+        }
+      }
+      background: linear-gradient(#121212 0%, #303030 100%);
+      height: 100%;
+      position: fixed;
+      display: block;
+      top: 0px;
+      width: 230px;
+      left: 0;
+      margin-left: 0;
+      z-index: 3001;
+      visibility: visible;
+      overflow-y: visible;
+      border-top: none;
+      text-align: left;
+      padding-right: 0;
+      padding-left: 0;
+      transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+      .navbar-nav {
+        position: relative;
+        z-index: 3;
+        padding: 20px 0;
+        .nav-item {
+          transition: all 0.3s;
+          padding: 10px;
+          margin-right: 0;
+          &:last-child {
+            padding: 10px;
+          }
+          &:focus, &:hover {
+            background: yellow;
+            .nav-link {
+              color: black;
+            }
+          }
+          .nav-link {
+            &:focus, &:hover {
+              // background: yellow;
+              color: black;
+            }
+          }
+        }
+      }
+      &.collapse {
+        &:not(.show) {
+          display: block;
+          transform: translateX(-100%);
+          @media screen and (min-width: 1200px) {
+              transform: translateX(0);
+          }
+  
+          @media screen and (max-width: 991px) {
+              transform: translateX(-100%);
+          }
+        }    
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   body {
     .page-template-ucs-tracking {
@@ -46,21 +135,3 @@
     } 
   }
 } 
-
-// @media only screen and (max-width: 1024px) and (orientation: 'landscape') {
-//   .page-template-home {
-//     .sec-our-duty {
-//       .duty-wrapper {
-//         .col-lg-6:nth-last-child(-n+2) {
-//           margin-bottom: 0;
-//         }
-//         .col-md-6:nth-last-child(-n+2) {
-//           margin-bottom: 0;
-//         }
-//         .col-sm-6:nth-last-child(-n+2) {
-//           margin-bottom: 0;
-//         }
-//       } 
-//     }
-//   } 
-// }

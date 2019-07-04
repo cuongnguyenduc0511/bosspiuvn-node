@@ -47,6 +47,13 @@ registerAppModule.controller('registerUcsCtrl', function ($scope, $http, $q) {
 
   var previewThumbnailInstance
   $(function () {
+    // $('.preview-value').each(function(index, elem) {
+    //   console.log($(elem))
+    //   // $clamp($(elem), {clamp: 1, useNativeClamp: false});
+    //   var ellipsis = new Ellipsis($(elem));
+    //   ellipsis.calc();
+    //   ellipsis.set();
+    // })
     initSongSelectField();
     $('#register-form').find('.form-control').each(function (index, elem) {
       $(elem).focus(function () {
@@ -111,6 +118,14 @@ registerAppModule.controller('registerUcsCtrl', function ($scope, $http, $q) {
         $('#preview-modal').modal('show');
       }
     })
+
+    $('#preview-modal').on('show.bs.modal', function (e) {
+      // do something...
+      $('.preview-value').each(function(index, elem) {
+        var targetElem = $(elem).get(0);
+        $clamp(targetElem, {clamp: 2});
+      })
+    });
 
     $('#confirm-submit').click(function () {
       var processingState = '<i class="fas fa-circle-notch fa-spin"></i> Processing';

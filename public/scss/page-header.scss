@@ -16,10 +16,21 @@
 
     &.background {
         max-height: 500px;
+        $animation_duration: 1s;
         .page-header-logo {
+            -webkit-animation: fadeInUp $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeInUp $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeInUp $animation_duration; /* Internet Explorer */
+            -o-animation: fadeInUp $animation_duration; /* Opera < 12.1 */
+            animation: fadeInUp $animation_duration;     
             margin-top: -110px;
         }
         .page-header-text {
+            -webkit-animation: fadeInUp $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeInUp $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeInUp $animation_duration; /* Internet Explorer */
+            -o-animation: fadeInUp $animation_duration; /* Opera < 12.1 */
+            animation: fadeInUp $animation_duration;     
             font-size: 2.8em;
             text-align: center;
             margin-top: -75px;
@@ -31,7 +42,10 @@
             background-image: url("../images/xx_bg4.jpg");
         }
         &-3 {
-            background-image: url("../images/p2w_bg4.jpg");
+            background-image: url("../images/xx-bg5.png");
+        }
+        &-4 {
+            background-image: url("../images/xx_bg2.jpg");
         }
     }
 

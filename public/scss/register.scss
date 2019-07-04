@@ -3,31 +3,27 @@
   position: relative;
   line-height: $lineHeight;
   max-height: $lineHeight * $lineCount; 
-  text-align: justify;
   margin-right: -1em;
   padding-right: 1em;
-  &:before {
-    content: '...';
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
-  &:after {
-    content: '';
-    position: absolute;
-    right: 0;
-    width: 1em;
-    height: 1em;
-    margin-top: 0.2em;
-    background: $bgColor;
-  }
+  // &:before {
+  //   content: '...';
+  //   position: absolute;
+  //   right: 0;
+  //   bottom: 0;
+  // }
+  // &:after {
+  //   content: '';
+  //   position: absolute;
+  //   right: 0;
+  //   width: 1em;
+  //   height: 1em;
+  //   margin-top: 0.2em;
+  //   background: $bgColor;
+  // }
 }
 
 body {
   .sec-register {
-    background-size: cover;
-    background-position: center center;
-    background-image: url('../images/background-texture.png');
     .required {
       color: #dc3545;
     }
@@ -90,7 +86,7 @@ body {
         }
       }
       .submit {
-        background-color: white;
+        background-color: yellow;
         color: black;
         &:hover {
           background-color: black;
@@ -105,7 +101,7 @@ body {
         background-color: red;
         color: white;
         &:hover {
-          background-color: yellow;
+          background-color: white;
           color: red
         }
       }
@@ -132,6 +128,20 @@ body {
     padding-left: 5px;
   }
 
+  #preview-modal {
+    .modal-content {
+      background: linear-gradient(#121212 0%, #303030 100%);
+      box-shadow: 0px 0px 0px 2px #EEEEEE;
+      .modal-header {
+          h5 {
+              color: yellow;
+          }
+      }
+      .modal-body {
+          color: white;
+      }
+    }
+  }
   .preview-thumbnail {
     display: block;
     margin-left: auto;
@@ -156,14 +166,15 @@ body {
       }
       .preview-field-name {
         font-weight: bolder;
-        color: darkblue
+        color: yellow
       }
       .preview-value {
-        @include multiLineEllipsis($lineHeight: 1.5em, $lineCount: 2, $bgColor: white);
+        @include multiLineEllipsis($lineHeight: 1.5em, $lineCount: 2, $bgColor: transparent);
       }
     }
   }
 }
+
 .tox-notifications-container {display: none !important;}
 .tinymce-mobile-editor-socket.tinymce-mobile-scrollable {
   touch-action: none;

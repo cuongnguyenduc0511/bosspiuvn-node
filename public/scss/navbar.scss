@@ -5,42 +5,48 @@
   &-logo {
       max-width: 200px;
   }
-  #sidebarCollapse {
+  .navbar-toggler {
     color: white;
     font-size: 1.5em;
   }
-  .navbar-nav {
-    .nav-item {
-      margin-right: 10px;
-      &:last-child {
-        margin-right: 0;
-      }
 
-      .nav-link {
-        color: white;
-        font-size: 16px;
-        font-family: 'XoloniumRegular';
-        font-weight: bolder;
-        text-transform: uppercase;
-  
-        &.active, &:hover {
-          color: yellow;
+  .navbar-collapse {
+    &-logo {
+      display: none;
+    }
+    .navbar-nav {
+      .nav-item {
+        margin-right: 10px;
+        &:last-child {
+          margin-right: 0;
         }
-
-        &.active {
-          &:hover {
-            transition: unset;
-            transform: unset;
+  
+        .nav-link {
+          color: white;
+          font-size: 16px;
+          font-family: 'XoloniumRegular';
+          font-weight: bolder;
+          text-transform: uppercase;
+    
+          &.active, &:hover {
+            color: yellow;
           }
-        }
-        
-        &:hover {
-          transition: all 0.3s ease;
-          transform: scale(1.1);
-        }
   
-        i {
-          margin-right: 5px;
+          &.active {
+            &:hover {
+              transition: unset;
+              transform: unset;
+            }
+          }
+          
+          // &:hover {
+          //   transition: all 0.3s ease;
+          //   transform: scale(1.1);
+          // }
+    
+          i {
+            margin-right: 5px;
+          }
         }
       }
     }

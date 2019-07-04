@@ -1,7 +1,5 @@
 body {
     .page-template-ucs-tracking {
-        background-repeat: repeat;
-        background-image: url('../images/background-texture.png');
         .sec-ucs-search {
           .search-panel {
               position: relative;
@@ -49,11 +47,11 @@ body {
             $animation_duration: 0.5s;
             padding: 10px;
             display: none;
-            -webkit-animation: fadein $animation_duration; /* Safari, Chrome and Opera > 12.1 */
-            -moz-animation: fadein $animation_duration; /* Firefox < 16 */
-            -ms-animation: fadein $animation_duration; /* Internet Explorer */
-            -o-animation: fadein $animation_duration; /* Opera < 12.1 */
-            animation: fadein $animation_duration;     
+            -webkit-animation: fadeIn $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeIn $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeIn $animation_duration; /* Internet Explorer */
+            -o-animation: fadeIn $animation_duration; /* Opera < 12.1 */
+            animation: fadeIn $animation_duration;     
             .request-list-wrapper {
                 .request-item {
                     background: linear-gradient(#121212 0%, #303030 100%);
