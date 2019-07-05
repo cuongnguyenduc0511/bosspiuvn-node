@@ -62,9 +62,9 @@ router.get('/song-list', (req, res, next) => {
 });
 
 router.get('/faq-rules', (req, res, next) => {
-  res.render('pages/faq-rules', {
+  res.render('pages/faq-rules-temp', {
     title: `Faq & Rules ${TITLE_FORMAT}`,
-    layout: 'master_layout/layout2',
+    layout: 'master_layout/layout-ver2',
     root: root,
   });
 });

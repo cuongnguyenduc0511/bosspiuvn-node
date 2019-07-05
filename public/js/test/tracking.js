@@ -74,30 +74,6 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
   }
 
   function firstLoad() {
-    // Promise.all([fetchData()]).then(function (data) {
-    //   var commonData = data[0].common;
-    //   var trackingResult = data[0].requestPagination;
-
-    //   $scope.trackingResult = trackingResult.paginationResult;
-    //   $scope.standardStepLevels = commonData.stepchartLevels.standard;
-    //   $scope.coopStepLevels = commonData.stepchartLevels.coop;
-
-    //   $scope.searchFormStepchartTypes = commonData.stepchartTypes;
-    //   $scope.searchFormStepchartLevels = _.concat($scope.standardStepLevels, $scope.coopStepLevels);
-
-    //   $scope.updateFormStepchartTypes = commonData.stepchartTypes;
-
-    //   var currentPage = $scope.trackingResult.currentPage;
-    //   var totalPages = $scope.trackingResult.totalPages;
-    //   $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
-    //   $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
-
-    //   $scope.isFullyLoaded = true;
-    //   $scope.$digest();
-    //   $('.sec-request-list').show();
-    // }).catch(function (error) {
-    //   console.log(error.response || error);
-    // });
     if ($scope.isFirstLoadFail) {
       // Show loading modal
       Swal({
@@ -117,6 +93,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       $scope.trackingResult = trackingResult.paginationResult;
       $scope.standardStepLevels = commonData.stepchartLevels.standard;
       $scope.coopStepLevels = commonData.stepchartLevels.coop;
+      $scope.stepchartTypesData = commonData.stepchartTypes;
 
       $scope.searchFormStepchartTypes = commonData.stepchartTypes;
       $scope.searchFormStepchartLevels = _.concat($scope.standardStepLevels, $scope.coopStepLevels);
@@ -247,18 +224,28 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       });
 
       $q.when(axios.post(baseUrl + '/request-token', submitData)).then(function (response) {
+        var requestResponse = response.data;
         $timeout(function () {
           Swal.hideLoading();
           Swal.close();
-          Swal({
-            title: 'Congratulations!',
-            text: response.data.message,
-            type: 'success',
-            allowOutsideClick: false,
-            confirmButtonText: 'OK'
-          }).then(function () {
-            resetForm(targetForm);
-          });
+          if(requestResponse.result === 1) {
+            Swal({
+              title: 'Congratulations!',
+              text: requestResponse.message,
+              type: 'success',
+              allowOutsideClick: false,
+              confirmButtonText: 'OK'
+            }).then(function () {
+              resetForm(targetForm);
+            });
+          } else {
+            Swal({
+              title: 'Oof...',
+              text: requestResponse.message,
+              type: 'error',
+              allowOutsideClick: false
+            });
+          }
         }, 2000);
       }).catch(function (error) {
         var errorResponse = error.response;
@@ -289,7 +276,6 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     if (targetForm.valid()) {
       var formData = $scope[updateMode + 'Form'];
       var submitData = _.assign({ _csrf: $scope._csrf, requestId: $scope.targetRequest }, formData);
-      console.log(submitData);
       // Show loading modal
       Swal({
         title: 'Your request is processing',
@@ -314,27 +300,37 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       }
 
       $q.when(axios.post(requestUrl, submitData)).then(function (response) {
+        var requestResponse = response.data;
         $timeout(function () {
-          $('#update-modal').modal('hide');
           Swal.hideLoading();
           Swal.close();
-          Swal({
-            title: 'Congratulations!',
-            text: response.data.message,
-            type: 'success',
-            allowOutsideClick: false,
-            confirmButtonText: 'OK'
-          }).then(function () {
-            //Reload list
-            if (updateMode !== 'resend') {
-              $scope.$emit('reloadCurrent');
-            }
-          })
+          if(requestResponse.result === 1) {
+            $('#update-modal').modal('hide');
+            Swal({
+              title: 'Congratulations!',
+              text: requestResponse.message,
+              type: 'success',
+              allowOutsideClick: false,
+              confirmButtonText: 'OK'
+            }).then(function () {
+              //Reload list
+              if (updateMode !== 'resend') {
+                $scope.$emit('reloadCurrent');
+              }
+            })
+          } else {
+            Swal({
+              title: 'Oof...',
+              text: requestResponse.message,
+              type: 'error',
+              allowOutsideClick: false
+            })
+          }
         }, 2000);
       }).catch(function (error) {
         var errorResponse = error.response;
         Swal({
-          title: 'Whoops!!',
+          title: 'Oof...',
           text: !_.isEmpty(errorResponse) ? (errorResponse.data.message || '') : error,
           type: 'error',
           allowOutsideClick: false
@@ -388,30 +384,55 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     });
 
     //set to false;
+    $scope.resultFound = false;
+    $scope.resultStepchartType = null;
     $scope.isFetchingRequestTimeout = false;
     $scope.isError = false;
     $scope.isNotFound = false;
 
     $q.when(getRequestList(params)).then(function (requestData) {
       var trackingResult = requestData.data;
-      switch (trackingResult.code) {
-        case 'NOT_FOUND': {
-          $scope.isNotFound = true;
-          $scope.trackingResult = null;
-          break;
-        }
-        case 'RESULT_FOUND': {
-          $scope.trackingResult = trackingResult.paginationResult;
-          var currentPage = $scope.trackingResult.currentPage;
-          var totalPages = $scope.trackingResult.totalPages;
-          $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
-          $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
-          $('.sec-request-list').show();
-          break;
-        }
+      if (trackingResult.result === 0) {
+        $scope.isNotFound = true;
+        $scope.trackingResult = null;
+      } else {
+        $scope.resultFound = trackingResult.code === 'RESULT_FOUND';
+        $scope.trackingResult = trackingResult.paginationResult;
+        $scope.resultStepchartType = _.get(_.find($scope.stepchartTypesData, { 'value': $scope.trackingResult.query.params.stepchart_type }), 'longLabel');
+        var currentPage = $scope.trackingResult.currentPage;
+        var totalPages = $scope.trackingResult.totalPages;
+        $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
+        $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
+        $('.sec-request-list').show();
       }
+      // switch (trackingResult.code) {
+      //   case 'NOT_FOUND': {
+      //     $scope.isNotFound = true;
+      //     $scope.trackingResult = null;
+      //     break;
+      //   }
+      //   case 'RESULT_FOUND': {
+      //     // $scope.trackingResult = trackingResult.paginationResult;
+      //     // var currentPage = $scope.trackingResult.currentPage;
+      //     // var totalPages = $scope.trackingResult.totalPages;
+      //     // $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
+      //     // $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
+      //     // $('.sec-request-list').show();
+      //     // break;
+      //   }
+      //   // result all
+      //   case '': {
+      //     $scope.trackingResult = trackingResult.paginationResult;
+      //     var currentPage = $scope.trackingResult.currentPage;
+      //     var totalPages = $scope.trackingResult.totalPages;
+      //     $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
+      //     $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
+      //     $('.sec-request-list').show();
+      //     break;
+      //   }
+      // }
     }).catch(function (error) {
-      // console.log(error.response || error);
+      console.log(error.response || error);
       if (error.code === 'ECONNABORTED') {
         console.log('Timeout');
         $scope.isFetchingRequestTimeout = true;
@@ -534,7 +555,11 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       return this.optional(element) || /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
     }, "Invalid Download Link, Please enter valid Download Link");
 
-
+    $.validator.addMethod("isPiuUcsUrl", function(value, element) {
+      var url = 'http://www.piugame.com/bbs/board.php?bo_table=ucs&wr_id=';
+      return value.includes(url)
+    }, "We only accept request which download url has format from PIU Official UCS Page : <br><strong>Example:</strong> http://www.piugame.com/bbs/board.php?bo_table=ucs&wr_id={{your_ucs_id}}");
+    
     $.validator.addMethod("isEmailValid", function (value, element) {
       return this.optional(element) || /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
     }, "Please enter valid email");
@@ -562,7 +587,8 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         stepmaker: 'required',
         ucsLink: {
           required: true,
-          isUrlValid: true
+          isUrlValid: true,
+          isPiuUcsUrl: true
         },
         updateToken: 'required'
       },

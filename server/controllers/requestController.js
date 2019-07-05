@@ -88,13 +88,17 @@ module.exports.resendActivationEmail = async (req, res) => {
     console.log(submitEmail);
     const requestItem = await requestModel.getItemById(requestId, true);
     if (isEmpty(requestItem)) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Id does not exist / It could have been deleted'
       });
     }
 
     if (requestItem.email !== submitEmail) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Wrong email, please type your valid email'
       });
     }
@@ -102,11 +106,15 @@ module.exports.resendActivationEmail = async (req, res) => {
     // TODO: add send email
     await sendRegisterEmail(requestItem, req);
     res.status(STATUS_CODE.SUCCESS).send({
+      result: 1,
+      code: 'REQUEST_SUCCESS',
       message: 'Your request has been sent, please check your email',
     })
   } catch (err) {
     console.log(err);
     res.status(STATUS_CODE.SERVER_ERROR).send({
+      result: 0,
+      code: 'REQUEST_FAILED',
       message: 'An error occurred while resending activation email, please try again later',
       err
     });
@@ -174,8 +182,10 @@ module.exports.requestToken = async (req, res) => {
     createTokenSession.startTransaction();
     const requestItem = await requestModel.getItemById(requestId, true);
     if (isEmpty(requestItem)) {
-      return res.status(STATUS_CODE.NOT_FOUND).send({
-        message: 'Request Id Not Found'
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
+        message: 'Request Id not found, it may have been deleted'
       })
     }
 
@@ -187,10 +197,14 @@ module.exports.requestToken = async (req, res) => {
 
       const { updateMode, registeredEmail } = updateResult;
       res.status(STATUS_CODE.SUCCESS).send({
-        message: `Your ${updateMode} token will be sent to your email shortly: ${registeredEmail}`
+        result: 1,
+        code: 'REQUEST_SUCCESS',
+        message: `Your ${updateMode} token will be sent to your email shortly, please check your email inbox / spam`
       })
     } else {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Wrong email, please type your valid email'
       });
     }
@@ -225,13 +239,17 @@ module.exports.updateRequestByToken = async (req, res) => {
     const requestItem = await getItemById(requestId, true);
 
     if (isEmpty(requestItem)) {
-      return res.status(STATUS_CODE.NOT_FOUND).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Request Id Not Found'
       });
     }
 
     if (isEmpty(requestItem.updateToken)) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Please request update token'
       });
     }
@@ -261,6 +279,8 @@ module.exports.updateRequestByToken = async (req, res) => {
         await updateRequestClientSession.commitTransaction();
         updateRequestClientSession.endSession();
         res.status(STATUS_CODE.SUCCESS).send({
+          result: 1,
+          code: 'REQUEST_SUCCESS',  
           message: 'Congratulations, your request has been successfully updated'
         });
       } else {
@@ -268,12 +288,16 @@ module.exports.updateRequestByToken = async (req, res) => {
         await removeToken(requestId, UPDATE_MODE.UPDATE);
         await updateRequestClientSession.commitTransaction();
         updateRequestClientSession.endSession();
-        res.status(STATUS_CODE.BAD_REQUEST).send({
+        res.send({
+          result: 0,
+          code: 'REQUEST_FAILED',  
           message: 'Token has been expired, please request new token'
         });
       }
     } else {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',  
         message: 'Wrong token, please type your valid token'
       });
     }
@@ -281,6 +305,8 @@ module.exports.updateRequestByToken = async (req, res) => {
     await updateRequestClientSession.abortTransaction();
     updateRequestClientSession.endSession();
     res.status(STATUS_CODE.SERVER_ERROR).send({
+      result: 0,
+      code: 'REQUEST_FAILED',
       message: 'An error occurred while updating request, Please try again later'
     })
   }
@@ -294,13 +320,17 @@ module.exports.deleteRequestByToken = async (req, res) => {
     deleteRequestSession.startTransaction();
     const requestItem = await requestModel.getItemById(requestId, true);
     if (isEmpty(requestItem)) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Request ID does not exist'
       });
     }
 
     if(isEmpty(requestItem.deleteToken)) {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',  
         message: 'Please request delete token'
       });
     }
@@ -321,12 +351,16 @@ module.exports.deleteRequestByToken = async (req, res) => {
         await requestModel.removeToken(requestId, UPDATE_MODE.DELETE);
         await deleteRequestSession.commitTransaction();
         deleteRequestSession.endSession();
-        res.status(STATUS_CODE.BAD_REQUEST).send({
+        res.send({
+          result: 0,
+          code: 'REQUEST_FAILED',  
           message: 'Token has been expired, please request new token'
         });
       }
     } else {
-      return res.status(STATUS_CODE.BAD_REQUEST).send({
+      return res.send({
+        result: 0,
+        code: 'REQUEST_FAILED',
         message: 'Wrong email / token, please type your valid email / token'
       });
     }
@@ -335,6 +369,8 @@ module.exports.deleteRequestByToken = async (req, res) => {
     await deleteRequestSession.abortTransaction();
     deleteRequestSession.endSession();
     return res.status(STATUS_CODE.SERVER_ERROR).send({
+      result: 0,
+      code: 'REQUEST_FAILED',
       message: 'An error occured while deleting request, please try again later',
       err
     })

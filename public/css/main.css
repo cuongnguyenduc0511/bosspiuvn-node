@@ -3227,6 +3227,9 @@ body {
 .page-header.background-4 {
   background-image: url("../images/xx_bg2.jpg");
 }
+.page-header.background-5 {
+  background-image: url("../images/xx_bg3.jpg");
+}
 .page-header.background-filter {
   max-height: 100vh;
 }
@@ -3663,6 +3666,21 @@ body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.ac
 body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.disabled .page-link {
   color: gray;
 }
+body .page-template-ucs-tracking .sec-search-result #result-alert {
+  -webkit-animation: fadeIn 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeIn 0.5s;
+  /* Firefox < 16 */
+  -ms-animation: fadeIn 0.5s;
+  /* Internet Explorer */
+  -o-animation: fadeIn 0.5s;
+  /* Opera < 12.1 */
+  animation: fadeIn 0.5s;
+  margin: 10px;
+}
+body .page-template-ucs-tracking .sec-search-result #result-alert i {
+  margin-right: 5px;
+}
 body .page-template-ucs-tracking .sec-not-found, body .page-template-ucs-tracking .sec-error, body .page-template-ucs-tracking .sec-request-timeout {
   padding: 20px;
   color: white;
@@ -3741,7 +3759,29 @@ body #update-modal .btn-submit i {
 .page-template-song .sec-series-carousel-wrapper {
   padding: 30px 0;
 }
-.page-template-song .sec-series-carousel-wrapper .owl-item.active.center .series-item {
+.page-template-song .sec-series-carousel-wrapper .song-carousel {
+  -webkit-animation: fadeInLeft 1s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeInLeft 1s;
+  /* Firefox < 16 */
+  -ms-animation: fadeInLeft 1s;
+  /* Internet Explorer */
+  -o-animation: fadeInLeft 1s;
+  /* Opera < 12.1 */
+  animation: fadeInLeft 1s;
+}
+.page-template-song .sec-series-carousel-wrapper .song-carousel .owl-item.active.center {
+  -webkit-animation: fadeIn 1s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeIn 1s;
+  /* Firefox < 16 */
+  -ms-animation: fadeIn 1s;
+  /* Internet Explorer */
+  -o-animation: fadeIn 1s;
+  /* Opera < 12.1 */
+  animation: fadeIn 1s;
+}
+.page-template-song .sec-series-carousel-wrapper .song-carousel .owl-item.active.center .series-item {
   background-image: url("../images/selected-series.png");
   background-size: 100% auto;
 }
@@ -3749,6 +3789,15 @@ body #update-modal .btn-submit i {
   padding: 20px;
 }
 .page-template-song .sec-series-carousel-wrapper .navigation-carousel {
+  -webkit-animation: fadeInLeft 1s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeInLeft 1s;
+  /* Firefox < 16 */
+  -ms-animation: fadeInLeft 1s;
+  /* Internet Explorer */
+  -o-animation: fadeInLeft 1s;
+  /* Opera < 12.1 */
+  animation: fadeInLeft 1s;
   display: flex;
   justify-content: center;
 }
@@ -3757,15 +3806,15 @@ body #update-modal .btn-submit i {
 }
 .page-template-song .sec-song-list-wrapper .song-item {
   margin-bottom: 20px;
-  -webkit-animation: fadein 0.8s;
+  -webkit-animation: fadeInUp 0.8s;
   /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 0.8s;
+  -moz-animation: fadeInUp 0.8s;
   /* Firefox < 16 */
-  -ms-animation: fadein 0.8s;
+  -ms-animation: fadeInUp 0.8s;
   /* Internet Explorer */
-  -o-animation: fadein 0.8s;
+  -o-animation: fadeInUp 0.8s;
   /* Opera < 12.1 */
-  animation: fadein 0.8s;
+  animation: fadeInUp 0.8s;
 }
 .page-template-song .sec-song-list-wrapper .song-item .card {
   margin: 0 auto;
@@ -3790,6 +3839,57 @@ body #update-modal .btn-submit i {
 .page-template-song .sec-song-list-wrapper .song-item p {
   font-size: 14px;
   color: white;
+}
+
+.page-template-faq-rules .sec-remind {
+  padding: 10px;
+}
+.page-template-faq-rules .sec-remind .remind-item {
+  -webkit-animation: fadeIn 1s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeIn 1s;
+  /* Firefox < 16 */
+  -ms-animation: fadeIn 1s;
+  /* Internet Explorer */
+  -o-animation: fadeIn 1s;
+  /* Opera < 12.1 */
+  animation: fadeIn 1s;
+  background: linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
+  box-shadow: 0px 0px 0px 2px #EEEEEE;
+  border-radius: 0.28571429rem;
+  color: white;
+  height: 100%;
+}
+.page-template-faq-rules .sec-remind .remind-item.do .header i {
+  color: green;
+}
+.page-template-faq-rules .sec-remind .remind-item.do-not .header i {
+  color: red;
+}
+.page-template-faq-rules .sec-remind .remind-item .content {
+  padding-bottom: 20px;
+}
+.page-template-faq-rules .sec-remind .remind-item .content .text-list {
+  padding: 0 40px;
+}
+.page-template-faq-rules .sec-remind .remind-item .content .text-list li {
+  margin: 10px 0;
+}
+.page-template-faq-rules .sec-remind .remind-item .content .text-list li:first-child {
+  margin-top: 0;
+}
+.page-template-faq-rules .sec-remind .remind-item .header {
+  padding: 20px;
+}
+.page-template-faq-rules .sec-remind .remind-item .header i {
+  font-size: 10em;
+  margin-bottom: 10px;
+}
+.page-template-faq-rules .sec-remind .remind-item strong.important {
+  color: yellow;
+}
+.page-template-faq-rules .sec-faq {
+  padding: 20px;
 }
 
 @media only screen and (min-width: 1200px) {
@@ -3906,6 +4006,13 @@ body #update-modal .btn-submit i {
   .column-field:last-child {
     margin-bottom: 0;
   }
+
+  .page-template-faq-rules .sec-remind div[class*=col-] {
+    margin-bottom: 20px;
+  }
+  .page-template-faq-rules .sec-remind div[class*=col-]:last-child {
+    margin-bottom: 0;
+  }
 }
 @media only screen and (max-width: 800px) and (orientation: portrait) {
   .page-header.background .page-header-text {
@@ -3966,6 +4073,12 @@ body #update-modal .btn-submit i {
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
     margin-bottom: 40px;
+  }
+  body .page-template-faq-rules .sec-remind div[class*=col-] {
+    margin-bottom: 20px;
+  }
+  body .page-template-faq-rules .sec-remind div[class*=col-]:last-child {
+    margin-bottom: 0;
   }
   body .page-template-home .sec-about-us .team-logo {
     max-width: 200px;

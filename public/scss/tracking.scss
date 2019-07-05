@@ -152,6 +152,20 @@ body {
                 
             }
         }
+        .sec-search-result {
+            #result-alert {
+                $animation_duration: 0.5s;
+                -webkit-animation: fadeIn $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+                -moz-animation: fadeIn $animation_duration; /* Firefox < 16 */
+                -ms-animation: fadeIn $animation_duration; /* Internet Explorer */
+                -o-animation: fadeIn $animation_duration; /* Opera < 12.1 */
+                animation: fadeIn $animation_duration;         
+                margin: 10px;
+                i {
+                    margin-right: 5px;
+                }
+            }
+        }
         .sec-not-found, .sec-error, .sec-request-timeout {
             padding: 20px;
             color: white;

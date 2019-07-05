@@ -2,16 +2,36 @@
 .page-template-song {
     .sec-series-carousel-wrapper {
         padding: 30px 0;
-        .owl-item.active.center {
-            .series-item {
-                background-image: url('../images/selected-series.png');
-                background-size: 100% auto;
+        .song-carousel {
+            $animation_duration: 1s;
+            -webkit-animation: fadeInLeft $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeInLeft $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeInLeft $animation_duration; /* Internet Explorer */
+            -o-animation: fadeInLeft $animation_duration; /* Opera < 12.1 */
+            animation: fadeInLeft $animation_duration; 
+            .owl-item.active.center {
+                $animation_duration: 1s;
+                -webkit-animation: fadeIn $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+                -moz-animation: fadeIn $animation_duration; /* Firefox < 16 */
+                -ms-animation: fadeIn $animation_duration; /* Internet Explorer */
+                -o-animation: fadeIn $animation_duration; /* Opera < 12.1 */
+                animation: fadeIn $animation_duration;         
+                .series-item {
+                    background-image: url('../images/selected-series.png');
+                    background-size: 100% auto;
+                }
             }
         }
         .series-item {
             padding: 20px; 
         }
         .navigation-carousel {
+            $animation_duration: 1s;
+            -webkit-animation: fadeInLeft $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeInLeft $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeInLeft $animation_duration; /* Internet Explorer */
+            -o-animation: fadeInLeft $animation_duration; /* Opera < 12.1 */
+            animation: fadeInLeft $animation_duration; 
             button {
                 margin-right: 10px;
             }
@@ -23,11 +43,11 @@
         .song-item {
             margin-bottom: 20px;
             $animation_duration: 0.8s;
-            -webkit-animation: fadein $animation_duration; /* Safari, Chrome and Opera > 12.1 */
-            -moz-animation: fadein $animation_duration; /* Firefox < 16 */
-            -ms-animation: fadein $animation_duration; /* Internet Explorer */
-            -o-animation: fadein $animation_duration; /* Opera < 12.1 */
-            animation: fadein $animation_duration;     
+            -webkit-animation: fadeInUp $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeInUp $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeInUp $animation_duration; /* Internet Explorer */
+            -o-animation: fadeInUp $animation_duration; /* Opera < 12.1 */
+            animation: fadeInUp $animation_duration;     
             .card {
                 margin: 0 auto;
                 height: 100%;

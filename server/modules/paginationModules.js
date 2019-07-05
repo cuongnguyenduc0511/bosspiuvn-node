@@ -1,5 +1,5 @@
 const { RECORD_PER_PAGE, RESPONSE, STATUS_CODE } = require('../shared/constant');
-const { isEmpty, cloneDeep, assign } = require('lodash');
+const { isEmpty, omit, cloneDeep, assign } = require('lodash');
 const queryString = require('querystring');
 
 module.exports.getData = async (req, res, modelInstance) => {
@@ -89,11 +89,17 @@ async function getPaginationData(req, res, currentPage, recordPerPage, modelInst
 
     return Promise.resolve({
       result: 1,
-      code: 'RESULT_FOUND',
+      code: !isEmptyObject(omit(requestQuery, 'item_per_page')) ? 'RESULT_FOUND' : undefined,
       paginationResult
     });
   } catch (err) {
     console.log(err);
     return Promise.reject(err);
   }
+}
+
+function isEmptyObject(o) {
+  return Object.keys(o).every(function(x) {
+      return o[x]==='' || o[x]===null;  // or just "return o[x];" for falsy values
+  });
 }

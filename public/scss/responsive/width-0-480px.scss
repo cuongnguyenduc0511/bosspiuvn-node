@@ -3,6 +3,16 @@
     .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
       margin-bottom: 40px;
     }
+    .page-template-faq-rules {
+      .sec-remind {
+        div[class*='col-'] {
+          margin-bottom: 20px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }  
     .page-template-home {
       .sec-about-us {
         .team-logo {

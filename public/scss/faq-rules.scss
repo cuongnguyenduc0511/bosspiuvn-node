@@ -1,0 +1,57 @@
+.page-template-faq-rules {
+    .sec-remind {
+        padding: 10px;
+        .remind-item {
+            $animation_duration: 1s;
+            -webkit-animation: fadeIn $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadeIn $animation_duration; /* Firefox < 16 */
+            -ms-animation: fadeIn $animation_duration; /* Internet Explorer */
+            -o-animation: fadeIn $animation_duration; /* Opera < 12.1 */
+            animation: fadeIn $animation_duration;             
+            background: linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
+            box-shadow: 0px 0px 0px 2px #EEEEEE;
+            border-radius: 0.28571429rem;
+            color : white;
+            height: 100%;
+            &.do {
+                .header {
+                    i {
+                        color: green;  
+                    }
+                }
+            }
+            &.do-not {
+                .header {
+                    i {
+                        color: red;    
+                    }
+                }
+            }
+            .content {
+                padding-bottom: 20px;
+                .text-list {
+                    padding: 0 40px;
+                    li {
+                        margin: 10px 0;
+                        &:first-child {
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+            .header {
+                padding: 20px;
+                i {
+                    font-size: 10em;  
+                    margin-bottom: 10px;
+                }
+            }
+            strong.important {
+                color: yellow;
+            }
+        }
+    }
+    .sec-faq {
+        padding: 20px;
+    }
+}
