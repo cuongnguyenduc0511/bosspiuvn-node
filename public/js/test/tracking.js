@@ -194,6 +194,18 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     }, 200)
   }
 
+  $('#update-modal').on('show.bs.modal', function (event) {
+    // Fix tinyMCE text area not show in mobile mode
+    var modal = $(this);
+    modal.addClass('d-block'); // Boostrap class for display-block
+  });
+
+  $('#update-modal').on('hide.bs.modal', function (event) {
+    var modal = $(this);
+    // Fix tinyMCE text area not show in mobile mode
+    modal.removeClass('d-block'); //
+  });
+
   $scope.onSearch = function (event) {
     event.preventDefault();
     var params = $scope.searchForm;

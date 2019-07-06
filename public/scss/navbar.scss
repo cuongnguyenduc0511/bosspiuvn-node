@@ -2,6 +2,7 @@
   box-shadow: 0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   background-color: black;
+  z-index: 3003;
   &-logo {
       max-width: 200px;
   }
@@ -11,6 +12,7 @@
   }
 
   .navbar-collapse {
+    z-index: 3002;
     &-logo {
       display: none;
     }
@@ -50,5 +52,20 @@
         }
       }
     }
+  }
+}
+
+.navbar-overlay {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3001;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  &.active {
+    display: block;
+    opacity: 1;
   }
 }

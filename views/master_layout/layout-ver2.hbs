@@ -34,4 +34,20 @@
   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 {{{_sections.footer_components}}}
+<script>
+  $(function() {
+      console.log('ready');
+      $('#navbarContent').on('show.bs.collapse', function () {
+        $('#navbar-overlay').addClass('active');
+      })
+
+      $('#navbarContent').on('hide.bs.collapse', function () {
+        $('#navbar-overlay').removeClass('active');
+      })
+
+      $('#navbar-overlay').click(function () {
+        $('#navbarContent').collapse('hide');
+      })
+  })
+</script>
 </html>

@@ -179,7 +179,9 @@ body {
 .tinymce-mobile-editor-socket.tinymce-mobile-scrollable {
   touch-action: none;
 }
-
+iframe#requester_note_ifr {
+  height: 100% !important;
+}
 .select2-container {
   // &.select2-container--focus, &.select2-container--open {
   //   border: red 2px solid;
