@@ -68,7 +68,6 @@ songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
 
   function abortLoadingImages() {
     const loadingThumbs = $('img.song-thumbnail');
-    console.log(loadingThumbs);
     return Promise.resolve(loadingThumbs.each(function() {
       $(this).attr("src", "");
     }))

@@ -27,7 +27,9 @@ const STEPCHART_TYPES = {
 
 const FULL_STANDARD_STEPCHART_LEVELS = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
 const STANDARD_STEPCHART_LEVELS = ['13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
-const COOP_STEPCHART_TYPES = ['X2','X3','X4','X5','X6','X7','X8','X9'];
+// const COOP_STEPCHART_TYPES = ['X2','X3','X4','X5','X6','X7','X8','X9'];
+const COOP_STEPCHART_TYPES = ['X2','X3','X4','X5'];
+
 
 const STANDARD_STEPCHART_REQUIREMENT = [
     STEPCHART_TYPES.SINGLE,

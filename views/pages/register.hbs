@@ -12,9 +12,6 @@
 </section>
 <section class="sec-register" ng-app="registerUcsApp" ng-controller="registerUcsCtrl">
   <div class="register-wrapper">
-    <div ng-if="!isFullyLoaded" id="form-loader" class="overlay_container">
-      <i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
-    </div>
     <div class="container">
         <div class="row">
           <div class="col-12 text-center">
@@ -22,6 +19,9 @@
             <h2 id="register-header" class='section-header header-1 red'>UCS REGISTER FORM</h2>
           </div>
           <form id="register-form" class="bss-form col-xl-8 col-lg-6 col-md-8 ml-auto mr-auto">
+            <div ng-if="!isFullyLoaded" id="form-loader" class="overlay_container">
+              <i class="spin-big overlay_loader fas fa-circle-notch fa-spin"></i>
+            </div>
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <section id="sec-form-profile" class="bss-section-form">
               <h4 class='header-1 green'>Profile</h4>

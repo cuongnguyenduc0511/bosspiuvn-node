@@ -8,8 +8,7 @@
 
   <title>{{title}}</title>
   <link rel="shortcut icon" type="image/png" href="images/favicon.png">
-  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/xolonium" type="text/css"/>
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+  {{!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"> --}}
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
   crossorigin="anonymous">
   {{{_sections.header_components}}}
@@ -32,22 +31,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
   crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 {{{_sections.footer_components}}}
-<script>
-  $(function() {
-      console.log('ready');
-      $('#navbarContent').on('show.bs.collapse', function () {
-        $('#navbar-overlay').addClass('active');
-      })
-
-      $('#navbarContent').on('hide.bs.collapse', function () {
-        $('#navbar-overlay').removeClass('active');
-      })
-
-      $('#navbar-overlay').click(function () {
-        $('#navbarContent').collapse('hide');
-      })
-  })
-</script>
 </html>

@@ -3,6 +3,9 @@
     <div class="navbar-brand">
       <img class="bss-navbar-logo" src="/images/boss-nav-logo.png" />
     </div>
+    {{!-- <button id="sidebarCollapse" class="navbar-toggler" type="button">
+      <i class="fas fa-bars"></i>
+    </button> --}}
     <button class="navbar-toggler" type="button" data-toggle="collapse"
       data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
       aria-label="Toggle navigation">
@@ -10,10 +13,6 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarContent">
-      <div class="navbar-collapse-logo">
-        <img class="bss-navbar-logo" src="/images/BOSS_PIUVN.png" />
-      </div>
-
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link {{#if active.home}}active{{/if}}" href="/">
@@ -28,7 +27,7 @@
             <i class="fas fa-plus-circle"></i>Register UCS Request</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/song-list">
+          <a class="nav-link {{#if active.songList}}active{{/if}}" href="/song-list">
             <i class="fas fa-music"></i>Song List</a>
         </li>
         <li class="nav-item">

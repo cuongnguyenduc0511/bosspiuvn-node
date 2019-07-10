@@ -12,13 +12,13 @@ router.get('/', ({ res }) => {
   res.redirect('/home');
 });
 
-router.get('/home-test', (req, res, next) => {
-  res.render('pages/home', {
-    title: `Home ${TITLE_FORMAT}`,
-    layout: 'master_layout/layout',
-    root: root,
-  });
-});
+// router.get('/home-test', (req, res, next) => {
+//   res.render('pages/home', {
+//     title: `Home ${TITLE_FORMAT}`,
+//     layout: 'master_layout/layout',
+//     root: root,
+//   });
+// });
 
 router.get('/home', (req, res, next) => {
   res.render('pages/homepage', {
@@ -58,6 +58,7 @@ router.get('/song-list', (req, res, next) => {
   res.render('pages/song', {
     title: `Song List ${TITLE_FORMAT}`,
     layout: 'master_layout/layout-ver2',
+    active: { songList: true }
   });
 });
 
@@ -65,7 +66,7 @@ router.get('/faq-rules', (req, res, next) => {
   res.render('pages/faq-rules-temp', {
     title: `Faq & Rules ${TITLE_FORMAT}`,
     layout: 'master_layout/layout-ver2',
-    root: root,
+    active: { faqRules: true }
   });
 });
 
