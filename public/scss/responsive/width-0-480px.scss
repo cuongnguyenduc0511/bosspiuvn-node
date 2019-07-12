@@ -1,7 +1,14 @@
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   body {
-    .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
-      margin-bottom: 40px;
+    .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item {
+      .details {
+        margin-bottom: 40px;
+      }
+      &.no-menu-options {
+        .details {
+          margin-bottom: 0;
+        }
+      }
     }
     .page-template-faq-rules {
       .sec-remind {

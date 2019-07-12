@@ -229,14 +229,21 @@ function getSelectedSong(selectedSong, songs) {
 function sanitizeFormInput() {
   $("#register-form").each(function () {
     var inputs = $(this).find(':input[type="text"]');
-    Array.prototype.forEach.call(inputs, function (input) {
+    _.forEach(inputs, function(input) {
       var targetInput = $(input);
       var sanitizedValue = decodeHTMLEntities(sanitizeParam(targetInput.val()));
       targetInput.val(sanitizedValue);
       // //update angular ng-model
-      $(input)[0].dispatchEvent(new Event("input", { bubbles: true }));
-    });
-  });
+      var updateAngularModelEvent
+      if (typeof(Event) === 'function') {
+        updateAngularModelEvent = new Event("input", { bubbles: true });
+      } else{
+        updateAngularModelEvent = document.createEvent('Event');
+        updateAngularModelEvent.initEvent('input', true, true);
+      }
+      input.dispatchEvent(updateAngularModelEvent);
+    })
+  });  
 }
 
 function sanitizeParam(dirty) {

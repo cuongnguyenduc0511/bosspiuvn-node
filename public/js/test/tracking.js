@@ -17,24 +17,38 @@ function initTextArea() {
   }
 }
 
+function initFancyBox() {
+  $('[data-fancybox]').fancybox({
+    youtube : {
+        controls : 1,
+        showinfo : 1
+    }
+  });
+}
+
 function getCommonData() {
   return axios.get(apiUrl + '/commons', {
     timeout: REQUEST_TIME_OUT
   });
 }
 
-function getRequestList(params = null) {
-  let axiosInstance = null;
+function getRequestList(params) {
+  var axiosInstance = null;
+
+  if(_.isEmpty(params)) {
+    params = null;
+  }
   switch (typeof params) {
     case 'object':
       axiosInstance = axios.get(apiUrl + '/requests', {
-        params,
+        params: params,
         timeout: REQUEST_TIME_OUT,
       }); break;
-    default: axiosInstance = axios.get(`${apiUrl}/requests${params}`, {
+    default: axiosInstance = axios.get(apiUrl + '/requests' + params, {
       timeout: REQUEST_TIME_OUT,
     }); break;
   }
+
   return axiosInstance;
 }
 
@@ -78,7 +92,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       // Show loading modal
       Swal({
         title: 'Please wait',
-        onBeforeOpen: () => {
+        onBeforeOpen: function() {
           Swal.showLoading();
         },
         showConfirmButton: false,
@@ -107,6 +121,9 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
 
       $scope.isFullyLoaded = true;
       $scope.$digest();
+      setTimeout(function() {
+        initFancyBox();
+      });
       $('.sec-request-list').show();
     }).catch(function (error) {
       console.log(error.response || error);
@@ -228,7 +245,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       // Show loading modal
       Swal({
         title: 'Your request is processing',
-        onBeforeOpen: () => {
+        onBeforeOpen: function()  {
           Swal.showLoading();
         },
         showConfirmButton: false,
@@ -291,7 +308,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       // Show loading modal
       Swal({
         title: 'Your request is processing',
-        onBeforeOpen: () => {
+        onBeforeOpen: function()  {
           Swal.showLoading();
         },
         showConfirmButton: false,
@@ -388,7 +405,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     // Show loading modal
     Swal({
       title: 'Please wait',
-      onBeforeOpen: () => {
+      onBeforeOpen: function()  {
         Swal.showLoading();
       },
       showConfirmButton: false,
@@ -415,6 +432,9 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         var totalPages = $scope.trackingResult.totalPages;
         $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
         $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
+        setTimeout(function() {
+          initFancyBox();
+        });  
         $('.sec-request-list').show();
       }
       // switch (trackingResult.code) {
@@ -658,18 +678,31 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     }
   })
 
-  function resetForm(targetForm = null) {
+  function resetForm(targetForm) {
     if (_.isEmpty(targetForm)) {
       // Reset all forms
       const forms = $('#update-modal').find('form');
-      Array.of(forms).forEach(function (form) {
-        form.find('input:text, select, textarea').val('');
-        form.find('input:text, select, textarea').each(function (index, inputElem) {
+      // Array.of(forms).forEach(function (form) {
+      //   form.find('input:text, select, textarea').val('');
+      //   form.find('input:text, select, textarea').each(function (index, inputElem) {
+      //     $(inputElem).removeClass('is-invalid');
+      //   })
+      //   form.find('input:radio, input:checkbox').prop('checked', false);
+      //   form.find('select').val('').trigger("change");
+      //   form.find('label').each(function (index, labelItem) {
+      //     $(labelItem).removeClass('label-invalid');
+      //   })
+      // });
+
+      _.forEach(forms, function(form) {
+        var targetForm = $(form);
+        targetForm.find('input:text, select, textarea').val('');
+        targetForm.find('input:text, select, textarea').each(function (index, inputElem) {
           $(inputElem).removeClass('is-invalid');
         })
-        form.find('input:radio, input:checkbox').prop('checked', false);
-        form.find('select').val('').trigger("change");
-        form.find('label').each(function (index, labelItem) {
+        targetForm.find('input:radio, input:checkbox').prop('checked', false);
+        targetForm.find('select').val('').trigger("change");
+        targetForm.find('label').each(function (index, labelItem) {
           $(labelItem).removeClass('label-invalid');
         })
       });
@@ -678,12 +711,18 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         tinymce.activeEditor.setContent('');
       }
 
-      Object.keys(formObjs).forEach((key) => {
+      // Object.keys(formObjs).forEach((key) => {
+      //   if (formObjs[key].currentForm !== undefined) {
+      //     formObjs[key].reset();
+      //     formObjs[key].resetForm();
+      //   }
+      // })
+      _.mapKeys(formObjs, function(value, key) {
         if (formObjs[key].currentForm !== undefined) {
           formObjs[key].reset();
           formObjs[key].resetForm();
         }
-      })
+      });
     } else {
       var formKey = targetForm.attr('mode') || 'token';
       targetForm.find('input:text, select, textarea').val('');
@@ -712,8 +751,8 @@ ucsTrackingAppModule.config(['$compileProvider', function ($compileProvider) {
 // });
 
 function generateItemsOfPaginationLeft(currentPage) {
-  let items = [];
-  for (let i = currentPage - 3; i < currentPage; i++) {
+  var items = [];
+  for (var i = currentPage - 3; i < currentPage; i++) {
     if (i > 0) {
       items.push(i);
     }
@@ -722,8 +761,8 @@ function generateItemsOfPaginationLeft(currentPage) {
 }
 
 function generateItemsOfPaginationRight(currentPage, lastPage) {
-  let items = [];
-  for (let i = currentPage + 1; i <= lastPage; i++) {
+  var items = [];
+  for (var i = currentPage + 1; i <= lastPage; i++) {
     items.push(i);
     if (i >= currentPage + 3) {
       break;
@@ -736,7 +775,6 @@ function generateItemsOfPaginationRight(currentPage, lastPage) {
 function initModalFormValidation() {
   $('#update-modal').find('form').each(function (index, targetFormElem) {
     var _targetFormElem = $(targetFormElem);
-    console.log(_targetFormElem);
     var identifier = _targetFormElem.attr('mode') || 'token';
     var targetForm = _.get(forms, identifier);
     var formRules = _.get(targetForm, 'rules');

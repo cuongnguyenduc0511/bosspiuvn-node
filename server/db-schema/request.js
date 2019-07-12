@@ -134,6 +134,7 @@ const viewInfoSchema = {
   playedBy: 1,
   requester: 1,
   isActivated: 1,
+  publishedVideoUrl: 1,
   status: {
     value: '$status.statusValue',
     label: '$status.statusLabel'

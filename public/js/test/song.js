@@ -28,7 +28,7 @@ function getSongs() {
 
 var songPageAppModule = angular.module('songApp', []);
 
-songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
+songPageAppModule.controller('songCtrl', function($scope, $http, $q, $timeout) {
   $scope.isCarouselInit = false;
   $('.owl-carousel').on('initialized.owl.carousel', function (event) {
     setTimeout(function () {
@@ -36,26 +36,31 @@ songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
       var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
       $scope.isCarouselInit = true;
       $scope.songList = currentSeriesObj.items;
+      $scope.beforeTargetSeries = currentSeriesObj.categoryId;
       $scope.$digest();
     })
   });
 
-  $q.when(getSongs()).then(response => {
+  $q.when(getSongs()).then(function(response) {
     $scope.series = response.data;
-  }).catch(error => {
-    const { response } = error;
-    console.log(response || error);
-  }).then(() => {
+  }).catch(function(error) {
+    console.log(error.response || error);
+  }).then(function() {
     initializeCarousel();
   });
 
   $('.owl-carousel').on('changed.owl.carousel', function (event) {
     if ($scope.isCarouselInit) {
-      abortLoadingImages().then(function() {
+      setTimeout(function() {
         var currentSeries = $('.owl-item.active.center').find('.series-img').attr('series');
-        var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
-        $scope.songList = currentSeriesObj.items;  
-        $scope.$digest();
+        if(currentSeries !== $scope.beforeTargetSeries) {
+          abortLoadingImages().then(function() {
+            var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
+            $scope.songList = currentSeriesObj.items; 
+            $scope.beforeTargetSeries = currentSeriesObj.categoryId;
+            $scope.$digest();
+          })
+        }
       })
     }
   });
@@ -67,7 +72,7 @@ songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
   }
 
   function abortLoadingImages() {
-    const loadingThumbs = $('img.song-thumbnail');
+    var loadingThumbs = $('img.song-thumbnail');
     return Promise.resolve(loadingThumbs.each(function() {
       $(this).attr("src", "");
     }))
@@ -79,8 +84,8 @@ songPageAppModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
   }
 
   function moveCarousel(direction) {
-    const moveEvents = `${direction}.owl.carousel`;
-    $timeout(() => {
+    var moveEvents = direction + '.owl.carousel';
+    $timeout(function()  {
       songCarousel.trigger(moveEvents);
     }, 1);
   }

@@ -13,9 +13,9 @@ body {
 
               #search-form {
                   label {
-                      font-family: 'XoloniumBold'; 
+                    //   font-family: 'XoloniumBold'; 
                       font-weight: normal; 
-                      font-style: italic; 
+                    //   font-style: italic; 
                       color: #eff7ef;
                       &.active {
                         color: yellow;
@@ -76,6 +76,7 @@ body {
                         .title {
                             font-size: 20px;
                             color: yellow;
+                            font-family: 'XoloniumRegular'
                         }
                         .field {
                             padding: 10px 0;
@@ -94,6 +95,7 @@ body {
                             }
                             .status-badge {
                                 font-size: inherit;
+                                margin-left: 5px;
                                 padding: 10px;
                             }
                             .field-value {
@@ -225,9 +227,9 @@ body {
           color: #dc3545;
         }
         label {
-            font-family: 'XoloniumBold'; 
+            // font-family: 'XoloniumBold'; 
             font-weight: normal; 
-            font-style: italic; 
+            // font-style: italic; 
             color: #eff7ef;
             &.active {
               color: yellow;
@@ -238,8 +240,9 @@ body {
             }
         }
         .modal-content {
+            background: #121212;
             background: linear-gradient(#121212 0%, #303030 100%);
-            box-shadow: 0px 0px 0px 2px #EEEEEE;
+                  box-shadow: 0px 0px 0px 2px #EEEEEE;
             .modal-header {
                 h5 {
                     color: yellow;

@@ -12,7 +12,7 @@ body {
 }
 
 * {
-  font-family: "XoloniumRegular";
+  font-family: "Noto Sans KR";
 }
 
 .header-1 {
@@ -3339,6 +3339,7 @@ body {
 }
 .page-template-home .sec-team-members .team-member-wrapper .team-member-item h5 {
   color: yellow;
+  font-family: "XoloniumBold";
 }
 .page-template-home .sec-team-members .team-member-wrapper .team-member-item p {
   padding: 0 10px;
@@ -3388,10 +3389,6 @@ body .sec-register #register-header {
   margin-top: 20px;
   pointer-events: none;
 }
-body .sec-register h2 {
-  font-style: italic;
-  text-align: center;
-}
 body .sec-register .register-wrapper {
   padding: 40px 20px 20px;
   position: relative;
@@ -3413,9 +3410,7 @@ body .sec-register .bss-form #requester-note {
   max-height: 600px;
 }
 body .sec-register .bss-form label {
-  font-family: "XoloniumBold";
   font-weight: normal;
-  font-style: italic;
   color: #eff7ef;
 }
 body .sec-register .bss-form label.active {
@@ -3439,16 +3434,12 @@ body .sec-register .bss-form .form-control:focus {
 body .sec-register .bss-form .submit {
   background-color: yellow;
   color: black;
-  font-family: "XoloniumRegular";
-  font-weight: 200;
 }
 body .sec-register .bss-form .submit:hover {
   background-color: black;
   color: yellow;
 }
 body .sec-register .bss-form .reset {
-  font-family: "XoloniumRegular";
-  font-weight: 200;
   background-color: red;
   color: white;
 }
@@ -3459,8 +3450,6 @@ body .sec-register .bss-form .reset:hover {
 body .submit-button {
   background-color: yellow;
   color: black;
-  font-family: "XoloniumRegular";
-  font-weight: 200;
 }
 body .submit-button:hover {
   background-color: black;
@@ -3475,6 +3464,7 @@ body .option-group {
   padding-left: 5px;
 }
 body #preview-modal .modal-content {
+  background: #121212;
   background: linear-gradient(#121212 0%, #303030 100%);
   box-shadow: 0px 0px 0px 2px #EEEEEE;
 }
@@ -3549,9 +3539,7 @@ body .page-template-ucs-tracking .sec-ucs-search .search-panel {
   box-shadow: 0px 0px 0px 2px #FFD500;
 }
 body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form label {
-  font-family: "XoloniumBold";
   font-weight: normal;
-  font-style: italic;
   color: #eff7ef;
 }
 body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form label.active {
@@ -3614,6 +3602,7 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .title {
   font-size: 20px;
   color: yellow;
+  font-family: "XoloniumRegular";
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field {
   padding: 10px 0;
@@ -3633,6 +3622,7 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field .status-badge {
   font-size: inherit;
+  margin-left: 5px;
   padding: 10px;
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details .field .field-value {
@@ -3743,9 +3733,7 @@ body #update-modal .remind-note {
   color: #dc3545;
 }
 body #update-modal label {
-  font-family: "XoloniumBold";
   font-weight: normal;
-  font-style: italic;
   color: #eff7ef;
 }
 body #update-modal label.active {
@@ -3756,6 +3744,7 @@ body #update-modal label.label-invalid {
   color: #dc3545;
 }
 body #update-modal .modal-content {
+  background: #121212;
   background: linear-gradient(#121212 0%, #303030 100%);
   box-shadow: 0px 0px 0px 2px #EEEEEE;
 }
@@ -4027,6 +4016,9 @@ body #update-modal .btn-submit i {
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
     margin-bottom: 40px;
+  }
+  body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item.no-menu-options .details {
+    margin-bottom: 0;
   }
   body .page-template-faq-rules .sec-remind div[class*=col-] {
     margin-bottom: 20px;

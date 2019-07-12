@@ -1,7 +1,7 @@
 <section ng-if="!isError" class="sec-request-list">
   <div class="request-list-wrapper container-fluid">
     <div class="row">
-      <div ng-cloak class="col-12 request-item" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
+      <div ng-cloak class="col-12 request-item {[{ requestItem.status.value === 'upload-pending' ? 'no-menu-options' : '' }]}" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
         <div class="col-auto thumbnail-wrapper">
           <img class="thumbnail" ng-src="{[{ requestItem.song.thumbnailUrl || '//:0' }]}">
         </div>
@@ -38,7 +38,7 @@
         <div class="stepball-xl d-none d-lg-block">
           <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
         </div>
-        <button ng-if="requestItem.status.value === 'activation-pending'" type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary btn-resend"
+        <button ng-if="requestItem.status.value === 'activation-pending'" type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary menu-options"
           ng-click="openModal($event)" mode="resend">
           <i class="fas fa-envelope"></i> Resend Activation Email</button>
         <div ng-if="requestItem.status.value !== 'upload-pending' && requestItem.status.value !== 'completed' && requestItem.status.value !== 'activation-pending'"
@@ -52,7 +52,8 @@
             <span class="d-none d-md-block d-lg-block d-xl-block">Delete</span>
           </button>
         </div>
-
+        <a ng-if="requestItem.status.value === 'completed'" data-fancybox href="{[{ requestItem.publishedVideoUrl }]}" class="btn btn-success menu-options">
+          <i class="fab fa-youtube"></i> View UCS Video</a>
       </div>
     </div>
   </div>
