@@ -53,6 +53,23 @@
     }
     .sec-faq {
         padding: 20px;
+        #faq-accordion {
+            .card {
+                .card-header {
+                    background: rgb(2,0,36);
+                    background: -moz-linear-gradient(11deg, rgba(2,0,36,1) 0%, rgba(128,36,23,1) 66%, rgba(113,20,6,1) 100%);
+                    background: -webkit-linear-gradient(11deg, rgba(2,0,36,1) 0%, rgba(128,36,23,1) 66%, rgba(113,20,6,1) 100%);
+                    background: linear-gradient(11deg, rgba(2,0,36,1) 0%, rgba(128,36,23,1) 66%, rgba(113,20,6,1) 100%);
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#020024",endColorstr="#711406",GradientType=1);
+                }
+                .btn-link {
+                    color: yellow;
+                    &:hover {
+                        color: #e6e01f;
+                    }
+                }
+            }
+        }
     }
     .sec-note {
         color: white;

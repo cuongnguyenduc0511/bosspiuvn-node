@@ -59,6 +59,10 @@ songPageAppModule.controller('songCtrl', function($scope, $http, $q, $timeout) {
             $scope.songList = currentSeriesObj.items; 
             $scope.beforeTargetSeries = currentSeriesObj.categoryId;
             $scope.$digest();
+            $('.sec-song-list-wrapper').hide();
+            setTimeout(function() {
+              $('.sec-song-list-wrapper').show();
+            }, 1000);
           })
         }
       })

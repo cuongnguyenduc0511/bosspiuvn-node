@@ -41,12 +41,12 @@ body {
       position: relative;
     }
     #register-form {
-      background: rgb(15,15,15);
-      background: -moz-linear-gradient(90deg, rgba(15,15,15,1) 0%, rgba(27,27,31,1) 33%, rgba(28,30,32,1) 65%, rgba(36,41,43,1) 100%);
-      background: -webkit-linear-gradient(90deg, rgba(15,15,15,1) 0%, rgba(27,27,31,1) 33%, rgba(28,30,32,1) 65%, rgba(36,41,43,1) 100%);
-      background: linear-gradient(90deg, rgba(15,15,15,1) 0%, rgba(27,27,31,1) 33%, rgba(28,30,32,1) 65%, rgba(36,41,43,1) 100%);
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0f0f0f",endColorstr="#24292b",GradientType=1);
-
+      background: rgb(18,18,18);
+      background: -moz-linear-gradient(90deg, rgba(18,18,18,1) 0%, rgba(48,48,48,1) 100%);
+      background: -webkit-linear-gradient(90deg, rgba(18,18,18,1) 0%, rgba(48,48,48,1) 100%);
+      background: linear-gradient(90deg, rgba(18,18,18,1) 0%, rgba(48,48,48,1) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
+      
       box-shadow: 0px 0px 0px 2px #EEEEEE;
       border-radius: .28571429rem;
     }

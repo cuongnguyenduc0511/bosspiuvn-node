@@ -12,6 +12,17 @@
       }
     }
   }  
+  #scrollToTop {
+   &:hover {
+    background: rgb(18,18,18);
+    background: -moz-linear-gradient(90deg, rgba(18,18,18,1) 0%, rgba(48,48,48,1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(18,18,18,1) 0%, rgba(48,48,48,1) 100%);
+    background: linear-gradient(90deg, rgba(18,18,18,1) 0%, rgba(48,48,48,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
+    border: 1px solid yellow;
+    color: yellow;
+   }
+  }
 }
 
 // @media only screen and (max-width: 1200px) {

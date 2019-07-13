@@ -51,6 +51,24 @@ body {
   margin-bottom: 40px;
 }
 
+#scrollToTop {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  border: 1px solid white;
+  background-color: transparent;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  padding: 15px 20px;
+  border-radius: 50%;
+}
+#scrollToTop i {
+  font-size: 25px;
+}
+
 @font-face {
   font-family: "XoloniumBold";
   src: url("../css/font/Xolonium-Bold.ttf") format("truetype");
@@ -3155,6 +3173,7 @@ body {
 .footer .social-network a {
   color: white;
   margin-right: 50px;
+  text-decoration: none;
 }
 .footer .social-network a #facebook:hover {
   color: #3c5a99;
@@ -3387,11 +3406,11 @@ body .sec-register .register-wrapper {
   position: relative;
 }
 body .sec-register #register-form {
-  background: #0f0f0f;
-  background: -moz-linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
-  background: -webkit-linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
-  background: linear-gradient(90deg, #0f0f0f 0%, #1b1b1f 33%, #1c1e20 65%, #24292b 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0f0f0f",endColorstr="#24292b",GradientType=1);
+  background: #121212;
+  background: -moz-linear-gradient(90deg, #121212 0%, #303030 100%);
+  background: -webkit-linear-gradient(90deg, #121212 0%, #303030 100%);
+  background: linear-gradient(90deg, #121212 0%, #303030 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
   box-shadow: 0px 0px 0px 2px #EEEEEE;
   border-radius: 0.28571429rem;
 }
@@ -3528,7 +3547,11 @@ body .page-template-ucs-tracking .sec-ucs-search .search-panel {
   border-radius: 0.28571429rem;
   width: 100%;
   display: inline-block;
-  background: linear-gradient(#121212 0%, #303030 100%);
+  background: #121212;
+  background: -moz-linear-gradient(180deg, #121212 0%, #303030 100%);
+  background: -webkit-linear-gradient(180deg, #121212 0%, #303030 100%);
+  background: linear-gradient(180deg, #121212 0%, #303030 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
   box-shadow: 0px 0px 0px 2px #FFD500;
 }
 body .page-template-ucs-tracking .sec-ucs-search .search-panel #search-form label {
@@ -3571,7 +3594,11 @@ body .page-template-ucs-tracking .sec-request-list {
   animation: fadeIn 0.5s;
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item {
-  background: linear-gradient(#121212 0%, #303030 100%);
+  background: #121212;
+  background: -moz-linear-gradient(101deg, #121212 0%, #303030 100%);
+  background: -webkit-linear-gradient(101deg, #121212 0%, #303030 100%);
+  background: linear-gradient(101deg, #121212 0%, #303030 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
   box-shadow: 0px 0px 0px 2px #EEEEEE;
   border-radius: 0.28571429rem;
   padding: 10px;
@@ -3738,7 +3765,10 @@ body #update-modal label.label-invalid {
 }
 body #update-modal .modal-content {
   background: #121212;
-  background: linear-gradient(#121212 0%, #303030 100%);
+  background: -moz-linear-gradient(180deg, #121212 0%, #303030 100%);
+  background: -webkit-linear-gradient(180deg, #121212 0%, #303030 100%);
+  background: linear-gradient(180deg, #121212 0%, #303030 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
   box-shadow: 0px 0px 0px 2px #EEEEEE;
 }
 body #update-modal .modal-content .modal-header h5 {
@@ -3886,6 +3916,19 @@ body #update-modal .btn-submit i {
 .page-template-faq-rules .sec-faq {
   padding: 20px;
 }
+.page-template-faq-rules .sec-faq #faq-accordion .card .card-header {
+  background: #020024;
+  background: -moz-linear-gradient(11deg, #020024 0%, #802417 66%, #711406 100%);
+  background: -webkit-linear-gradient(11deg, #020024 0%, #802417 66%, #711406 100%);
+  background: linear-gradient(11deg, #020024 0%, #802417 66%, #711406 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#020024",endColorstr="#711406",GradientType=1);
+}
+.page-template-faq-rules .sec-faq #faq-accordion .card .btn-link {
+  color: yellow;
+}
+.page-template-faq-rules .sec-faq #faq-accordion .card .btn-link:hover {
+  color: #e6e01f;
+}
 .page-template-faq-rules .sec-note {
   color: white;
 }
@@ -3900,6 +3943,16 @@ body #update-modal .btn-submit i {
   .bss-navbar .navbar-nav .nav-item .nav-link:hover {
     transition: all 0.3s ease;
     transform: scale(1.1);
+  }
+
+  #scrollToTop:hover {
+    background: #121212;
+    background: -moz-linear-gradient(90deg, #121212 0%, #303030 100%);
+    background: -webkit-linear-gradient(90deg, #121212 0%, #303030 100%);
+    background: linear-gradient(90deg, #121212 0%, #303030 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#121212",endColorstr="#303030",GradientType=1);
+    border: 1px solid yellow;
+    color: yellow;
   }
 }
 @media only screen and (max-width: 1024px) {
@@ -4049,6 +4102,10 @@ body #update-modal .btn-submit i {
   body .sec-register .register-wrapper {
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  #scrollToTop {
+    right: 10px;
   }
 }
 @media only screen and (max-width: 480px) and (orientation: portrait) {
