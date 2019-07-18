@@ -10,6 +10,7 @@
             {[{ requestItem.song.name }]} {[{ requestItem.stepchartInfo.stepchartType.value === 'co-op' ? requestItem.stepchartInfo.stepchartType.shortLabel
             + ' ' + requestItem.stepchartInfo.stepchartLevel : requestItem.stepchartInfo.stepchartType.shortLabel + requestItem.stepchartInfo.stepchartLevel
             }]} | UCS by {[{ requestItem.stepmaker }]}
+            <a ng-if="requestItem.status.value === 'activation-pending'" tabindex="0" class="detail-popover popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="Your request has not been activated" data-content="Please check your email inbox (spam) for activation email, we won't play your request until your request is activated (once it's activated successfully, request status will be changed to REQUEST PENDING"><i class="fas fa-exclamation-triangle"></i></a>
           </h4>
           <div class="field">
             <span class="field-name">Requester: </span>
@@ -24,7 +25,7 @@
             <span class="field-value">{[{ requestItem.contentName ? requestItem.contentName : 'No content name' }]}
             </span>
           </div>
-          <div class="field step-difficulty d-lg-none">
+          <div class="field step-difficulty d-xl-none">
             <span class="field-name">Difficulty: </span>
             <div class="stepball-mobile">
               <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
@@ -35,24 +36,24 @@
             <span class="badge status-badge {[{ requestItem.status.clientBadgeStyle }]}">{[{ requestItem.status.label }]}</span>
           </div>
         </div>
-        <div class="stepball-xl d-none d-lg-block">
+        <div class="stepball-xl d-none d-xl-block">
           <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
         </div>
-        <button ng-if="requestItem.status.value === 'activation-pending'" type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary menu-options"
+        <button ng-if="requestItem.status.value === 'activation-pending'" type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary btn-option"
           ng-click="openModal($event)" mode="resend">
           <i class="fas fa-envelope"></i> Resend Activation Email</button>
         <div ng-if="requestItem.status.value !== 'upload-pending' && requestItem.status.value !== 'completed' && requestItem.status.value !== 'activation-pending'"
           class="menu-options">
           <button type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary" ng-click="openModal($event)" mode="update">
             <i class="fas fa-edit"></i>
-            <span class="d-none d-md-block d-lg-block d-xl-block">Update</span>
+            <span class="d-none d-md-block">Update</span>
           </button>
           <button type="button" request="{[{ requestItem.requestId }]}" class="btn btn-danger" ng-click="openModal($event)" mode="delete">
             <i class="fas fa-trash-alt"></i>
-            <span class="d-none d-md-block d-lg-block d-xl-block">Delete</span>
+            <span class="d-none d-md-block">Delete</span>
           </button>
         </div>
-        <a ng-if="requestItem.status.value === 'completed'" data-fancybox href="{[{ requestItem.publishedVideoUrl }]}" class="btn btn-success menu-options">
+        <a ng-if="requestItem.status.value === 'completed'" data-fancybox href="{[{ requestItem.publishedVideoUrl }]}" class="btn btn-success btn-option">
           <i class="fab fa-youtube"></i> View UCS Video</a>
       </div>
     </div>

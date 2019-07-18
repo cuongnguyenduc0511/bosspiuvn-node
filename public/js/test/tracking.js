@@ -26,6 +26,12 @@ function initFancyBox() {
   });
 }
 
+function initPopover() {
+  $('.popover-dismiss').popover({
+    trigger: 'focus'
+  });
+}
+
 function getCommonData() {
   return axios.get(apiUrl + '/commons', {
     timeout: REQUEST_TIME_OUT
@@ -123,6 +129,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       $scope.$digest();
       setTimeout(function() {
         initFancyBox();
+        initPopover();
       });
       $('.sec-request-list').show();
     }).catch(function (error) {
@@ -434,6 +441,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
         setTimeout(function() {
           initFancyBox();
+          initPopover();
         });  
         $('.sec-request-list').show();
       }

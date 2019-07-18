@@ -20,7 +20,7 @@
         }
   
         .nav-link {
-          color: white;
+          color: #818181;
           font-size: 16px;
           font-family: 'XoloniumRegular';
           font-weight: bolder;
@@ -45,3 +45,98 @@
     }
   }
 }
+
+.navbar-overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 3000;
+  top: 0;
+  left: 0;
+  background-color: rgb(0,0,0);
+  // background-color: rgba(0,0,0, 0.9);
+  overflow-x: hidden;
+  // transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+
+  $animation_duration: 0.5s;
+  &.open {
+    width: 100%;
+    -webkit-animation: fadeIn $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadeIn $animation_duration; /* Firefox < 16 */
+    -ms-animation: fadeIn $animation_duration; /* Internet Explorer */
+    -o-animation: fadeIn $animation_duration; /* Opera < 12.1 */
+    animation: fadeIn $animation_duration;     
+  }
+
+  &.close {
+    width: 100%;
+    -webkit-animation: fadeOut $animation_duration; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadeOut $animation_duration; /* Firefox < 16 */
+    -ms-animation: fadeOut $animation_duration; /* Internet Explorer */
+    -o-animation: fadeOut $animation_duration; /* Opera < 12.1 */
+    animation: fadeOut $animation_duration;     
+  }
+
+  .close-btn {
+    font-size: 15vw;
+    align-self: flex-end;
+    margin-right: 17px;
+    margin-left: auto;
+    margin-top: -20px;
+    text-decoration: none;
+    color: yellow;
+  }
+  &-content {
+    width: 100%;
+    text-align: center;
+    align-self: center;
+    margin: auto 0;
+    .navbar-mobile-nav {
+      list-style: none;
+      padding: 0;
+      .nav-item {
+        &:hover, &:focus {
+          background: yellow;
+          .nav-link {
+            color: black;
+            &.active {
+              color: black;
+            }
+          }
+        }
+        .nav-link {
+          padding: 8px;
+          text-decoration: none;
+          font-size: 5vw;
+          color: #818181;
+          display: block;
+          transition: 0.3s;
+          margin-bottom: 18px;
+          font-family: 'XoloniumRegular';
+          font-weight: bolder;
+          text-transform: uppercase;
+
+          &.active {
+            color: yellow;
+          }
+          i {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// @media screen and (max-height: 450px) {
+//   .navbar-overlay {
+//     a {font-size: 20px}
+//     .closebtn {
+//       font-size: 40px;
+//       top: 15px;
+//       right: 35px;
+//       }
+//   } 
+// }

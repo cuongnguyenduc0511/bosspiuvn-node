@@ -1,5 +1,8 @@
 .page-template-faq-rules {
     .sec-remind {
+        h1 {
+          margin: 20px 0;
+        }
         padding: 10px;
         .remind-item {
             $animation_duration: 1s;
@@ -74,7 +77,23 @@
     .sec-note {
         color: white;
         ul {
-            padding: 2em;
+            padding: 2em 2em 0em;
+            margin-bottom: 1em;
+            list-style: none;
+            li {
+              &::before {
+                content: '';
+                display: inline-block;
+                height: 10px;          
+                width: 10px;            
+                background-size: 10px;          
+                background-image: url("../images/checkmark.png");            
+                background-repeat: no-repeat;
+                background-color: transparent;
+                margin-right: 5px;  
+              }  
+              margin-bottom: 10px;
+            }
         }
     }
 }

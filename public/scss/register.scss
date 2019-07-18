@@ -23,6 +23,16 @@
 }
 
 body {
+  .detail-popover {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 1.2em;
+    color: yellow;
+    &:hover {
+      color: rgb(185, 185, 38);
+    }  
+  }
+
   .sec-register {
     .required {
       color: #dc3545;

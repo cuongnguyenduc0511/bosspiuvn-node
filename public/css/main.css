@@ -3136,7 +3136,7 @@ body {
   margin-right: 0;
 }
 .bss-navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
-  color: white;
+  color: #818181;
   font-size: 16px;
   font-family: "XoloniumRegular";
   font-weight: bolder;
@@ -3151,6 +3151,89 @@ body {
 }
 .bss-navbar .navbar-collapse .navbar-nav .nav-item .nav-link i {
   margin-right: 5px;
+}
+
+.navbar-overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 3000;
+  top: 0;
+  left: 0;
+  background-color: black;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.navbar-overlay.open {
+  width: 100%;
+  -webkit-animation: fadeIn 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeIn 0.5s;
+  /* Firefox < 16 */
+  -ms-animation: fadeIn 0.5s;
+  /* Internet Explorer */
+  -o-animation: fadeIn 0.5s;
+  /* Opera < 12.1 */
+  animation: fadeIn 0.5s;
+}
+.navbar-overlay.close {
+  width: 100%;
+  -webkit-animation: fadeOut 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeOut 0.5s;
+  /* Firefox < 16 */
+  -ms-animation: fadeOut 0.5s;
+  /* Internet Explorer */
+  -o-animation: fadeOut 0.5s;
+  /* Opera < 12.1 */
+  animation: fadeOut 0.5s;
+}
+.navbar-overlay .close-btn {
+  font-size: 15vw;
+  align-self: flex-end;
+  margin-right: 17px;
+  margin-left: auto;
+  margin-top: -20px;
+  text-decoration: none;
+  color: yellow;
+}
+.navbar-overlay-content {
+  width: 100%;
+  text-align: center;
+  align-self: center;
+  margin: auto 0;
+}
+.navbar-overlay-content .navbar-mobile-nav {
+  list-style: none;
+  padding: 0;
+}
+.navbar-overlay-content .navbar-mobile-nav .nav-item:hover, .navbar-overlay-content .navbar-mobile-nav .nav-item:focus {
+  background: yellow;
+}
+.navbar-overlay-content .navbar-mobile-nav .nav-item:hover .nav-link, .navbar-overlay-content .navbar-mobile-nav .nav-item:focus .nav-link {
+  color: black;
+}
+.navbar-overlay-content .navbar-mobile-nav .nav-item:hover .nav-link.active, .navbar-overlay-content .navbar-mobile-nav .nav-item:focus .nav-link.active {
+  color: black;
+}
+.navbar-overlay-content .navbar-mobile-nav .nav-item .nav-link {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 5vw;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  margin-bottom: 18px;
+  font-family: "XoloniumRegular";
+  font-weight: bolder;
+  text-transform: uppercase;
+}
+.navbar-overlay-content .navbar-mobile-nav .nav-item .nav-link.active {
+  color: yellow;
+}
+.navbar-overlay-content .navbar-mobile-nav .nav-item .nav-link i {
+  margin-right: 10px;
 }
 
 .footer {
@@ -3393,6 +3476,15 @@ body {
   color: yellow;
 }
 
+body .detail-popover {
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 1.2em;
+  color: yellow;
+}
+body .detail-popover:hover {
+  color: #b9b926;
+}
 body .sec-register .required {
   color: #dc3545;
 }
@@ -3605,6 +3697,15 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
   display: flex;
   margin-bottom: 20px;
 }
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .detail-popover {
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 1.2em;
+  color: yellow;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .detail-popover:hover {
+  color: #b9b926;
+}
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .thumbnail-wrapper {
   padding: 0;
 }
@@ -3612,9 +3713,11 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
   display: block;
   margin-left: auto;
   margin-right: auto;
-  max-width: 100% !important;
-  width: auto !important;
-  max-height: 250px !important;
+  max-width: 100%;
+  width: auto;
+  max-height: 250px;
+  border: 2px solid yellow;
+  border-radius: 10px;
 }
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .details {
   color: white;
@@ -3656,7 +3759,7 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
 body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .stepball-xl img {
   max-height: 130px;
 }
-body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .btn-resend {
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .btn-option {
   position: absolute;
   right: 10px;
   bottom: 10px;
@@ -3665,6 +3768,12 @@ body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .reques
   position: absolute;
   right: 10px;
   bottom: 10px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .menu-options button {
+  margin-right: 5px;
+}
+body .page-template-ucs-tracking .sec-request-list .request-list-wrapper .request-item .menu-options button:last-child {
+  margin-right: 0;
 }
 body .page-template-ucs-tracking .sec-request-list .bss-pagination {
   flex-wrap: wrap;
@@ -3682,7 +3791,6 @@ body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item:ho
   transition: all 0.5s ease;
 }
 body .page-template-ucs-tracking .sec-request-list .bss-pagination .page-item.active .page-link {
-  border-radius: 50%;
   background-color: yellow;
   color: black;
 }
@@ -3780,6 +3888,9 @@ body #update-modal .modal-content .modal-body {
 body #update-modal .btn-submit i {
   margin-right: 5px;
 }
+body .popover {
+  z-index: 50;
+}
 
 .page-template-song .sec-series-carousel-wrapper {
   padding: 30px 0;
@@ -3869,6 +3980,9 @@ body #update-modal .btn-submit i {
 .page-template-faq-rules .sec-remind {
   padding: 10px;
 }
+.page-template-faq-rules .sec-remind h1 {
+  margin: 20px 0;
+}
 .page-template-faq-rules .sec-remind .remind-item {
   -webkit-animation: fadeIn 1s;
   /* Safari, Chrome and Opera > 12.1 */
@@ -3933,7 +4047,23 @@ body #update-modal .btn-submit i {
   color: white;
 }
 .page-template-faq-rules .sec-note ul {
-  padding: 2em;
+  padding: 2em 2em 0em;
+  margin-bottom: 1em;
+  list-style: none;
+}
+.page-template-faq-rules .sec-note ul li {
+  margin-bottom: 10px;
+}
+.page-template-faq-rules .sec-note ul li::before {
+  content: "";
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  background-size: 10px;
+  background-image: url("../images/checkmark.png");
+  background-repeat: no-repeat;
+  background-color: transparent;
+  margin-right: 5px;
 }
 
 @media only screen and (min-width: 1200px) {

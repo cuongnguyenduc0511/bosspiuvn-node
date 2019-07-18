@@ -54,6 +54,10 @@ registerAppModule.controller('registerUcsCtrl', function ($scope, $http, $q) {
     //   ellipsis.calc();
     //   ellipsis.set();
     // })
+    $('.popover-dismiss').popover({
+      trigger: 'focus'
+    })
+
     initSongSelectField();
     $('#register-form').find('.form-control').each(function (index, elem) {
       $(elem).focus(function () {
