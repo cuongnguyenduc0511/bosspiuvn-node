@@ -130,6 +130,14 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // const csrfProtection = csrf();
 // app.use(csrfProtection);
 
+//Maintenance mode
+// app.use('*', function(req, res, next) {
+//     return res.render('pages/maintenance', {
+//         title: `Maintenance ${TITLE_FORMAT}`,
+//         layout: 'master_layout/layout-maintenance',
+//     });    
+// })
+
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 
@@ -151,9 +159,8 @@ app.use(function (err, req, res, next) {
     // // render the error page
     if (err.status === 404) {
         res.status(err.status).render('pages/not-found', {
-            title: `Page Not Found 404 | ${TITLE_FORMAT}`,
+            title: `Page Not Found 404 ${TITLE_FORMAT}`,
             layout: 'master_layout/layout-ver2',
-            root: root,
         });
     } else if (err.status === 403 && err.code === 'EBADCSRFTOKEN') {
         res.status(err.status).send({

@@ -4025,6 +4025,38 @@ body .popover {
   color: yellow;
 }
 
+.page-template-maintenance {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+.page-template-maintenance .sec-page-content {
+  margin-top: 80px;
+  width: 100%;
+  align-self: center;
+}
+.page-template-maintenance .sec-page-content .maintenance {
+  color: white;
+  padding: 20px 10px;
+}
+.page-template-maintenance .sec-page-content .maintenance .logo {
+  margin-bottom: 30px;
+}
+.page-template-maintenance .sec-page-content .maintenance .logo img {
+  max-width: 200px;
+}
+.page-template-maintenance .sec-page-content .maintenance .prompt a {
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.page-template-maintenance .sec-page-content .maintenance .prompt a:hover {
+  color: yellow;
+}
+
+.page-maintenance {
+  margin-top: 0;
+}
+
 @media only screen and (min-width: 1200px) {
   .bss-navbar {
     width: 100%;
