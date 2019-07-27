@@ -16,19 +16,9 @@
             border-radius: 0.28571429rem;
             color : white;
             height: 100%;
-            &.do {
-                .header {
-                    i {
-                        color: green;  
-                    }
-                }
-            }
-            &.do-not {
-                .header {
-                    i {
-                        color: red;    
-                    }
-                }
+            .logo {
+                max-width: 200px;
+                margin-bottom: 20px;
             }
             .content {
                 padding-bottom: 20px;

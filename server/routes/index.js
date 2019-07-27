@@ -63,7 +63,7 @@ router.get('/song-list', (req, res, next) => {
 });
 
 router.get('/faq-rules', (req, res, next) => {
-  res.render('pages/faq-rules-temp', {
+  res.render('pages/faq-rules', {
     title: `Faq & Rules ${TITLE_FORMAT}`,
     layout: 'master_layout/layout-ver2',
     active: { faqRules: true }

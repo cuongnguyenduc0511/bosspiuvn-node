@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('file-system');
 const { includes } = require('lodash');
+const { TITLE_FORMAT } = require('./shared/constant');
 var UAParser = require('ua-parser-js');
 require('dotenv').config()
 
@@ -150,8 +151,8 @@ app.use(function (err, req, res, next) {
     // // render the error page
     if (err.status === 404) {
         res.status(err.status).render('pages/not-found', {
-            title: 'Page Not Found | 404',
-            layout: 'master_layout/layout2',
+            title: `Page Not Found 404 | ${TITLE_FORMAT}`,
+            layout: 'master_layout/layout-ver2',
             root: root,
         });
     } else if (err.status === 403 && err.code === 'EBADCSRFTOKEN') {

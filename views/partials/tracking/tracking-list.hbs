@@ -1,16 +1,32 @@
 <section ng-if="!isError" class="sec-request-list">
   <div class="request-list-wrapper container-fluid">
     <div class="row">
-      <div ng-cloak class="col-12 request-item {[{ requestItem.status.value === 'upload-pending' ? 'no-menu-options' : '' }]}" ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
+      <div ng-cloak
+        class="col-12 request-item {[{ requestItem.status.value === 'upload-pending' ? 'no-menu-options' : '' }]}"
+        ng-repeat="requestItem in trackingResult.items track by requestItem.requestId">
         <div class="col-auto thumbnail-wrapper">
           <img class="thumbnail" ng-src="{[{ requestItem.song.thumbnailUrl || '//:0' }]}">
         </div>
         <div class="col-auto details">
           <h4 class="title">
-            {[{ requestItem.song.name }]} {[{ requestItem.stepchartInfo.stepchartType.value === 'co-op' ? requestItem.stepchartInfo.stepchartType.shortLabel
-            + ' ' + requestItem.stepchartInfo.stepchartLevel : requestItem.stepchartInfo.stepchartType.shortLabel + requestItem.stepchartInfo.stepchartLevel
+            {[{ requestItem.song.name }]} {[{ requestItem.stepchartInfo.stepchartType.value === 'co-op' ?
+            requestItem.stepchartInfo.stepchartType.shortLabel
+            + ' ' + requestItem.stepchartInfo.stepchartLevel : requestItem.stepchartInfo.stepchartType.shortLabel +
+            requestItem.stepchartInfo.stepchartLevel
             }]} | UCS by {[{ requestItem.stepmaker }]}
-            <a ng-if="requestItem.status.value === 'activation-pending'" tabindex="0" class="detail-popover popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="Your request has not been activated" data-content="Please check your email inbox (spam) for activation email, we won't play your request until your request is activated (once it's activated successfully, request status will be changed to REQUEST PENDING"><i class="fas fa-exclamation-triangle"></i></a>
+            <a ng-if="requestItem.status.value === 'activation-pending'" tabindex="0"
+              class="detail-popover popover-dismiss" role="button" data-toggle="popover" data-trigger="focus"
+              title="Your request has not been activated"
+              data-content="Please check your email inbox (spam) for activation email, we won't play your request until your request is activated (once it's activated successfully, request status will be changed to REQUEST PENDING"><i
+              class="fas fa-exclamation-triangle"></i>
+            </a>
+            {{!-- <a ng-if="requestItem.status.value === 'activation-pending'" tabindex="0"
+              class="detail-popover popover-dismiss" role="button" data-toggle="popover" data-trigger="focus"
+              title="Your request has not been activated"
+              data-content="Please check your email inbox (spam) for activation email, we won't play your request until your request is activated (once it's activated successfully, request status will be changed to REQUEST PENDING"><i
+              class="fas fa-exclamation-triangle"></i>
+            </a> --}}
+
           </h4>
           <div class="field">
             <span class="field-name">Requester: </span>
@@ -28,38 +44,47 @@
           <div class="field step-difficulty d-xl-none">
             <span class="field-name">Difficulty: </span>
             <div class="stepball-mobile">
-              <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
+              <img
+                ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
             </div>
           </div>
           <div class="field">
             <span class="field-name">Status: </span>
-            <span class="badge status-badge {[{ requestItem.status.clientBadgeStyle }]}">{[{ requestItem.status.label }]}</span>
+            <span class="badge status-badge {[{ requestItem.status.clientBadgeStyle }]}">{[{ requestItem.status.label
+              }]}</span>
           </div>
         </div>
         <div class="stepball-xl d-none d-xl-block">
-          <img ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
+          <img
+            ng-src="/images/stepball_levels/{[{ requestItem.stepchartInfo.stepchartType.value }]}/{[{ requestItem.stepchartInfo.stepchartLevel }]}-big.png">
         </div>
-        <button ng-if="requestItem.status.value === 'activation-pending'" type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary btn-option"
-          ng-click="openModal($event)" mode="resend">
+        <button ng-if="requestItem.status.value === 'activation-pending'" type="button"
+          request="{[{ requestItem.requestId }]}" class="btn btn-primary btn-option" ng-click="openModal($event)"
+          mode="resend">
           <i class="fas fa-envelope"></i> Resend Activation Email</button>
-        <div ng-if="requestItem.status.value !== 'upload-pending' && requestItem.status.value !== 'completed' && requestItem.status.value !== 'activation-pending'"
+        <div
+          ng-if="requestItem.status.value !== 'upload-pending' && requestItem.status.value !== 'completed' && requestItem.status.value !== 'activation-pending'"
           class="menu-options">
-          <button type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary" ng-click="openModal($event)" mode="update">
+          <button type="button" request="{[{ requestItem.requestId }]}" class="btn btn-primary"
+            ng-click="openModal($event)" mode="update">
             <i class="fas fa-edit"></i>
             <span class="d-none d-md-block">Update</span>
           </button>
-          <button type="button" request="{[{ requestItem.requestId }]}" class="btn btn-danger" ng-click="openModal($event)" mode="delete">
+          <button type="button" request="{[{ requestItem.requestId }]}" class="btn btn-danger"
+            ng-click="openModal($event)" mode="delete">
             <i class="fas fa-trash-alt"></i>
             <span class="d-none d-md-block">Delete</span>
           </button>
         </div>
-        <a ng-if="requestItem.status.value === 'completed'" data-fancybox href="{[{ requestItem.publishedVideoUrl }]}" class="btn btn-success btn-option">
+        <a ng-if="requestItem.status.value === 'completed'" data-fancybox href="{[{ requestItem.publishedVideoUrl }]}"
+          class="btn btn-success btn-option">
           <i class="fab fa-youtube"></i> View UCS Video</a>
       </div>
     </div>
   </div>
 
-  <div ng-cloak ng-if="trackingResult && trackingResult.items.length > 0 && !isError" class="d-flex justify-content-center">
+  <div ng-cloak ng-if="trackingResult && trackingResult.items.length > 0 && !isError"
+    class="d-flex justify-content-center">
     <ul class="bss-pagination pagination">
       <li ng-class="trackingResult.currentPage === 1 ? 'page-item disabled' : 'page-item'">
         <span class="page-link" page="1" ng-click="changePage($event)">First</span>
@@ -68,7 +93,8 @@
         <span class="page-link" page="{[{ trackingResult.prevPage }]}" ng-click="changePage($event)">Previous</span>
       </li>
       <li class="page-item" ng-repeat="leftPaginationItem in leftPaginationItems">
-        <span class="page-link" page="{[{ leftPaginationItem }]}" ng-click="changePage($event)">{[{ leftPaginationItem }]}
+        <span class="page-link" page="{[{ leftPaginationItem }]}" ng-click="changePage($event)">{[{ leftPaginationItem
+          }]}
         </span>
       </li>
       <li class="page-item active">
@@ -77,7 +103,8 @@
         </span>
       </li>
       <li class="page-item" ng-repeat="rightPaginationItem in rightPaginationItems">
-        <span class="page-link" page="{[{ rightPaginationItem }]}" ng-click="changePage($event)">{[{ rightPaginationItem }]}</span>
+        <span class="page-link" page="{[{ rightPaginationItem }]}" ng-click="changePage($event)">{[{ rightPaginationItem
+          }]}</span>
       </li>
       <li ng-class="!trackingResult.nextPage ? 'page-item disabled' : 'page-item'">
         <span class="page-link" page="{[{ trackingResult.nextPage }]}" ng-click="changePage($event)">Next</span>

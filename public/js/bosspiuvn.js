@@ -1,18 +1,32 @@
-$(document).ready(function () {
-    $("#sidebar").mCustomScrollbar({
-        theme: "minimal"
-    });
+window.onscroll = function() {scrollFunction()};
 
-    $('#dismiss, .overlay').on('click', function () {
-        $('#sidebar').removeClass('active');
-        $('.overlay').removeClass('active');
-    });
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("scrollToTop").style.display = "block";
+  } else {
+    document.getElementById("scrollToTop").style.display = "none";
+  }
+}
 
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').addClass('active');
-        $('.overlay').addClass('active');
-        $('.collapse.in').toggleClass('in');
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-    });
+// When the user clicks on the button, scroll to the top of the document
+function goToTop() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 
-});
+// function openNav() {
+//   $('#navbar-overlay').removeClass('close').addClass('open');
+// }
+
+// function closeNav() {
+//   $('#navbar-overlay').removeClass('open').addClass('close').one('webkitAnimationEnd mozAnimationEnd oAnimationEnd msAnimationEnd animationend', 
+//     function() {
+//       var elem = $(this);
+//       elem.removeClass('close');
+//     }
+//   );
+// }
+
+// $('#navbar-collapse').click(function() {
+//   openNav();
+// })  

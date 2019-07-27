@@ -1,0 +1,21 @@
+.page-template-not-found {
+  .sec-page-content {
+    .not-found {
+      color: white;
+      padding: 20px 10px;
+      .status {
+          font-size: 25vh;
+          margin-bottom: 0;
+      }
+      .prompt {
+        a {
+          text-decoration: none;
+          transition: all 0.3s ease;
+          &:hover {
+            color: yellow;
+          }
+        }
+      }
+    }
+  }
+}

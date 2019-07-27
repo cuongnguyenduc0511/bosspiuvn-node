@@ -11,15 +11,16 @@
       </div>
     </div>
   </section>
-  <h1 class='header-1 gold'>AVAILABLE UCS SONG</h1>
   <section class="sec-series-carousel-wrapper">
+    <h1 class='header-1 gold text-center'>AVAILABLE UCS SONG</h1>
     <div class="song-carousel owl-carousel owl-theme">
       <div class="series-item col-12" ng-repeat="seriesItem in series">
         <img class="img-fluid series-img" series="{[{ seriesItem.categoryId }]}"
           ng-src="/images/series/{[{ seriesItem.categoryId }]}.png">
       </div>
     </div>
-    <div ng-if="isCarouselInit" class="navigation-carousel">
+    <h5 ng-cloak ng-if="isCarouselInit" id="tips" class="text-center">Swipe series item or click button below to change series</h5>
+    <div ng-cloak ng-if="isCarouselInit" class="navigation-carousel">
       <button class="btn btn-primary" ng-click="moveCarousel('prev')">Prev</button>
       <button class="btn btn-primary" ng-click="moveCarousel('next')">Next</button>
     </div>

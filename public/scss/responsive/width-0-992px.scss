@@ -50,5 +50,36 @@
       }
     }
   }
+
+  .navbar-overlay {
+    .close-btn {
+      font-size: 9vw;
+      align-self: flex-end;
+      margin-right: 17px;
+      margin-left: auto;
+      margin-top: -13px;
+      text-decoration: none;
+      color: yellow;
+    }
+    &-content {
+      margin-top: -12px;
+      .navbar-mobile-nav {
+        .nav-item {
+          .nav-link {
+            text-decoration: none;
+            font-size: 3vw;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+            margin-bottom: 5px;
+            font-family: "XoloniumRegular";
+            font-weight: bolder;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+  }
+
 } 
 
