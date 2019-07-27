@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "start": "npm-run-all -p start-server",
-    "start-server": "nodemon ./server/bin/www",
+    "stop": "npm-run-all -p stop-server",
+    "restart": "npm-run-all -p restart-server",
+    "start-server": "pm2 start ./server/bin/www",
+    "stop-server": "pm2 stop ./server/bin/www",
+    "restart-server": "pm2 restart ./server/bin/www",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar public/ -o public/ --watch --recursive --use-polling --polling-interval 1000"
   },
