@@ -20,13 +20,12 @@
               data-content="Please check your email inbox (spam) for activation email, we won't play your request until your request is activated (once it's activated successfully, request status will be changed to REQUEST PENDING"><i
               class="fas fa-exclamation-triangle"></i>
             </a>
-            {{!-- <a ng-if="requestItem.status.value === 'activation-pending'" tabindex="0"
+            <a ng-if="requestItem.status.value === 'offsync' || requestItem.status.value === 'unplayable' || requestItem.status.value === 'invalid' || requestItem.status.value === 'crashed'" tabindex="0"
               class="detail-popover popover-dismiss" role="button" data-toggle="popover" data-trigger="focus"
-              title="Your request has not been activated"
-              data-content="Please check your email inbox (spam) for activation email, we won't play your request until your request is activated (once it's activated successfully, request status will be changed to REQUEST PENDING"><i
+              title="Your request has error"
+              data-content="Please fix your chart and perform to update your request, your request will be terminated in 7 days if you don't update"><i
               class="fas fa-exclamation-triangle"></i>
-            </a> --}}
-
+            </a>
           </h4>
           <div class="field">
             <span class="field-name">Requester: </span>

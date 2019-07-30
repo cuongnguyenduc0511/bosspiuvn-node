@@ -422,6 +422,12 @@ var formValidObj = $("#register-form").validate({
   }
 });
 
+$('#song').on('select2:select', function (e) {
+  if (!_.isEmpty(formValidObj.submitted)) {
+    $(this).valid();
+  }
+});
+
 $('#reset').click(function () {
   resetForm();
 });
