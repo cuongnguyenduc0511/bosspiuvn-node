@@ -19,9 +19,9 @@ function initTextArea() {
 
 function initFancyBox() {
   $('[data-fancybox]').fancybox({
-    youtube : {
-        controls : 1,
-        showinfo : 1
+    youtube: {
+      controls: 1,
+      showinfo: 1
     }
   });
 }
@@ -41,7 +41,7 @@ function getCommonData() {
 function getRequestList(params) {
   var axiosInstance = null;
 
-  if(_.isEmpty(params)) {
+  if (_.isEmpty(params)) {
     params = null;
   }
   switch (typeof params) {
@@ -98,7 +98,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       // Show loading modal
       Swal({
         title: 'Please wait',
-        onBeforeOpen: function() {
+        onBeforeOpen: function () {
           Swal.showLoading();
         },
         showConfirmButton: false,
@@ -127,7 +127,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
 
       $scope.isFullyLoaded = true;
       $scope.$digest();
-      setTimeout(function() {
+      setTimeout(function () {
         initFancyBox();
         initPopover();
       });
@@ -252,7 +252,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       // Show loading modal
       Swal({
         title: 'Your request is processing',
-        onBeforeOpen: function()  {
+        onBeforeOpen: function () {
           Swal.showLoading();
         },
         showConfirmButton: false,
@@ -264,7 +264,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         $timeout(function () {
           Swal.hideLoading();
           Swal.close();
-          if(requestResponse.result === 1) {
+          if (requestResponse.result === 1) {
             Swal({
               title: 'Congratulations!',
               text: requestResponse.message,
@@ -315,7 +315,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       // Show loading modal
       Swal({
         title: 'Your request is processing',
-        onBeforeOpen: function()  {
+        onBeforeOpen: function () {
           Swal.showLoading();
         },
         showConfirmButton: false,
@@ -340,7 +340,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         $timeout(function () {
           Swal.hideLoading();
           Swal.close();
-          if(requestResponse.result === 1) {
+          if (requestResponse.result === 1) {
             $('#update-modal').modal('hide');
             Swal({
               title: 'Congratulations!',
@@ -412,7 +412,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     // Show loading modal
     Swal({
       title: 'Please wait',
-      onBeforeOpen: function()  {
+      onBeforeOpen: function () {
         Swal.showLoading();
       },
       showConfirmButton: false,
@@ -439,10 +439,10 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         var totalPages = $scope.trackingResult.totalPages;
         $scope.leftPaginationItems = generateItemsOfPaginationLeft(currentPage);
         $scope.rightPaginationItems = generateItemsOfPaginationRight(currentPage, totalPages);
-        setTimeout(function() {
+        setTimeout(function () {
           initFancyBox();
           initPopover();
-        });  
+        });
         $('.sec-request-list').show();
       }
       // switch (trackingResult.code) {
@@ -502,19 +502,19 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       })
     });
 
-    $('#update-modal').find('form').each(function (index, formElem) {
-      $(formElem).find('.form-control').each(function (index, inputElem) {
-        $(inputElem).focus(function () {
-          $(inputElem).addClass('active');
-          $(inputElem).prev().addClass('active');
-        })
+    // $('#update-modal').find('form').each(function (index, formElem) {
+    //   $(formElem).find('.form-control').each(function (index, inputElem) {
+    //     $(inputElem).focus(function () {
+    //       $(inputElem).addClass('active');
+    //       $(inputElem).prev().addClass('active');
+    //     })
 
-        $(inputElem).blur(function () {
-          $(inputElem).removeClass('active');
-          $(inputElem).prev().removeClass('active');
-        })
-      });
-    });
+    //     $(inputElem).blur(function () {
+    //       $(inputElem).removeClass('active');
+    //       $(inputElem).prev().removeClass('active');
+    //     })
+    //   });
+    // });
 
     $('#search-form label').click(function (e) {
       e.preventDefault();
@@ -595,11 +595,11 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
       return this.optional(element) || /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
     }, "Invalid Download Link, Please enter valid Download Link");
 
-    $.validator.addMethod("isPiuUcsUrl", function(value, element) {
+    $.validator.addMethod("isPiuUcsUrl", function (value, element) {
       var url = 'http://www.piugame.com/bbs/board.php?bo_table=ucs&wr_id=';
       return value.includes(url)
     }, "We only accept request which download url has format from PIU Official UCS Page : <br><strong>Example:</strong> http://www.piugame.com/bbs/board.php?bo_table=ucs&wr_id={{your_ucs_id}}");
-    
+
     $.validator.addMethod("isEmailValid", function (value, element) {
       return this.optional(element) || /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
     }, "Please enter valid email");
@@ -690,19 +690,8 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
     if (_.isEmpty(targetForm)) {
       // Reset all forms
       const forms = $('#update-modal').find('form');
-      // Array.of(forms).forEach(function (form) {
-      //   form.find('input:text, select, textarea').val('');
-      //   form.find('input:text, select, textarea').each(function (index, inputElem) {
-      //     $(inputElem).removeClass('is-invalid');
-      //   })
-      //   form.find('input:radio, input:checkbox').prop('checked', false);
-      //   form.find('select').val('').trigger("change");
-      //   form.find('label').each(function (index, labelItem) {
-      //     $(labelItem).removeClass('label-invalid');
-      //   })
-      // });
 
-      _.forEach(forms, function(form) {
+      _.forEach(forms, function (form) {
         var targetForm = $(form);
         targetForm.find('input:text, select, textarea').val('');
         targetForm.find('input:text, select, textarea').each(function (index, inputElem) {
@@ -719,13 +708,7 @@ ucsTrackingAppModule.controller('ucsTrackingAppCtrl', function ($scope, $http, $
         tinymce.activeEditor.setContent('');
       }
 
-      // Object.keys(formObjs).forEach((key) => {
-      //   if (formObjs[key].currentForm !== undefined) {
-      //     formObjs[key].reset();
-      //     formObjs[key].resetForm();
-      //   }
-      // })
-      _.mapKeys(formObjs, function(value, key) {
+      _.mapKeys(formObjs, function (value, key) {
         if (formObjs[key].currentForm !== undefined) {
           formObjs[key].reset();
           formObjs[key].resetForm();
@@ -841,6 +824,18 @@ function initModalFormValidation() {
       submitHandler: function (form) {
         return false;
       }
-    })
+    });
+    
+    _targetFormElem.find('.form-control').each(function (index, inputElem) {
+      $(inputElem).focus(function () {
+        $(inputElem).addClass('active');
+        $(inputElem).parent().prev().addClass('active');
+      })
+
+      $(inputElem).blur(function () {
+        $(inputElem).removeClass('active');
+        $(inputElem).parent().prev().removeClass('active');
+      })
+    });
   });
 }

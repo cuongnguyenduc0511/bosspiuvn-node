@@ -2,13 +2,15 @@
   <h5><i class="fas fa-envelope"></i> Resend Activation Email</h5>
   <form id="resend-form" mode="resend">
     <div class="form-group row">
+      <label for="activation-email" class="col-lg-12 col-form-label">Email
+        <span class="required">*</span>
+      </label>
       <div class="col-lg-12">
-        <label for="activation-email" class="col-form-label">Email
-          <span class="required">*</span>
-        </label>
-        <input ng-model="resendForm.email" type="text" class="form-control" id="activation-email" name="activationEmail" placeholder="Enter your email">
+        <input ng-model="resendForm.email" type="text" class="form-control" id="activation-email" name="activationEmail"
+          placeholder="Enter your email">
       </div>
     </div>
-    <button type="button" id="reset-form" class="btn btn-danger" mode="resend" ng-click="onFormReset($event)">Reset</button>
+    <button type="button" id="reset-form" class="btn btn-danger" mode="resend"
+      ng-click="onFormReset($event)">Reset</button>
   </form>
 </section>

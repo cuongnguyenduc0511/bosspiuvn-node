@@ -1,5 +1,8 @@
 var songCarousel;
 
+var baseUrl = window.location.protocol + '//' + window.location.host;
+var apiUrl = baseUrl + '/api'
+
 function initCarousel() {
   songCarousel = $('.song-carousel').owlCarousel({
     loop: true,

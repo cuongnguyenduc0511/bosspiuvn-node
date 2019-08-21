@@ -13,20 +13,3 @@ function goToTop() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
-
-// function openNav() {
-//   $('#navbar-overlay').removeClass('close').addClass('open');
-// }
-
-// function closeNav() {
-//   $('#navbar-overlay').removeClass('open').addClass('close').one('webkitAnimationEnd mozAnimationEnd oAnimationEnd msAnimationEnd animationend', 
-//     function() {
-//       var elem = $(this);
-//       elem.removeClass('close');
-//     }
-//   );
-// }
-
-// $('#navbar-collapse').click(function() {
-//   openNav();
-// })  

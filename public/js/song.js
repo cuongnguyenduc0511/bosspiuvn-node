@@ -1,7 +1,10 @@
-var carousel;
+var songCarousel;
+
+var baseUrl = window.location.protocol + '//' + window.location.host;
+var apiUrl = baseUrl + '/api'
 
 function initCarousel() {
-  carousel = $('.owl-carousel').owlCarousel({
+  songCarousel = $('.song-carousel').owlCarousel({
     loop: true,
     center: true,
     margin: 10,
@@ -22,84 +25,86 @@ function initCarousel() {
   });
 }
 
-var appModule = angular.module('songApp', []);
+function getSongs() {
+  return axios.get(apiUrl + '/songs/test');
+}
 
-appModule.controller('songCtrl', ($scope, $http, $q, $timeout) => {
-  $scope.isCarouselInit = null;
+var songPageAppModule = angular.module('songApp', []);
+
+songPageAppModule.controller('songCtrl', function($scope, $http, $q, $timeout) {
+  $scope.isCarouselInit = false;
   $('.owl-carousel').on('initialized.owl.carousel', function (event) {
-    $scope.songList = getSongList(event);
-    $scope.isCarouselInit = true;
+    setTimeout(function () {
+      var currentSeries = $('.owl-item.active.center').find('.series-img').attr('series');
+      var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
+      $scope.isCarouselInit = true;
+      $scope.songList = currentSeriesObj.items;
+      $scope.beforeTargetSeries = currentSeriesObj.categoryId;
+      $scope.$digest();
+    })
   });
 
-  $q.when(axios.get(apiUrl + '/songs')).then(response => {
-    $scope.songs = response.data;
-  }).catch(error => {
-    const { response } = error;
-    console.log(response || error);
-  }).then(() => {
+  $q.when(getSongs()).then(function(response) {
+    $scope.series = response.data;
+  }).catch(function(error) {
+    console.log(error.response || error);
+  }).then(function() {
     initializeCarousel();
   });
 
-  function initializeCarousel() {
-    $q.when(axios.get(baseUrl + '/series')).then(response => {
-      const { series } = response.data;
-      const sorted = _.sortBy([...series], ['order']);
-      $scope.series = sorted;
-      $timeout(() => {
-        initCarousel();
-        carousel.on('changed.owl.carousel', function (event) {
-          abortLoadingImages().then(() => {
-            $scope.songList = getSongList(event);
+  $('.owl-carousel').on('changed.owl.carousel', function (event) {
+    if ($scope.isCarouselInit) {
+      setTimeout(function() {
+        var currentSeries = $('.owl-item.active.center').find('.series-img').attr('series');
+        if(currentSeries !== $scope.beforeTargetSeries) {
+          abortLoadingImages().then(function() {
+            var currentSeriesObj = _.find($scope.series, { 'categoryId': currentSeries });
+            $scope.songList = currentSeriesObj.items; 
+            $scope.beforeTargetSeries = currentSeriesObj.categoryId;
             $scope.$digest();
+            $('.sec-song-list-wrapper').hide();
+            setTimeout(function() {
+              $('.sec-song-list-wrapper').show();
+            }, 1000);
           })
-        });
+        }
       })
-    }).catch(error => {
-      const { response } = error;
-      console.log(response || error);
-    });
-  }
+    }
+  });
 
-  function getSongList(event) {
-    let currentSeriesIndex = getCurrentIndex(event);
-    const series = $scope.series;
-    const songs = $scope.songs;
-    const currentSeries = series[currentSeriesIndex];
-    let songList = _.filter(songs, function (item) { return item.group === currentSeries.title; });
-    songList = _.sortBy(songList, ['songName']);
-    return songList;
+  function initializeCarousel() {
+    setTimeout(function () {
+      initCarousel();
+    })
   }
 
   function abortLoadingImages() {
-    const loadingThumbs = $('.thumbnail-small');
+    var loadingThumbs = $('img.song-thumbnail');
     return Promise.resolve(loadingThumbs.each(function() {
       $(this).attr("src", "");
     }))
   }
 
-  $scope.triggerNextCarousel = function() {
-    moveCarousel('next');
-  }
-
-  $scope.triggerPrevCarousel = function() {
-    moveCarousel('prev');
+  $scope.moveCarousel = function(direction) {
+    // prev or next
+    moveCarousel(direction);
   }
 
   function moveCarousel(direction) {
-    const moveEvents = `${direction}.owl.carousel`;
-    $timeout(() => {
-      carousel.trigger(moveEvents);
+    var moveEvents = direction + '.owl.carousel';
+    $timeout(function()  {
+      songCarousel.trigger(moveEvents);
     }, 1);
   }
 
 });
 
-appModule.config(function ($interpolateProvider) {
+songPageAppModule.config(function ($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
   $interpolateProvider.endSymbol('}]}');
 });
 
-appModule.config(['$compileProvider', function ($compileProvider) {
+songPageAppModule.config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false);
   $compileProvider.commentDirectivesEnabled(false);
   $compileProvider.cssClassDirectivesEnabled(false);
